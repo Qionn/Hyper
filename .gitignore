@@ -1,0 +1,13 @@
+# Common directories
+build/
+
+# Binaries
+scripts/premake5.exe
+
+# Visual Studio 20xx files
+.vs/
+JSON/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
