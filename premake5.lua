@@ -14,11 +14,13 @@ workspace "Hyper"
 	debugdir "%{cfg.targetdir}"
 	
     filter "configurations:Debug"
+		runtime "Debug"
         optimize "Off"
 		symbols "On"
 		
     filter "configurations:Release"
-        optimize "Speed"
+        runtime "Release"
+		optimize "Speed"
 		symbols "Off"
 
 	filter "system:windows"

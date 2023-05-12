@@ -4,6 +4,11 @@
 namespace hyper
 {
 	class Application;
+
+	class ILogService;
+	class NullLogService;
+	class ConsoleLogService;
+	class ServiceHub;
 }
 
 #endif // !__HYPER_FWD_H__

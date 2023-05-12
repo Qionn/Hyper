@@ -22,16 +22,11 @@ project "Hyper"
 		"include",
 		"source",
 		VendorIncludes["glm"],
-		VendorIncludes["glfw"],
 		VendorIncludes["renderer"]
 	}
 	
 	libdirs {
 		VendorLibraries["renderer"]
-	}
-	
-	links {
-		"glfw"
 	}
 	
 	filter { "options:renderer=vulkan" }
@@ -40,7 +35,15 @@ project "Hyper"
 			"source/backend/vulkan/**.h"
 		}
 		
-		links { "vulkan-1" }
-		defines { "HYPER_PLATFORM_VULKAN" }
+		links "vulkan-1"
+		defines "HYPER_BACKEND_VULKAN"
 		
+	filter { "system:windows" }
+		files {
+			"source/backend/win32/**.cpp",
+			"source/backend/win32/**.h"
+		}
+
+		defines "HYPER_BACKEND_WIN32"
+
 	filter {}

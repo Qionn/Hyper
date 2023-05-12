@@ -1,11 +1,9 @@
 group "ThirdParty"
-	include "glfw"
 	include "glm"
 group ""
 
 VendorIncludes = {}
 VendorIncludes["glm"] = "%{wks.location}/third_party/glm"
-VendorIncludes["glfw"] = "%{wks.location}/third_party/glfw/include"
 
 VendorLibraries = {}
 
