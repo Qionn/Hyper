@@ -4,7 +4,6 @@
 
 #include <cstdio>
 #include <ctime>
-#include <thread>
 
 namespace hyper
 {
@@ -16,27 +15,23 @@ namespace hyper
 		CONSOLE_SCREEN_BUFFER_INFO screenInfo;
 		GetConsoleScreenBufferInfo(m_Console, &screenInfo);
 		m_OldAttributes = screenInfo.wAttributes;
+
+		m_Thread = std::jthread(&Impl::thread_function, this);
+	}
+
+	ConsoleLogService::Impl::~Impl()
+	{
+		m_JoinThread = true;
+		m_Thread.join();
 	}
 
 	void ConsoleLogService::Impl::log(ELogLevel level, std::string_view message)
 	{
-		std::time_t currentTime = std::time(nullptr);
-		std::tm localTime;
-		localtime_s(&localTime, &currentTime);
-
-		char timeBuffer[9];
-		std::strftime(timeBuffer, sizeof(timeBuffer), "%H:%M:%S", &localTime);
-
-		while (m_IsLogging.test_and_set(std::memory_order_acquire))
 		{
-			std::this_thread::yield();
+			std::lock_guard lock(m_Mutex);
+			m_Messages.push({ std::string(message), level });
 		}
-
-		begin_color(level);
-		std::fprintf(stdout, "[%s] <%s> %s\n", timeBuffer, m_Name.c_str(), message.data());
-		end_color();
-
-		m_IsLogging.clear(std::memory_order_release);
+		m_Conditional.notify_one();
 	}
 
 	void ConsoleLogService::Impl::begin_color(ELogLevel level)
@@ -77,5 +72,35 @@ namespace hyper
 	void ConsoleLogService::Impl::end_color()
 	{
 		SetConsoleTextAttribute(m_Console, m_OldAttributes);
+	}
+
+	void ConsoleLogService::Impl::thread_function()
+	{
+		while (true)
+		{
+			std::unique_lock lock(m_Mutex);
+			m_Conditional.wait(lock, [this]() { return !m_Messages.empty() || m_JoinThread; });
+
+			if (m_JoinThread && m_Messages.empty())
+			{
+				break;
+			}
+
+			MessageInfo info = std::move(m_Messages.front());
+			m_Messages.pop();
+
+			lock.unlock();
+
+			std::time_t currentTime = std::time(nullptr);
+			std::tm localTime;
+			localtime_s(&localTime, &currentTime);
+
+			char timeBuffer[9];
+			std::strftime(timeBuffer, ARRAYSIZE(timeBuffer), "%H:%M:%S", &localTime);
+
+			begin_color(info.level);
+			std::fprintf(stdout, "[%s] <%s> %s\n", timeBuffer, m_Name.c_str(), info.message.c_str());
+			end_color();
+		}
 	}
 }

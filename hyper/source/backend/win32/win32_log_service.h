@@ -1,8 +1,10 @@
 #ifndef __HYPER_WIN32_LOG_SERVICE_H__
 #define __HYPER_WIN32_LOG_SERVICE_H__
 
-#include <string>
 #include <atomic>
+#include <condition_variable>
+#include <thread>
+#include <queue>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -23,11 +25,21 @@ namespace hyper
 		Impl& operator=(const Impl&)	= delete;
 		Impl& operator=(Impl&&)			= delete;
 
-		~Impl() = default;
+		~Impl();
 
 	private:
+		struct MessageInfo
+		{
+			std::string message;
+			ELogLevel level;
+		};
+
 		std::string m_Name;
-		std::atomic_flag m_IsLogging = ATOMIC_FLAG_INIT;
+		std::jthread m_Thread;
+		std::mutex m_Mutex;
+		std::condition_variable m_Conditional;
+		std::queue<MessageInfo> m_Messages;
+		std::atomic_bool m_JoinThread = false;
 
 		HANDLE m_Console;
 		WORD m_OldAttributes;
@@ -35,6 +47,8 @@ namespace hyper
 	private:
 		void begin_color(ELogLevel level);
 		void end_color();
+
+		void thread_function();
 	};
 }
 

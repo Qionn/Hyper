@@ -11,7 +11,7 @@ namespace hyper
 	void log(ELogLevel level, std::format_string<Args...> fmt, Args&&... args)
 	{
 		std::string message = std::format(fmt, std::forward<Args>(args)...);
-		ServiceHub::log_service()->log(level, message);
+		ServiceHub::log_service()->log(level, std::move(message));
 	}
 
 	template<class ... Args>
