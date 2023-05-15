@@ -4,6 +4,7 @@
 namespace hyper
 {
 	class Application;
+	class Time;
 
 	class ILogService;
 	class NullLogService;

@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "hyper/core/application.h"
+#include "hyper/core/time.h"
 #include "hyper/service/service_hub.h"
 
 namespace hyper
@@ -16,7 +17,9 @@ namespace hyper
 
 		while (m_IsRunning)
 		{
+			Time::start();
 
+			Time::stop();
 		}
 	}
 
