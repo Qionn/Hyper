@@ -4,6 +4,7 @@
 namespace hyper
 {
 	class Application;
+	class Renderer;
 	class Time;
 	class Window;
 

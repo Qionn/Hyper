@@ -4,6 +4,7 @@
 #include <memory>
 #include <string_view>
 
+#include "hyper/core/renderer.h"
 #include "hyper/core/window.h"
 #include "hyper/event/observer.h"
 #include "hyper/fwd.h"
@@ -27,6 +28,7 @@ namespace hyper
 
 	private:
 		std::unique_ptr<Window> m_pWindow;
+		std::unique_ptr<Renderer> m_pRenderer;
 
 		bool m_IsRunning = false;
 		

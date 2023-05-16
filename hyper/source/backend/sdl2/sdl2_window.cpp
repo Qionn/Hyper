@@ -73,6 +73,11 @@ namespace hyper
 		SDL_HideWindow(m_pWindow);
 	}
 
+	void* Window::Impl::GetNativeWindow() const
+	{
+		return m_pWindow;
+	}
+
 	void Window::Impl::SetEventCallback(const EventCallback& callback)
 	{
 		m_Callback = callback;

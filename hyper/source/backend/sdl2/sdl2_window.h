@@ -20,6 +20,7 @@ namespace hyper
 		void Show();
 		void Hide();
 
+		void* GetNativeWindow() const;
 		void SetEventCallback(const EventCallback& callback);
 
 		Impl(const Impl&) = delete;

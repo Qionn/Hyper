@@ -16,6 +16,7 @@ namespace hyper
 		try
 		{
 			m_pWindow = std::make_unique<Window>(800, 600, name);
+			m_pRenderer = std::make_unique<Renderer>(*m_pWindow);
 		}
 		catch (const std::runtime_error& err)
 		{
@@ -40,6 +41,9 @@ namespace hyper
 			Time::Start();
 
 			m_pWindow->Update();
+
+			m_pRenderer->BeginFrame();
+			m_pRenderer->EndFrame();
 
 			Time::Stop();
 		}

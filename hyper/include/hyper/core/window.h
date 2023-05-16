@@ -16,6 +16,8 @@ namespace hyper
 		void Show();
 		void Hide();
 
+		void* GetNativeWindow() const;
+
 		Window(const Window&)				= delete;
 		Window(Window&&)					= delete;
 		Window& operator=(const Window&)	= delete;

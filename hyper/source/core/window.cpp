@@ -29,4 +29,9 @@ namespace hyper
 	{
 		m_pImpl->Hide();
 	}
+
+	void* Window::GetNativeWindow() const
+	{
+		return m_pImpl->GetNativeWindow();
+	}
 }
