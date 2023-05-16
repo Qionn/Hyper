@@ -40,7 +40,6 @@ namespace hyper
 
 	private:
 		void FireEvent(const AEvent& event) const;
-		static int EventFilter(void* pUserData, SDL_Event* pEvent);
 	};
 }
 

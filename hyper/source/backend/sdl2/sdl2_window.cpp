@@ -2,6 +2,8 @@
 
 #include "hyper/event/window_events.h"
 
+#include <backends/imgui_impl_sdl2.h>
+
 #include <stdexcept>
 
 namespace hyper
@@ -21,7 +23,7 @@ namespace hyper
 									 SDL_WINDOWPOS_CENTERED,
 									 static_cast<int>(width),
 									 static_cast<int>(height),
-									 SDL_WINDOW_SHOWN);
+									 SDL_WINDOW_ALLOW_HIGHDPI);
 
 		if (m_pWindow == nullptr)
 		{
@@ -43,8 +45,6 @@ namespace hyper
 
 	void Window::Impl::Update()
 	{
-		SDL_SetEventFilter(&Impl::EventFilter, &m_Id);
-
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -60,6 +60,8 @@ namespace hyper
 					}
 				}
 			}
+			
+			ImGui_ImplSDL2_ProcessEvent(&event);
 		}
 	}
 
@@ -89,18 +91,5 @@ namespace hyper
 		{
 			m_Callback(event);
 		}
-	}
-
-	int Window::Impl::EventFilter(void* pUserData, SDL_Event* pEvent)
-	{
-		uint32_t windowId = *reinterpret_cast<uint32_t*>(pUserData);
-
-		switch (pEvent->type)
-		{
-			case SDL_WINDOWEVENT:
-				return pEvent->window.windowID == windowId;
-		}
-
-		return 0;
 	}
 }

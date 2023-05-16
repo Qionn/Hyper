@@ -12,7 +12,8 @@ project "BurgerTime"
 	includedirs {
 		"source",
 		"%{wks.location}/hyper/include",
-		VendorIncludes["glm"]
+		VendorIncludes["glm"],
+		VendorIncludes["imgui"],
 	}
 	
 	postbuildcommands {

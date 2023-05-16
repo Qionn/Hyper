@@ -28,8 +28,16 @@ namespace hyper
 
 	SoundId DefaultSoundService::Impl::AddSound(std::string_view filepath)
 	{
+		std::string strFilepath(filepath);
+
+		auto it = m_SoundIdMap.find(strFilepath);
+		if (it != m_SoundIdMap.end())
+		{
+			return it->second;
+		}
+
 		auto id = static_cast<SoundId>(m_AudioClips.size());
-		m_SoundIdMap[std::string(filepath)] = id;
+		m_SoundIdMap[strFilepath] = id;
 
 		{
 			std::lock_guard lock(m_Mutex);

@@ -1,3 +1,5 @@
+#include "layers/exercise_layer.h"
+
 #include <hyper/core/application.h>
 
 #include <memory>
@@ -9,10 +11,12 @@
 #endif
 
 using namespace hyper;
+using namespace burger_time;
 
 int main()
 {
 	auto pApp = std::make_unique<Application>("Burger Time");
+	pApp->PushLayer<ExerciseLayer>();
 
 	pApp->Start();
 }

@@ -19,6 +19,7 @@ project "Hyper"
 		"include",
 		"source",
 		VendorIncludes["glm"],
+		VendorIncludes["imgui"],
 		VendorIncludes["sdl2"],
 		VendorIncludes["sdl2_mixer"]
 	}
@@ -29,6 +30,7 @@ project "Hyper"
 	}
 	
 	links {
+		"ImGui",
 		"SDL2",
 		"SDL2_mixer"
 	}

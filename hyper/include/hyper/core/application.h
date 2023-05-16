@@ -7,6 +7,7 @@
 #include "hyper/core/renderer.h"
 #include "hyper/core/window.h"
 #include "hyper/event/observer.h"
+#include "hyper/utils/layer_stack.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -19,6 +20,14 @@ namespace hyper
 		void Start();
 		void Stop();
 
+		template<class T, class ... Args>
+		void PushLayer(Args&&... args)
+		{
+			m_pLayerStack->Push<T>(std::forward<Args>(args)...);
+		}
+
+		void PopLayer();
+
 		Application(const Application&)				= delete;
 		Application(Application&&)					= delete;
 		Application& operator=(const Application&)	= delete;
@@ -29,6 +38,7 @@ namespace hyper
 	private:
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<Renderer> m_pRenderer;
+		std::unique_ptr<LayerStack> m_pLayerStack;
 
 		bool m_IsRunning = false;
 		
