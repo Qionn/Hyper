@@ -19,15 +19,18 @@ project "Hyper"
 		"include",
 		"source",
 		VendorIncludes["glm"],
-		VendorIncludes["sdl2"]
+		VendorIncludes["sdl2"],
+		VendorIncludes["sdl2_mixer"]
 	}
 	
 	libdirs {
-		VendorLibraries["sdl2"]
+		VendorLibraries["sdl2"],
+		VendorLibraries["sdl2_mixer"]
 	}
 	
 	links {
-		"SDL2"
+		"SDL2",
+		"SDL2_mixer"
 	}
 	
 	files {
@@ -38,7 +41,8 @@ project "Hyper"
 	defines "HYPER_PLATFORM_SDL2"
 	
 	postbuildcommands {
-		("{COPYFILE} " .. VendorLibraries["sdl2"] .. "/SDL2.dll %{cfg.buildtarget.directory}/SDL2.dll")
+		("{COPYFILE} " .. VendorLibraries["sdl2"] .. "/SDL2.dll %{cfg.buildtarget.directory}/SDL2.dll"),
+		("{COPYFILE} " .. VendorLibraries["sdl2_mixer"] .. "/SDL2_mixer.dll %{cfg.buildtarget.directory}/SDL2_mixer.dll")
 	}
 	
 	filter { "system:windows" }

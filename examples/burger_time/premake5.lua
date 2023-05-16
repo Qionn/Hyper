@@ -15,4 +15,8 @@ project "BurgerTime"
 		VendorIncludes["glm"]
 	}
 	
+	postbuildcommands {
+		"{COPYDIR} assets/ %{cfg.buildtarget.directory}/assets/"
+	}
+	
 	links { "Hyper" }

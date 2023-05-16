@@ -12,6 +12,7 @@ namespace hyper
 	Application::Application(std::string_view name)
 	{
 		ServiceHub::RegisterService<ConsoleLogService>(name);
+		ServiceHub::RegisterService<DefaultSoundService>();
 
 		try
 		{

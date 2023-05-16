@@ -5,6 +5,8 @@ group ""
 VendorIncludes = {}
 VendorIncludes["glm"] = "%{wks.location}/third_party/glm"
 VendorIncludes["sdl2"] = "%{wks.location}/third_party/sdl2/include"
+VendorIncludes["sdl2_mixer"] = "%{wks.location}/third_party/sdl2_mixer/include"
 
 VendorLibraries = {}
 VendorLibraries["sdl2"] = "%{wks.location}/third_party/sdl2/lib/%{cfg.platform}"
+VendorLibraries["sdl2_mixer"] = "%{wks.location}/third_party/sdl2_mixer/lib/%{cfg.platform}"

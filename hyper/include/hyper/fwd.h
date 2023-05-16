@@ -3,6 +3,8 @@
 
 namespace hyper
 {
+	class AudioClip;
+
 	class Application;
 	class Renderer;
 	class Time;
