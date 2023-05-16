@@ -18,22 +18,22 @@ namespace hyper
 	class ILogService
 	{
 	public:
-		virtual void log(ELogLevel level, std::string_view message) const = 0;
+		virtual void Log(ELogLevel level, std::string_view message) const = 0;
 		virtual ~ILogService() = default;
 	};
 
 	class NullLogService final : public ILogService
 	{
 	public:
-		void log(ELogLevel, std::string_view) const override {};
+		void Log(ELogLevel, std::string_view) const override {};
 	};
 
 	class ConsoleLogService final : public ILogService
 	{
 	public:
-		ConsoleLogService(std::string_view name);
+		explicit ConsoleLogService(std::string_view name);
 
-		void log(ELogLevel level, std::string_view message) const override;
+		void Log(ELogLevel level, std::string_view message) const override;
 
 		ConsoleLogService(const ConsoleLogService&)				= delete;
 		ConsoleLogService(ConsoleLogService&)					= delete;

@@ -4,9 +4,6 @@ project "Hyper"
 	cppdialect "C++20"
 	staticruntime "on"
 
-	pchheader "pch.h"
-	pchsource "source/pch.cpp"
-
 	files {
 		"include/**.h",
 		"source/**.cpp",
@@ -22,22 +19,28 @@ project "Hyper"
 		"include",
 		"source",
 		VendorIncludes["glm"],
-		VendorIncludes["renderer"]
+		VendorIncludes["sdl2"]
 	}
 	
 	libdirs {
-		VendorLibraries["renderer"]
+		VendorLibraries["sdl2"]
 	}
 	
-	filter { "options:renderer=vulkan" }
-		files {
-			"source/backend/vulkan/**.cpp",
-			"source/backend/vulkan/**.h"
-		}
-		
-		links "vulkan-1"
-		defines "HYPER_BACKEND_VULKAN"
-		
+	links {
+		"SDL2"
+	}
+	
+	files {
+		"source/backend/sdl2/**.cpp",
+		"source/backend/sdl2/**.h"
+	}
+	
+	defines "HYPER_PLATFORM_SDL2"
+	
+	postbuildcommands {
+		("{COPYFILE} " .. VendorLibraries["sdl2"] .. "/SDL2.dll %{cfg.buildtarget.directory}/SDL2.dll")
+	}
+	
 	filter { "system:windows" }
 		files {
 			"source/backend/win32/**.cpp",

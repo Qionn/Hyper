@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "win32_log_service.h"
 
 #include <cstdio>
@@ -16,16 +14,17 @@ namespace hyper
 		GetConsoleScreenBufferInfo(m_Console, &screenInfo);
 		m_OldAttributes = screenInfo.wAttributes;
 
-		m_Thread = std::jthread(&Impl::thread_function, this);
+		m_Thread = std::jthread(&Impl::ThreadFunction, this);
 	}
 
 	ConsoleLogService::Impl::~Impl()
 	{
 		m_JoinThread = true;
+		m_Conditional.notify_all();
 		m_Thread.join();
 	}
 
-	void ConsoleLogService::Impl::log(ELogLevel level, std::string_view message)
+	void ConsoleLogService::Impl::Log(ELogLevel level, std::string_view message)
 	{
 		{
 			std::lock_guard lock(m_Mutex);
@@ -34,7 +33,7 @@ namespace hyper
 		m_Conditional.notify_one();
 	}
 
-	void ConsoleLogService::Impl::begin_color(ELogLevel level)
+	void ConsoleLogService::Impl::BeginColor(ELogLevel level)
 	{
 		WORD attribs = m_OldAttributes;
 
@@ -69,12 +68,12 @@ namespace hyper
 		SetConsoleTextAttribute(m_Console, attribs);
 	}
 
-	void ConsoleLogService::Impl::end_color()
+	void ConsoleLogService::Impl::EndColor()
 	{
 		SetConsoleTextAttribute(m_Console, m_OldAttributes);
 	}
 
-	void ConsoleLogService::Impl::thread_function()
+	void ConsoleLogService::Impl::ThreadFunction()
 	{
 		while (true)
 		{
@@ -98,9 +97,9 @@ namespace hyper
 			char timeBuffer[9];
 			std::strftime(timeBuffer, ARRAYSIZE(timeBuffer), "%H:%M:%S", &localTime);
 
-			begin_color(info.level);
+			BeginColor(info.level);
 			std::fprintf(stdout, "[%s] <%s> %s\n", timeBuffer, m_Name.c_str(), info.message.c_str());
-			end_color();
+			EndColor();
 		}
 	}
 }

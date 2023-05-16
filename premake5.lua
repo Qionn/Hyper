@@ -29,7 +29,6 @@ workspace "Hyper"
 
 	filter {}
 
-include "options"
 include "third_party"
 include "hyper"
 include "examples"

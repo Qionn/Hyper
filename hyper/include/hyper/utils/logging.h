@@ -8,46 +8,46 @@
 namespace hyper
 {
 	template<class ... Args>
-	void log(ELogLevel level, std::format_string<Args...> fmt, Args&&... args)
+	void Log(ELogLevel level, std::format_string<Args...> fmt, Args&&... args)
 	{
 		std::string message = std::format(fmt, std::forward<Args>(args)...);
-		ServiceHub::log_service()->log(level, std::move(message));
+		ServiceHub::LogService()->Log(level, std::move(message));
 	}
 
 	template<class ... Args>
-	void log_trace(std::format_string<Args...> fmt, Args&&... args)
+	void LogTrace(std::format_string<Args...> fmt, Args&&... args)
 	{
-		log(ELogLevel::eTrace, fmt, std::forward<Args>(args)...);
+		Log(ELogLevel::eTrace, fmt, std::forward<Args>(args)...);
 	}
 
 	template<class ... Args>
-	void log_info(std::format_string<Args...> fmt, Args&&... args)
+	void LogInfo(std::format_string<Args...> fmt, Args&&... args)
 	{
-		log(ELogLevel::eInfo, fmt, std::forward<Args>(args)...);
+		Log(ELogLevel::eInfo, fmt, std::forward<Args>(args)...);
 	}
 
 	template<class ... Args>
-	void log_warn(std::format_string<Args...> fmt, Args&&... args)
+	void LogWarn(std::format_string<Args...> fmt, Args&&... args)
 	{
-		log(ELogLevel::eWarn, fmt, std::forward<Args>(args)...);
+		Log(ELogLevel::eWarn, fmt, std::forward<Args>(args)...);
 	}
 
 	template<class ... Args>
-	void log_error(std::format_string<Args...> fmt, Args&&... args)
+	void LogError(std::format_string<Args...> fmt, Args&&... args)
 	{
-		log(ELogLevel::eError, fmt, std::forward<Args>(args)...);
+		Log(ELogLevel::eError, fmt, std::forward<Args>(args)...);
 	}
 
 	template<class ... Args>
-	void log_fatal(std::format_string<Args...> fmt, Args&&... args)
+	void LogFatal(std::format_string<Args...> fmt, Args&&... args)
 	{
-		log(ELogLevel::eFatal, fmt, std::forward<Args>(args)...);
+		Log(ELogLevel::eFatal, fmt, std::forward<Args>(args)...);
 	}
 
 	template<class ... Args>
-	void log_debug(std::format_string<Args...> fmt, Args&&... args)
+	void LogDebug(std::format_string<Args...> fmt, Args&&... args)
 	{
-		log(ELogLevel::eDebug, fmt, std::forward<Args>(args)...);
+		Log(ELogLevel::eDebug, fmt, std::forward<Args>(args)...);
 	}
 }
 

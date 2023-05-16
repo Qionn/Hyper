@@ -18,7 +18,7 @@ namespace hyper
 	public:
 		Impl(std::string_view name);
 
-		void log(ELogLevel level, std::string_view message);
+		void Log(ELogLevel level, std::string_view message);
 
 		Impl(const Impl&)				= delete;
 		Impl(Impl&&)					= delete;
@@ -45,10 +45,10 @@ namespace hyper
 		WORD m_OldAttributes;
 
 	private:
-		void begin_color(ELogLevel level);
-		void end_color();
+		void BeginColor(ELogLevel level);
+		void EndColor();
 
-		void thread_function();
+		void ThreadFunction();
 	};
 }
 

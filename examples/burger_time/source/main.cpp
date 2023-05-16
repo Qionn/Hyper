@@ -5,5 +5,5 @@
 int main()
 {
 	auto pApp = std::make_unique<hyper::Application>("Burger Time");
-	pApp->start();
+	pApp->Start();
 }

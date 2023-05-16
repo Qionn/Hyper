@@ -11,11 +11,11 @@ namespace hyper
 	public:
 		using Clock = std::chrono::high_resolution_clock;
 
-		static void start();
-		static void stop();
+		static void Start();
+		static void Stop();
 
 		template<class T = float> requires std::floating_point<T>
-		static T deltatime()
+		static T DeltaTime()
 		{
 			return std::chrono::duration<T>(s_DeltaTime).count();
 		}

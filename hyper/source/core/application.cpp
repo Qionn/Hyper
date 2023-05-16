@@ -1,30 +1,67 @@
-#include "pch.h"
-
 #include "hyper/core/application.h"
 #include "hyper/core/time.h"
+#include "hyper/event/dispatcher.h"
+#include "hyper/event/window_events.h"
 #include "hyper/service/service_hub.h"
+#include "hyper/utils/logging.h"
+
+#include <stdexcept>
 
 namespace hyper
 {
-	Application::Application(const char* pName)
+	Application::Application(std::string_view name)
 	{
-		ServiceHub::register_service<ConsoleLogService>(pName);
+		ServiceHub::RegisterService<ConsoleLogService>(name);
+
+		try
+		{
+			m_pWindow = std::make_unique<Window>(800, 600, name);
+		}
+		catch (const std::runtime_error& err)
+		{
+			LogError("Application initialization failed: {}", err.what());
+			std::exit(-1);
+		}
+
+		m_pWindow->AddObserver(this);
 	}
 
-	void Application::start()
+	Application::~Application()
+	{
+		m_pWindow->RemoveObserver(this);
+	}
+
+	void Application::Start()
 	{
 		m_IsRunning = true;
 
 		while (m_IsRunning)
 		{
-			Time::start();
+			Time::Start();
 
-			Time::stop();
+			m_pWindow->Update();
+
+			Time::Stop();
 		}
 	}
 
-	void Application::stop()
+	void Application::Stop()
 	{
 		m_IsRunning = false;
+	}
+
+	bool Application::OnEvent(const AEvent& event)
+	{
+		Dispatcher dispatcher(event);
+
+		dispatcher.Dispatch(&Application::OnWindowCloseEvent, this);
+
+		return dispatcher.IsEventHandled();
+	}
+
+	bool Application::OnWindowCloseEvent(const WindowCloseEvent&)
+	{
+		Stop();
+		return true;
 	}
 }

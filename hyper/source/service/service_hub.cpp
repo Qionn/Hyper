@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "hyper/service/service_hub.h"
 
 namespace hyper

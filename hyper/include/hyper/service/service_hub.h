@@ -12,10 +12,10 @@ namespace hyper
 	class ServiceHub final
 	{
 	public:
-		static ILogService* log_service() { return s_pActiveLogService; }
+		static ILogService* LogService() { return s_pActiveLogService; }
 
 		template<class T, class ... Args> requires std::derived_from<T, ILogService>
-		static void register_service(Args&&... args)
+		static void RegisterService(Args&&... args)
 		{
 			s_pLogService = std::make_unique<T>(std::forward<Args>(args)...);
 			s_pActiveLogService = s_pLogService.get();
