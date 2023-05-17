@@ -25,24 +25,4 @@ namespace hyper
 	{
 		m_pImpl->Play(id, volume);
 	}
-
-	LoggingSoundService::LoggingSoundService(std::unique_ptr<ISoundService>&& soundService)
-		: m_SoundService{ std::move(soundService) }
-	{
-		
-	}
-
-	SoundId LoggingSoundService::AddSound(std::string_view filepath)
-	{
-		SoundId id = m_SoundService->AddSound(filepath);
-		LogTrace("Added sound '{}' with id {}", filepath, id);
-		return id;
-	}
-
-	void LoggingSoundService::Play(SoundId id, float volume) const
-	{
-		LogTrace("Playing sound {} with {:.0f}% volume", id, volume * 100);
-		m_SoundService->Play(id, volume);
-	}
-
 }

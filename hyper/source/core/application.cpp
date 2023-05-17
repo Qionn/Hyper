@@ -55,11 +55,6 @@ namespace hyper
 		m_IsRunning = false;
 	}
 
-	void Application::PopLayer()
-	{
-
-	}
-
 	bool Application::OnEvent(const AEvent& event)
 	{
 		Dispatcher dispatcher(event);

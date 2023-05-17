@@ -19,14 +19,6 @@ namespace hyper
 		void Start();
 		void Stop();
 
-		template<class T, class ... Args>
-		void PushLayer(Args&&... args)
-		{
-			m_pLayerStack->Push<T>(std::forward<Args>(args)...);
-		}
-
-		void PopLayer();
-
 		Application(const Application&)				= delete;
 		Application(Application&&)					= delete;
 		Application& operator=(const Application&)	= delete;

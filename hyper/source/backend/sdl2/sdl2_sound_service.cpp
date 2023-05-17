@@ -1,5 +1,6 @@
 #include "sdl2_sound_service.h"
 
+#include <SDL.h>
 #include <SDL_mixer.h>
 
 namespace hyper
@@ -8,7 +9,15 @@ namespace hyper
 	{
 		if (s_InstanceCount++ == 0)
 		{
-			Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+			if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+			{
+				throw std::runtime_error("Failed to initialize SDL2 audio subsystem");
+			}
+
+			if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+			{
+				throw std::runtime_error("Failed to open SDL2 Mixer audio");
+			}
 		}
 
 		m_Thread = std::jthread(&Impl::ThreadFunction, this);
@@ -23,6 +32,7 @@ namespace hyper
 		if (--s_InstanceCount == 0)
 		{
 			Mix_CloseAudio();
+			SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		}
 	}
 
@@ -64,15 +74,15 @@ namespace hyper
 			std::unique_lock lock(m_Mutex);
 			m_Conditional.wait(lock, [this]() { return !m_SoundQueue.empty() || m_JoinThread; });
 
-			if (m_SoundQueue.empty() && m_JoinThread)
+			if (m_JoinThread)
 			{
 				break;
 			}
 
-			auto info = m_SoundQueue.front();
+			auto [id, volume] = m_SoundQueue.front();
 			m_SoundQueue.pop();
 
-			auto pAudioClip = m_AudioClips[info.id].get();
+			auto pAudioClip = m_AudioClips[id].get();
 
 			lock.unlock();
 
@@ -81,7 +91,7 @@ namespace hyper
 				pAudioClip->Load();
 			}
 
-			pAudioClip->Play(info.volume);
+			pAudioClip->Play(volume);
 		}
 	}
 }

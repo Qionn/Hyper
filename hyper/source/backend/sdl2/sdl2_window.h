@@ -32,8 +32,6 @@ namespace hyper
 
 	private:
 		SDL_Window* m_pWindow;
-		uint32_t m_Id;
-
 		EventCallback m_Callback;
 
 		static inline size_t s_InstanceCount = 0;

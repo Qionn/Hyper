@@ -12,9 +12,9 @@ namespace hyper
 	{
 		if (s_InstanceCount++ == 0)
 		{
-			if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+			if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
 			{
-				throw std::runtime_error("Failed to initialize the SDL2 library");
+				throw std::runtime_error("Failed to initialize SDL2 video subsystem");
 			}
 		}
 
@@ -27,10 +27,8 @@ namespace hyper
 
 		if (m_pWindow == nullptr)
 		{
-			throw std::runtime_error("Failed to create the SDL2 window");
+			throw std::runtime_error("Failed to create SDL2 window");
 		}
-
-		m_Id = SDL_GetWindowID(m_pWindow);
 	}
 
 	Window::Impl::~Impl()
@@ -39,7 +37,7 @@ namespace hyper
 
 		if (--s_InstanceCount == 0)
 		{
-			SDL_Quit();
+			SDL_QuitSubSystem(SDL_INIT_VIDEO);
 		}
 	}
 
