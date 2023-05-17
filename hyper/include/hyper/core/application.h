@@ -7,7 +7,6 @@
 #include "hyper/core/renderer.h"
 #include "hyper/core/window.h"
 #include "hyper/event/observer.h"
-#include "hyper/utils/layer_stack.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -38,7 +37,6 @@ namespace hyper
 	private:
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<Renderer> m_pRenderer;
-		std::unique_ptr<LayerStack> m_pLayerStack;
 
 		bool m_IsRunning = false;
 		

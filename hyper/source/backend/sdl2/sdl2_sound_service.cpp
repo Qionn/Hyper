@@ -72,14 +72,16 @@ namespace hyper
 			auto info = m_SoundQueue.front();
 			m_SoundQueue.pop();
 
-			const auto& audioClip = m_AudioClips[info.id];
+			auto pAudioClip = m_AudioClips[info.id].get();
 
-			if (!audioClip->IsLoaded())
+			lock.unlock();
+
+			if (!pAudioClip->IsLoaded())
 			{
-				audioClip->Load();
+				pAudioClip->Load();
 			}
 
-			audioClip->Play(info.volume);
+			pAudioClip->Play(info.volume);
 		}
 	}
 }

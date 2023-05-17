@@ -18,7 +18,6 @@ namespace hyper
 		{
 			m_pWindow = std::make_unique<Window>(800, 600, name);
 			m_pRenderer = std::make_unique<Renderer>(*m_pWindow);
-			m_pLayerStack = std::make_unique<LayerStack>();
 		}
 		catch (const std::runtime_error& err)
 		{
@@ -45,7 +44,6 @@ namespace hyper
 			m_pWindow->Update();
 
 			m_pRenderer->BeginFrame();
-			m_pLayerStack->Render();
 			m_pRenderer->EndFrame();
 
 			Time::Stop();
@@ -59,7 +57,7 @@ namespace hyper
 
 	void Application::PopLayer()
 	{
-		m_pLayerStack->Pop();
+
 	}
 
 	bool Application::OnEvent(const AEvent& event)

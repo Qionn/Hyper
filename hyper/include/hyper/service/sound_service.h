@@ -1,6 +1,7 @@
 #ifndef __HYPER_SOUND_SERVICE_H__
 #define __HYPER_SOUND_SERVICE_H__
 
+#include <memory>
 #include <string_view>
 
 #include "hyper/fwd.h"
@@ -42,6 +43,25 @@ namespace hyper
 	private:
 		class Impl;
 		Impl* m_pImpl;
+	};
+
+	class LoggingSoundService final : public ISoundService
+	{
+	public:
+		LoggingSoundService(std::unique_ptr<ISoundService>&& soundService);
+
+		SoundId AddSound(std::string_view filepath) override;
+		void Play(SoundId id, float volume) const override;
+
+		LoggingSoundService(const LoggingSoundService&)				= delete;
+		LoggingSoundService(LoggingSoundService&&)					= delete;
+		LoggingSoundService& operator=(const LoggingSoundService&)	= delete;
+		LoggingSoundService& operator=(LoggingSoundService&&)		= delete;
+
+		~LoggingSoundService() = default;
+
+	private:
+		std::unique_ptr<ISoundService> m_SoundService;
 	};
 }
 
