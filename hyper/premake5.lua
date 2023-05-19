@@ -6,6 +6,7 @@ project "Hyper"
 
 	files {
 		"include/**.h",
+		"include/**.inl",
 		"source/**.cpp",
 		"source/**.h"
 	}

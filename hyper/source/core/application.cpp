@@ -7,6 +7,9 @@
 
 #include <stdexcept>
 
+
+#include "hyper/utils/assert.h"
+
 namespace hyper
 {
 	Application::Application(std::string_view name)

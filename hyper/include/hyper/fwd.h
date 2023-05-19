@@ -6,7 +6,6 @@ namespace hyper
 	class AudioClip;
 
 	class Application;
-	class Layer;
 	class Renderer;
 	class Time;
 	class Window;
@@ -14,8 +13,14 @@ namespace hyper
 	class Dispatcher;
 	class AEvent;
 	class IObserver;
-
 	class WindowCloseEvent;
+
+	class Actor;
+	class AComponent;
+	class Scene;
+	class SceneFactory;
+
+	class TransformComponent;
 
 	class ILogService;
 	class NullLogService;
@@ -24,8 +29,6 @@ namespace hyper
 	class ISoundService;
 	class NullSoundService;
 	class DefaultSoundService;
-
-	class LayerStack;
 }
 
 #endif // !__HYPER_FWD_H__

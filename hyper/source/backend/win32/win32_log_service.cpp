@@ -13,24 +13,20 @@ namespace hyper
 		CONSOLE_SCREEN_BUFFER_INFO screenInfo;
 		GetConsoleScreenBufferInfo(m_Console, &screenInfo);
 		m_OldAttributes = screenInfo.wAttributes;
-
-		m_Thread = std::jthread(&Impl::ThreadFunction, this);
-	}
-
-	ConsoleLogService::Impl::~Impl()
-	{
-		m_JoinThread = true;
-		m_Conditional.notify_all();
-		m_Thread.join();
 	}
 
 	void ConsoleLogService::Impl::Log(ELogLevel level, std::string_view message)
 	{
-		{
-			std::lock_guard lock(m_Mutex);
-			m_Messages.push({ std::string(message), level });
-		}
-		m_Conditional.notify_one();
+		std::time_t currentTime = std::time(nullptr);
+		std::tm localTime;
+		localtime_s(&localTime, &currentTime);
+
+		char timeBuffer[9];
+		std::strftime(timeBuffer, ARRAYSIZE(timeBuffer), "%H:%M:%S", &localTime);
+
+		BeginColor(level);
+		std::fprintf(stdout, "[%s] <%s> %s\n", timeBuffer, m_Name.c_str(), message.data());
+		EndColor();
 	}
 
 	void ConsoleLogService::Impl::BeginColor(ELogLevel level)
@@ -71,35 +67,5 @@ namespace hyper
 	void ConsoleLogService::Impl::EndColor()
 	{
 		SetConsoleTextAttribute(m_Console, m_OldAttributes);
-	}
-
-	void ConsoleLogService::Impl::ThreadFunction()
-	{
-		while (true)
-		{
-			std::unique_lock lock(m_Mutex);
-			m_Conditional.wait(lock, [this]() { return !m_Messages.empty() || m_JoinThread; });
-
-			if (m_JoinThread && m_Messages.empty())
-			{
-				break;
-			}
-
-			MessageInfo info = std::move(m_Messages.front());
-			m_Messages.pop();
-
-			lock.unlock();
-
-			std::time_t currentTime = std::time(nullptr);
-			std::tm localTime;
-			localtime_s(&localTime, &currentTime);
-
-			char timeBuffer[9];
-			std::strftime(timeBuffer, ARRAYSIZE(timeBuffer), "%H:%M:%S", &localTime);
-
-			BeginColor(info.level);
-			std::fprintf(stdout, "[%s] <%s> %s\n", timeBuffer, m_Name.c_str(), info.message.c_str());
-			EndColor();
-		}
 	}
 }
