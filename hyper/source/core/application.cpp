@@ -3,24 +3,26 @@
 #include "hyper/event/dispatcher.h"
 #include "hyper/event/window_events.h"
 #include "hyper/service/service_hub.h"
+#include "hyper/utils/assert.h"
 #include "hyper/utils/logging.h"
 
 #include <stdexcept>
 
-
-#include "hyper/utils/assert.h"
-
 namespace hyper
 {
-	Application::Application(std::string_view name)
+	Application::Application(const Info& info)
 	{
-		ServiceHub::RegisterService<ConsoleLogService>(name);
+		ServiceHub::RegisterService<ConsoleLogService>(info.name);
 		ServiceHub::RegisterService<DefaultSoundService>();
 
 		try
 		{
-			m_pWindow = std::make_unique<Window>(800, 600, name);
+			m_pWindow = std::make_unique<Window>(info.windowWidth, info.windowHeight, info.name);
 			m_pRenderer = std::make_unique<Renderer>(*m_pWindow);
+
+			m_pScene = info.loadScene();
+			HyperAssert(m_pScene != nullptr, "Expected the loadScene function to create a scene");
+			
 		}
 		catch (const std::runtime_error& err)
 		{
@@ -45,8 +47,10 @@ namespace hyper
 			Time::Start();
 
 			m_pWindow->Update();
+			m_pScene->Update();
 
 			m_pRenderer->BeginFrame();
+			m_pScene->Render();
 			m_pRenderer->EndFrame();
 
 			Time::Stop();

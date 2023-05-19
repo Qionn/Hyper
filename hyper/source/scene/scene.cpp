@@ -39,8 +39,8 @@ namespace hyper
 
 	Actor* Scene::CreateActor()
 	{
-		Actor* pActor = m_ActorAllocator.Aquire(1);
-		new(pActor) Actor(this);
+		auto pActor = new Actor(this);
+		m_OwnedActors.emplace_back(std::unique_ptr<Actor>(pActor));
 		return pActor;
 	}
 }

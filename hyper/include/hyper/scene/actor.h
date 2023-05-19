@@ -55,7 +55,7 @@ namespace hyper
 		friend Scene;
 
 	private:
-		Actor(Scene* pScene);
+		explicit Actor(Scene* pScene);
 
 		void AddChild(Actor* pChild);
 		void RemoveChild(const Actor* pChild);

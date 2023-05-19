@@ -1,18 +1,16 @@
 #ifndef __HYPER_SCENE_H__
 #define __HYPER_SCENE_H__
 
+#include <memory>
 #include <vector>
 
-#include "hyper/memory/pool_allocator.h"
+#include "hyper/scene/actor.h"
 #include "hyper/fwd.h"
 
 namespace hyper
 {
 	class Scene final
 	{
-	public:
-		using ActorAllocator = PoolAllocator<Actor, 32>;
-
 	public:
 		Scene() = default;
 
@@ -33,7 +31,7 @@ namespace hyper
 
 	private:
 		std::vector<Actor*> m_Actors;
-		ActorAllocator m_ActorAllocator;
+		std::vector<std::unique_ptr<Actor>> m_OwnedActors;
 	};
 }
 

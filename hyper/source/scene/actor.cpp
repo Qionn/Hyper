@@ -70,6 +70,10 @@ namespace hyper
 				SetPosition(newPosition);
 			}
 		}
+		else if (keepWorldPosition)
+		{
+			SetPosition(currentWorldPosition);
+		}
 	}
 
 	Actor* Actor::GetParent() const
