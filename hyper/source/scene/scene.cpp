@@ -6,6 +6,12 @@
 
 namespace hyper
 {
+	Scene::Scene(IContext& context)
+		: m_pContext{ &context }
+	{
+
+	}
+
 	void Scene::Update()
 	{
 		for (Actor* pActor : m_Actors)
@@ -42,5 +48,10 @@ namespace hyper
 		auto pActor = new Actor(this);
 		m_OwnedActors.emplace_back(std::unique_ptr<Actor>(pActor));
 		return pActor;
+	}
+
+	IContext& Scene::GetContext() const
+	{
+		return *m_pContext;
 	}
 }

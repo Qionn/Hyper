@@ -19,7 +19,7 @@ namespace hyper
 		void AddActor(const std::function<void(SceneFactory&, Actor&)>& createActor);
 		void AddActor(const std::function<void(Actor&)>& createActor);
 
-		std::unique_ptr<Scene> CreateScene();
+		std::unique_ptr<Scene> CreateScene(hyper::IContext& context);
 
 		SceneFactory(const SceneFactory&)				= default;
 		SceneFactory(SceneFactory&&)					= default;
@@ -30,7 +30,7 @@ namespace hyper
 
 	private:
 		Actor* m_pPrevActor = nullptr;
-		std::vector<std::pair<Actor*, std::function<void(SceneFactory&, Actor&)>>> m_CreateActorFunctions;
+		std::vector<std::pair<Actor*, std::function<void(SceneFactory&, Actor&)>>> m_CreateActorInfo;
 	};
 }
 

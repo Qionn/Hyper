@@ -12,7 +12,7 @@ namespace hyper
 	class Scene final
 	{
 	public:
-		Scene() = default;
+		Scene(IContext& context);
 
 		void Update();
 		void Render() const;
@@ -21,6 +21,8 @@ namespace hyper
 		void RemoveActor(const Actor* pActor);
 
 		Actor* CreateActor();
+
+		IContext& GetContext() const;
 
 		Scene(const Scene&)				= delete;
 		Scene(Scene&&)					= delete;
@@ -32,6 +34,8 @@ namespace hyper
 	private:
 		std::vector<Actor*> m_Actors;
 		std::vector<std::unique_ptr<Actor>> m_OwnedActors;
+
+		IContext* m_pContext;
 	};
 }
 

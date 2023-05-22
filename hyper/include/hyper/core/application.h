@@ -8,7 +8,7 @@
 #include "hyper/core/renderer.h"
 #include "hyper/core/window.h"
 #include "hyper/event/observer.h"
-#include "hyper/scene/scene.h"
+#include "hyper/scene/scene_factory.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -16,14 +16,14 @@ namespace hyper
 	class Application final : public IObserver
 	{
 	public:
-		using LoadSceneFunction = std::function<std::unique_ptr<Scene>()>;
+		using LoadSceneFunctor = std::function<SceneFactory()>;
 
 		struct Info final
 		{
 			std::string_view name;
 			uint32_t windowWidth;
 			uint32_t windowHeight;
-			LoadSceneFunction loadScene;
+			LoadSceneFunctor loadScene;
 		};
 
 	public:

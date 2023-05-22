@@ -21,6 +21,8 @@ namespace hyper
 			throw std::runtime_error("Failed to create SDL2 renderer");
 		}
 
+		m_pContext = std::make_unique<SDL2Context>(m_pRenderer);
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
@@ -56,5 +58,10 @@ namespace hyper
 		SDL_RenderSetScale(m_pRenderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
 		ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 		SDL_RenderPresent(m_pRenderer);
+	}
+
+	hyper::IContext& Renderer::Impl::GetContext() const
+	{
+		return *m_pContext;
 	}
 }

@@ -23,4 +23,9 @@ namespace hyper
 	{
 		m_pImpl->EndFrame();
 	}
+
+	IContext& Renderer::GetContext() const
+	{
+		return m_pImpl->GetContext();
+	}
 }

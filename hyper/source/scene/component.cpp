@@ -19,4 +19,14 @@ namespace hyper
 	{
 		return m_pActor->GetParent();
 	}
+
+	Scene* AComponent::GetScene() const
+	{
+		return m_pActor->GetScene();
+	}
+
+	IContext& AComponent::GetSceneContext() const
+	{
+		return m_pActor->GetSceneContext();
+	}
 }

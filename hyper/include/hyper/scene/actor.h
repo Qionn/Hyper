@@ -30,6 +30,7 @@ namespace hyper
 
 		Actor* GetParent() const;
 		Scene* GetScene() const;
+		IContext& GetSceneContext() const;
 
 		void SetPosition(float x, float y);
 		void SetPosition(const glm::vec2& position);

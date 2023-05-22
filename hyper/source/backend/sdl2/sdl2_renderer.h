@@ -1,9 +1,13 @@
 #ifndef __HYPER_SDL2_RENDERER_H__
 #define __HYPER_SDL2_RENDERER_H__
 
+#include <memory>
+
 #include <SDL.h>
 
 #include "hyper/core/renderer.h"
+
+#include "sdl2_context.h"
 
 namespace hyper
 {
@@ -15,6 +19,8 @@ namespace hyper
 		void BeginFrame();
 		void EndFrame();
 
+		IContext& GetContext() const;
+
 		Impl(const Impl&)				= delete;
 		Impl(Impl&&)					= delete;
 		Impl& operator=(const Impl&)	= delete;
@@ -24,6 +30,7 @@ namespace hyper
 
 	private:
 		SDL_Renderer* m_pRenderer;
+		std::unique_ptr<IContext> m_pContext;
 	};
 }
 

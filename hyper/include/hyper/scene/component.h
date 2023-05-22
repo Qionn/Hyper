@@ -16,6 +16,9 @@ namespace hyper
 		Actor* GetActor() const;
 		Actor* GetActorParent() const;
 
+		Scene* GetScene() const;
+		IContext& GetSceneContext() const;
+
 		AComponent(const AComponent&)				= delete;
 		AComponent(AComponent&&)					= delete;
 		AComponent& operator=(const AComponent&)	= delete;

@@ -1,5 +1,6 @@
 #include "hyper/scene/components/transform_component.h"
 #include "hyper/scene/actor.h"
+#include "hyper/scene/scene.h"
 #include "hyper/utils/assert.h"
 
 #include <algorithm>
@@ -84,6 +85,11 @@ namespace hyper
 	Scene* Actor::GetScene() const
 	{
 		return m_pScene;
+	}
+
+	IContext& Actor::GetSceneContext() const
+	{
+		return m_pScene->GetContext();
 	}
 
 	void Actor::SetPosition(float x, float y)

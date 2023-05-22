@@ -13,6 +13,8 @@ namespace hyper
 		void BeginFrame();
 		void EndFrame();
 
+		IContext& GetContext() const;
+
 		Renderer(const Renderer&)				= delete;
 		Renderer(Renderer&&)					= delete;
 		Renderer& operator=(const Renderer&)	= delete;

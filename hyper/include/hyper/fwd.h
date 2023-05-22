@@ -6,6 +6,7 @@ namespace hyper
 	class AudioClip;
 
 	class Application;
+	class IContext;
 	class Renderer;
 	class Time;
 	class Window;

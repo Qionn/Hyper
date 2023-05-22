@@ -20,8 +20,8 @@ namespace hyper
 			m_pWindow = std::make_unique<Window>(info.windowWidth, info.windowHeight, info.name);
 			m_pRenderer = std::make_unique<Renderer>(*m_pWindow);
 
-			m_pScene = info.loadScene();
-			HyperAssert(m_pScene != nullptr, "Expected the loadScene function to create a scene");
+			SceneFactory factory = info.loadScene();
+			m_pScene = factory.CreateScene(m_pRenderer->GetContext());
 			
 		}
 		catch (const std::runtime_error& err)
