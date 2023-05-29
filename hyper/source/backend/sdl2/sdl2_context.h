@@ -12,10 +12,8 @@ namespace hyper
 	public:
 		SDL2Context(SDL_Renderer* pRenderer);
 
-		void DrawTexture(const ITexture& texture, const glm::vec2& pos) const override;
-		void DrawTexture(const ITexture& texture, const glm::vec2& pos, float width, float height) const override;
-		void DrawTexture(const ITexture& texture, float x, float y) const override;
-		void DrawTexture(const ITexture& texture, float x, float y, float width, float height) const override;
+		void DrawTexture(const ITexture& texture, const Rectf& dstRect) const override;
+		void DrawTexture(const ITexture& texture, const Recti& srcRect, const Rectf& dstRect) const override;
 
 		std::unique_ptr<ITexture> CreateTexture(std::string_view filepath) override;
 

@@ -7,46 +7,41 @@
 
 namespace hyper
 {
-	Actor::Actor(Scene* pScene)
-		: m_pScene{ pScene }
+	Actor::Actor(Scene& scene)
+		: m_pScene{ &scene }
 	{
-		HyperAssert(pScene != nullptr, "pScene must point to a valid memory address");
-
 		m_pTransform = AddComponent<TransformComponent>();
 	}
 
-	void Actor::Update()
+	void Actor::Update(float dt)
 	{
 		for (auto& [id, pComponent] : m_Components)
 		{
-			pComponent->OnUpdate();
+			pComponent->OnUpdate(dt);
 		}
 
 		for (Actor* pChild : m_Children)
 		{
-			pChild->Update();
+			pChild->Update(dt);
 		}
 	}
 
-	void Actor::Render() const
+	void Actor::Render(const IContext& context) const
 	{
 		for (const auto& [id, pComponent] : m_Components)
 		{
-			pComponent->OnRender();
+			pComponent->OnRender(context);
 		}
 
 		for (const Actor* pChild : m_Children)
 		{
-			pChild->Render();
+			pChild->Render(context);
 		}
 	}
 
-	void Actor::ForEachChild(const std::function<void(Actor&)>& functor)
+	Scene* Actor::GetScene() const
 	{
-		for (Actor* pActor : m_Children)
-		{
-			functor(*pActor);
-		}
+		return m_pScene;
 	}
 
 	void Actor::SetParent(Actor* pParent, bool keepWorldPosition)
@@ -82,14 +77,11 @@ namespace hyper
 		return m_pParent;
 	}
 
-	Scene* Actor::GetScene() const
+	void Actor::ForEachChild(const std::function<void(Actor&)>& functor)
 	{
-		return m_pScene;
-	}
-
-	IContext& Actor::GetSceneContext() const
-	{
-		return m_pScene->GetContext();
+		std::ranges::for_each(m_Children, [&functor](Actor* pChild){
+			functor(*pChild);
+		});
 	}
 
 	void Actor::SetPosition(float x, float y)

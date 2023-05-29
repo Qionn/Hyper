@@ -9,7 +9,6 @@
 #include <glm/vec2.hpp>
 
 #include "hyper/scene/component.h"
-#include "hyper/utils/typeid.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -17,26 +16,38 @@ namespace hyper
 	class Actor final
 	{
 	public:
-		void Update();
-		void Render() const;
+		void Update(float dt);
+		void Render(const IContext& context) const;
 
-		template<class T, class ... Args>	T* AddComponent(Args&&... args);
-		template<class T>					bool RemoveComponent();
-		template<class T>					T* GetComponent() const;
+		// -----===== Scene ======-----
+		Scene* GetScene() const;
+		// -----==================-----
+
+		// -----===== Parent =====-----
+		void SetParent(Actor* pParent, bool keepWorldPosition);
+		Actor* GetParent() const;
 
 		void ForEachChild(const std::function<void(Actor&)>& functor);
+		// -----==================-----
 
-		void SetParent(Actor* pParent, bool keepWorldPosition);
+		// -----=== Components ===-----
+		template<class T, class ... Args>
+		T* AddComponent(Args&&... args);
 
-		Actor* GetParent() const;
-		Scene* GetScene() const;
-		IContext& GetSceneContext() const;
+		template<class T>
+		bool RemoveComponent();
 
+		template<class T>
+		T* GetComponent() const;
+		// -----==================-----
+
+		// -----=== Transform ===------
 		void SetPosition(float x, float y);
 		void SetPosition(const glm::vec2& position);
 
 		const glm::vec2& GetLocalPosition() const;
 		const glm::vec2& GetWorldPosition() const;
+		// -----==================-----
 
 		Actor(const Actor&)				= delete;
 		Actor(Actor&&)					= delete;
@@ -47,6 +58,7 @@ namespace hyper
 
 	private:
 		Scene* m_pScene;
+
 		Actor* m_pParent = nullptr;
 		std::vector<Actor*> m_Children;
 
@@ -56,7 +68,7 @@ namespace hyper
 		friend Scene;
 
 	private:
-		explicit Actor(Scene* pScene);
+		explicit Actor(Scene& scene);
 
 		void AddChild(Actor* pChild);
 		void RemoveChild(const Actor* pChild);

@@ -3,6 +3,8 @@
 
 #include <type_traits>
 
+#include "hyper/utils/typeid.h"
+
 namespace hyper
 {
 	template<class T, class ... Args>

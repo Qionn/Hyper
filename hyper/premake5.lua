@@ -33,7 +33,7 @@ project "Hyper"
 	}
 	
 	links {
-		"ImGui",
+		"imgui",
 		"SDL2",
 		"SDL2_mixer",
 		"SDL2_image"
@@ -44,7 +44,7 @@ project "Hyper"
 		"source/backend/sdl2/**.h"
 	}
 	
-	defines "HYPER_PLATFORM_SDL2"
+	defines "HYPER_BACKEND_SDL2"
 	
 	filter { "system:windows" }
 		files {

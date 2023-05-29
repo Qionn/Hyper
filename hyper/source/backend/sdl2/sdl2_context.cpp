@@ -9,32 +9,37 @@ namespace hyper
 
 	}
 
-	void SDL2Context::DrawTexture(const ITexture& texture, const glm::vec2& pos) const
+	void SDL2Context::DrawTexture(const ITexture& texture, const Rectf& dstRect) const
 	{
-		DrawTexture(texture, pos, (float)texture.GetWidth(), (float)texture.GetHeight());
+		Recti srcRect = {
+			.x		= 0,
+			.y		= 0,
+			.width	= texture.GetWidth(),
+			.height	= texture.GetHeight()
+		};
+
+		DrawTexture(texture, srcRect, dstRect);
 	}
 
-	void SDL2Context::DrawTexture(const ITexture& texture, const glm::vec2& pos, float width, float height) const
-	{
-		DrawTexture(texture, pos.x, pos.y, width, height);
-	}
-
-	void SDL2Context::DrawTexture(const ITexture& texture, float x, float y) const
-	{
-		DrawTexture(texture, x, y, (float)texture.GetWidth(), (float)texture.GetHeight());
-	}
-
-	void SDL2Context::DrawTexture(const ITexture& texture, float x, float y, float width, float height) const
+	void SDL2Context::DrawTexture(const ITexture& texture, const Recti& srcRect, const Rectf& dstRect) const
 	{
 		const auto& sdl2Texture = reinterpret_cast<const SDL2Texture&>(texture);
 
-		SDL_FRect rect = {};
-		rect.x = x;
-		rect.y = y;
-		rect.w = width;
-		rect.h = height;
+		SDL_Rect sdlSrcRect = {
+			.x = srcRect.x,
+			.y = srcRect.y,
+			.w = srcRect.width,
+			.h = srcRect.height,
+		};
 
-		SDL_RenderCopyF(m_pRenderer, sdl2Texture.GetSDLTexture(), nullptr, &rect);
+		SDL_FRect sdlDstRect = {
+			.x = dstRect.x,
+			.y = dstRect.y,
+			.w = dstRect.width,
+			.h = dstRect.height
+		};
+
+		SDL_RenderCopyF(m_pRenderer, sdl2Texture.GetSDLTexture(), &sdlSrcRect, &sdlDstRect);
 	}
 
 	std::unique_ptr<ITexture> SDL2Context::CreateTexture(std::string_view filepath)

@@ -17,8 +17,7 @@ namespace hyper
 
 	void TransformComponent::SetPosition(const glm::vec2& position)
 	{
-		m_Position = position;
-		SetDirty();
+		SetPosition(position.x, position.y);
 	}
 
 	const glm::vec2& TransformComponent::GetLocalPosition() const
@@ -50,12 +49,12 @@ namespace hyper
 		});
 	}
 
-	void TransformComponent::OnUpdate()
+	void TransformComponent::OnUpdate(float)
 	{
 
 	}
 
-	void TransformComponent::OnRender() const
+	void TransformComponent::OnRender(const IContext&) const
 	{
 
 	}

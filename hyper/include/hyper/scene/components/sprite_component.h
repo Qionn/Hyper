@@ -5,24 +5,27 @@
 
 #include "hyper/graphics/texture.h"
 #include "hyper/scene/component.h"
+#include "hyper/utils/rect.h"
 
 namespace hyper
 {
 	class SpriteComponent final : public AComponent
 	{
 	public:
-		SpriteComponent(Actor* pActor, std::string_view filepath);
+		SpriteComponent(Actor* pActor, std::unique_ptr<ITexture> pTexture);
 		~SpriteComponent() = default;
 
-		void SetSize(float width, float height);
+		void SetScale(float scale);
+		void SetClipRect(const Recti& rect);
 
 	private:
-		float m_Width, m_Height;
+		float m_Scale = 1.0f;
+		Recti m_ClipRect;
 		std::unique_ptr<ITexture> m_pTexture;
 
 	private:
-		void OnUpdate() override;
-		void OnRender() const override;
+		void OnUpdate(float dt) override;
+		void OnRender(const IContext& context) const override;
 	};
 }
 

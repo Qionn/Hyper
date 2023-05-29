@@ -18,8 +18,8 @@ int main()
 	Application::Info appInfo{
 		.name			= "Burger Time",
 		.windowWidth	= 800,
-		.windowHeight	= 600,
-		.loadScene		= &LoadTestScene
+		.windowHeight	= 800,
+		.sceneFactory	= LoadTestSceneFactory()
 	};
 
 	auto pApp = std::make_unique<Application>(appInfo);

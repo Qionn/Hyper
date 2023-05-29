@@ -16,14 +16,12 @@ namespace hyper
 	class Application final : public IObserver
 	{
 	public:
-		using LoadSceneFunctor = std::function<SceneFactory()>;
-
 		struct Info final
 		{
 			std::string_view name;
 			uint32_t windowWidth;
 			uint32_t windowHeight;
-			LoadSceneFunctor loadScene;
+			SceneFactory sceneFactory;
 		};
 
 	public:

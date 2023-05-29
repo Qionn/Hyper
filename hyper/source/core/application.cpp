@@ -17,12 +17,9 @@ namespace hyper
 
 		try
 		{
-			m_pWindow = std::make_unique<Window>(info.windowWidth, info.windowHeight, info.name);
-			m_pRenderer = std::make_unique<Renderer>(*m_pWindow);
-
-			SceneFactory factory = info.loadScene();
-			m_pScene = factory.CreateScene(m_pRenderer->GetContext());
-			
+			m_pWindow	= std::make_unique<Window>(info.windowWidth, info.windowHeight, info.name);
+			m_pRenderer	= std::make_unique<Renderer>(*m_pWindow);
+			m_pScene	= info.sceneFactory.CreateScene(m_pRenderer->GetContext());
 		}
 		catch (const std::runtime_error& err)
 		{
@@ -47,7 +44,7 @@ namespace hyper
 			Time::Start();
 
 			m_pWindow->Update();
-			m_pScene->Update();
+			m_pScene->Update(Time::DeltaTime());
 
 			m_pRenderer->BeginFrame();
 			m_pScene->Render();

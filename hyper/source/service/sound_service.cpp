@@ -1,4 +1,4 @@
-#if defined(HYPER_PLATFORM_SDL2)
+#if defined(HYPER_BACKEND_SDL2)
 #	include "backend/sdl2/sdl2_sound_service.h"
 #endif
 

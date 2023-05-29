@@ -16,10 +16,11 @@ namespace hyper
 	public:
 		SceneFactory() = default;
 
-		void AddActor(const std::function<void(SceneFactory&, Actor&)>& createActor);
+		void AddActor(const std::function<void(Scene&, Actor&)>& createActor);
 		void AddActor(const std::function<void(Actor&)>& createActor);
 
-		std::unique_ptr<Scene> CreateScene(hyper::IContext& context);
+		std::unique_ptr<Scene> CreateScene(IContext& context) const;
+		void PopulateScene(Scene& scene) const;
 
 		SceneFactory(const SceneFactory&)				= default;
 		SceneFactory(SceneFactory&&)					= default;
@@ -29,8 +30,7 @@ namespace hyper
 		~SceneFactory() = default;
 
 	private:
-		Actor* m_pPrevActor = nullptr;
-		std::vector<std::pair<Actor*, std::function<void(SceneFactory&, Actor&)>>> m_CreateActorInfo;
+		std::vector<std::function<void(Scene&, Actor&)>> m_CreateActorInfo;
 	};
 }
 

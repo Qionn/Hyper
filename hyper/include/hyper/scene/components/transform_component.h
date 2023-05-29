@@ -28,8 +28,8 @@ namespace hyper
 		bool m_IsDirty				= true;
 
 	private:
-		void OnUpdate() override;
-		void OnRender() const override;
+		void OnUpdate(float dt) override;
+		void OnRender(const IContext& context) const override;
 	};
 }
 

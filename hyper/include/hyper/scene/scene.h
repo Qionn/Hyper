@@ -2,6 +2,7 @@
 #define __HYPER_SCENE_H__
 
 #include <memory>
+#include <queue>
 #include <vector>
 
 #include "hyper/scene/actor.h"
@@ -12,15 +13,19 @@ namespace hyper
 	class Scene final
 	{
 	public:
-		Scene(IContext& context);
+		explicit Scene(IContext& context);
 
-		void Update();
+		void Update(float dt);
 		void Render() const;
-
-		void AddActor(Actor* pActor);
-		void RemoveActor(const Actor* pActor);
-
+		
 		Actor* CreateActor();
+		void AddActor(Actor* pActor);
+
+		void PurgeActor(const Actor* pActor);
+		void PurgeAllActors();
+		void DeletePurgedActors();
+
+		void Clear();
 
 		IContext& GetContext() const;
 
@@ -32,10 +37,11 @@ namespace hyper
 		~Scene() = default;
 
 	private:
-		std::vector<Actor*> m_Actors;
-		std::vector<std::unique_ptr<Actor>> m_OwnedActors;
+		IContext& m_Context;
 
-		IContext* m_pContext;
+		std::vector<Actor*> m_Actors;
+		std::vector<Actor*> m_PurgedActors;
+		std::vector<std::unique_ptr<Actor>> m_ActorPool;
 	};
 }
 

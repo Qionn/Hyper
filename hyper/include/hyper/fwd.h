@@ -6,7 +6,6 @@ namespace hyper
 	class AudioClip;
 
 	class Application;
-	class IContext;
 	class Renderer;
 	class Time;
 	class Window;
@@ -16,11 +15,19 @@ namespace hyper
 	class IObserver;
 	class WindowCloseEvent;
 
+	class IContext;
+	class ITexture;
+
+	class Body;
+	class World;
+
 	class Actor;
 	class AComponent;
 	class Scene;
 	class SceneFactory;
 
+	class BodyComponent;
+	class SpriteComponent;
 	class TransformComponent;
 
 	class ILogService;

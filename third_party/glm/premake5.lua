@@ -1,3 +1,3 @@
-project "GLM"
+project "glm"
     kind "None"
     files { "glm/**.hpp" }

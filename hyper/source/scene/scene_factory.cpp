@@ -4,45 +4,42 @@
 
 namespace hyper
 {
-	void SceneFactory::AddActor(const std::function<void(SceneFactory&, Actor&)>& createActor)
+	void SceneFactory::AddActor(const std::function<void(Scene&, Actor&)>& createActor)
 	{
-		m_CreateActorInfo.emplace_back(m_pPrevActor, createActor);
+		m_CreateActorInfo.push_back(createActor);
 	}
 
 	void SceneFactory::AddActor(const std::function<void(Actor&)>& createActor)
 	{
-		m_CreateActorInfo.emplace_back(
-			m_pPrevActor,
-			[createActor](SceneFactory&, Actor& actor) {
+		m_CreateActorInfo.push_back(
+			[createActor](Scene&, Actor& actor) {
 				createActor(actor);
 			}
 		);
 	}
 
-	std::unique_ptr<Scene> SceneFactory::CreateScene(hyper::IContext& context)
+	std::unique_ptr<Scene> SceneFactory::CreateScene(IContext& context) const
 	{
 		auto pScene = std::make_unique<Scene>(context);
-		
+		PopulateScene(*pScene);
+		return pScene;
+	}
+
+	void SceneFactory::PopulateScene(Scene& scene) const
+	{
+		scene.Clear();
+
 		size_t actorIndex = 0;
 		while (actorIndex < m_CreateActorInfo.size())
 		{
-			auto [pPrevActor, createActor] = m_CreateActorInfo[actorIndex];
-			
-			Actor* pActor = pScene->CreateActor();
-			pActor->SetParent(pPrevActor, false);
-		
-			m_pPrevActor = pActor;
-			createActor(*this, *pActor);
-			m_pPrevActor = nullptr;
+			auto& createActor = m_CreateActorInfo[actorIndex];
+			Actor* pActor = scene.CreateActor();
 
-			if (pPrevActor == nullptr)
-			{
-				pScene->AddActor(pActor);
-			}
-		
+			createActor(scene, *pActor);
+
+			scene.AddActor(pActor);
+
 			++actorIndex;
 		}
-
-		return pScene;
 	}
 }

@@ -8,16 +8,15 @@ namespace hyper
 	class AComponent
 	{
 	public:
-		AComponent(Actor* pActor);
+		explicit AComponent(Actor* pActor);
 
-		virtual void OnUpdate() = 0;
-		virtual void OnRender() const = 0;
+		virtual void OnUpdate(float dt) = 0;
+		virtual void OnRender(const IContext& context) const = 0;
 
 		Actor* GetActor() const;
 		Actor* GetActorParent() const;
 
 		Scene* GetScene() const;
-		IContext& GetSceneContext() const;
 
 		AComponent(const AComponent&)				= delete;
 		AComponent(AComponent&&)					= delete;

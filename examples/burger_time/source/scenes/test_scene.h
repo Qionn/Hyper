@@ -7,7 +7,7 @@
 
 namespace burger_time
 {
-	hyper::SceneFactory LoadTestScene();
+	hyper::SceneFactory LoadTestSceneFactory();
 }
 
 #endif // !__BURGER_TIME_TEST_SCENE_H__

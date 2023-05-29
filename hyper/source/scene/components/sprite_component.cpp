@@ -4,27 +4,45 @@
 
 namespace hyper
 {
-	SpriteComponent::SpriteComponent(Actor* pActor, std::string_view filepath)
+	SpriteComponent::SpriteComponent(Actor* pActor, std::unique_ptr<ITexture> pTexture)
 		: AComponent(pActor)
+		, m_pTexture{ std::move(pTexture) }
 	{
-		m_pTexture = GetSceneContext().CreateTexture(filepath);
-		m_Width		= static_cast<float>(m_pTexture->GetWidth());
-		m_Height	= static_cast<float>(m_pTexture->GetHeight());
+		m_ClipRect.x		= 0;
+		m_ClipRect.y		= 0;
+		m_ClipRect.width	= m_pTexture->GetWidth();
+		m_ClipRect.height	= m_pTexture->GetHeight();
 	}
 
-	void SpriteComponent::SetSize(float width, float height)
+	void SpriteComponent::SetScale(float scale)
 	{
-		m_Width = width;
-		m_Height = height;
+		m_Scale = scale;
+	}
+	
+	void SpriteComponent::SetClipRect(const Recti& rect)
+	{
+		m_ClipRect = rect;
 	}
 
-	void SpriteComponent::OnUpdate()
+	void SpriteComponent::OnUpdate(float)
 	{
 
 	}
 
-	void SpriteComponent::OnRender() const
+	void SpriteComponent::OnRender(const IContext& context) const
 	{
-		GetSceneContext().DrawTexture(*m_pTexture, GetActor()->GetWorldPosition(), m_Width, m_Height);
+		float width = m_ClipRect.width * m_Scale;
+		float height = m_ClipRect.height * m_Scale;
+
+		glm::vec2 worldPos = GetActor()->GetWorldPosition();
+
+		Rectf dstRect = {
+			.x			= worldPos.x - (width * 0.5f),
+			.y			= worldPos.y - (height * 0.5f),
+			.width		= width,
+			.height		= height
+		};
+
+		context.DrawTexture(*m_pTexture, m_ClipRect, dstRect);
 	}
 }
