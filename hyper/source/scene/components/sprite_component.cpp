@@ -1,13 +1,17 @@
 #include "hyper/graphics/context.h"
 #include "hyper/scene/components/sprite_component.h"
 #include "hyper/scene/actor.h"
+#include "hyper/scene/scene.h"
 
 namespace hyper
 {
-	SpriteComponent::SpriteComponent(Actor* pActor, std::unique_ptr<ITexture> pTexture)
+	SpriteComponent::SpriteComponent(Actor* pActor, std::string_view filepath)
 		: AComponent(pActor)
-		, m_pTexture{ std::move(pTexture) }
 	{
+		IContext& context = GetScene()->GetContext();
+
+		m_pTexture			= context.CreateTexture(filepath);
+
 		m_ClipRect.x		= 0;
 		m_ClipRect.y		= 0;
 		m_ClipRect.width	= m_pTexture->GetWidth();

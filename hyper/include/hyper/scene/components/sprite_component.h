@@ -1,7 +1,7 @@
 #ifndef __HYPER_SPRITE_H__
 #define __HYPER_SPRITE_H__
 
-#include <memory>
+#include <string_view>
 
 #include "hyper/graphics/texture.h"
 #include "hyper/scene/component.h"
@@ -12,7 +12,7 @@ namespace hyper
 	class SpriteComponent final : public AComponent
 	{
 	public:
-		SpriteComponent(Actor* pActor, std::unique_ptr<ITexture> pTexture);
+		SpriteComponent(Actor* pActor, std::string_view filepath);
 		~SpriteComponent() = default;
 
 		void SetScale(float scale);

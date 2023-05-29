@@ -12,15 +12,13 @@ namespace burger_time
 	{
 		SceneFactory factory;
 
-		factory.AddActor([](Scene& scene, Actor& actor) {
-			IContext& context = scene.GetContext();
-			actor.AddComponent<SpriteComponent>(context.CreateTexture("assets/sprites/level_01.png"));
+		factory.AddActor([](Actor& actor) {
+			actor.AddComponent<SpriteComponent>("assets/sprites/level_01.png");
 			actor.SetPosition(400, 400);
 		});
 
-		factory.AddActor([](Scene& scene, Actor& actor) {
-			IContext& context = scene.GetContext();
-			actor.AddComponent<SpriteComponent>(context.CreateTexture("assets/sprites/player_idle.png"));
+		factory.AddActor([](Actor& actor) {
+			actor.AddComponent<SpriteComponent>("assets/sprites/player_idle.png");
 			actor.SetPosition(300, 50);
 		});
 
