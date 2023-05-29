@@ -1,6 +1,6 @@
 # Hyper
 
-Hyper is a C++ toolkit designed for game development. It provides a comprehensive set of tools to build games from scratch. Whether you are a seasoned game developer or just starting out, Hyper makes it easy to create high-quality games that run on a variety of platforms.
+Hyper is my final exam project for Programming 4. It's a game engine I built to learn about game development. It's beginner-friendly and allows me to create small games. it is a valuable experience that enhances my game development skills.
 
 ## Examples
 
