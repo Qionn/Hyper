@@ -37,8 +37,16 @@ namespace hyper
 		return pActor;
 	}
 
+	Actor* Scene::CreateAndAddActor()
+	{
+		Actor* pActor = CreateActor();
+		AddActor(pActor);
+		return pActor;
+	}
+
 	void Scene::AddActor(Actor* pActor)
 	{
+		HyperAssert(pActor->GetScene() == this, "pActor does not belong to this scene");
 		m_Actors.push_back(pActor);
 	}
 

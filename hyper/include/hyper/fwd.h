@@ -16,17 +16,13 @@ namespace hyper
 	class WindowCloseEvent;
 
 	class IContext;
+	class IFont;
 	class ITexture;
-
-	class Body;
-	class World;
 
 	class Actor;
 	class AComponent;
 	class Scene;
-	class SceneFactory;
 
-	class BodyComponent;
 	class SpriteComponent;
 	class TransformComponent;
 

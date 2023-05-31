@@ -1,12 +1,26 @@
 #include "sdl2_context.h"
 #include "sdl2_texture.h"
 
+#include "hyper/utils/logging.h"
+
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+
+#include <algorithm>
+
 namespace hyper
 {
 	SDL2Context::SDL2Context(SDL_Renderer* pRenderer)
 		: m_pRenderer{ pRenderer }
 	{
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+		TTF_Init();
+	}
 
+	SDL2Context::~SDL2Context()
+	{
+		TTF_Quit();
+		IMG_Quit();
 	}
 
 	void SDL2Context::DrawTexture(const ITexture& texture, const Rectf& dstRect) const
@@ -44,6 +58,45 @@ namespace hyper
 
 	std::unique_ptr<ITexture> SDL2Context::CreateTexture(std::string_view filepath)
 	{
-		return std::make_unique<SDL2Texture>(m_pRenderer, filepath);
+		SDL_Texture* pTexture = IMG_LoadTexture(m_pRenderer, filepath.data());
+		if (pTexture == nullptr)
+		{
+			LogWarn("Missing texture '{}': {}", filepath, IMG_GetError());
+		}
+
+		return std::make_unique<SDL2Texture>(pTexture);
+	}
+
+	std::unique_ptr<ITexture> SDL2Context::CreateTexture(std::string_view fontFilepath, int ptSize, std::string_view text, const glm::vec3& color)
+	{
+		TTF_Font* pFont = TTF_OpenFont(fontFilepath.data(), ptSize);
+		if (pFont == nullptr)
+		{
+			LogWarn("Missing font: '{}': {}", fontFilepath, TTF_GetError());
+		}
+
+		SDL_Color sdlColor = {
+			static_cast<Uint8>(std::clamp(color.r * 255, 0.0f, 255.0f)),
+			static_cast<Uint8>(std::clamp(color.g * 255, 0.0f, 255.0f)),
+			static_cast<Uint8>(std::clamp(color.b * 255, 0.0f, 255.0f)),
+			255
+		};
+
+		SDL_Surface* pSurface = TTF_RenderText_Solid(pFont, text.data(), sdlColor);
+		if (pSurface == nullptr)
+		{
+			LogWarn("Missing surface: {}", TTF_GetError());
+		}
+
+		SDL_Texture* pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pSurface);
+		if (pTexture == nullptr)
+		{
+			LogWarn("Missing texture: {}", SDL_GetError());
+		}
+
+		SDL_FreeSurface(pSurface);
+		TTF_CloseFont(pFont);
+
+		return std::make_unique<SDL2Texture>(pTexture);
 	}
 }

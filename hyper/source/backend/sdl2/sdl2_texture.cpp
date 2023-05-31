@@ -1,20 +1,13 @@
 #include "sdl2_texture.h"
 
-#include "hyper/utils/logging.h"
-
-#include <SDL_image.h>
+#include "hyper/utils/assert.h"
 
 namespace hyper
 {
-	SDL2Texture::SDL2Texture(SDL_Renderer* pRenderer, std::string_view filepath)
+	SDL2Texture::SDL2Texture(SDL_Texture* pTexture)
+		: m_pTexture{ pTexture }
 	{
-		m_pTexture = IMG_LoadTexture(pRenderer, filepath.data());
-
-		if (m_pTexture == nullptr)
-		{
-			LogWarn("Failed to load SDL2 texture '{}'", filepath);
-		}
-
+		HyperAssert(pTexture != nullptr, "Expected pTexture to point to valid memory");
 		SDL_QueryTexture(m_pTexture, nullptr, nullptr, &m_Width, &m_Height);
 	}
 

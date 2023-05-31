@@ -19,7 +19,7 @@ int main()
 		.name			= "Burger Time",
 		.windowWidth	= 800,
 		.windowHeight	= 800,
-		.sceneFactory	= LoadTestSceneFactory()
+		.loadScene		= &LoadTestScene
 	};
 
 	auto pApp = std::make_unique<Application>(appInfo);

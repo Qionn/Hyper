@@ -2,26 +2,27 @@
 
 #include <hyper/graphics/context.h>
 #include <hyper/scene/components/sprite_component.h>
+#include <hyper/scene/components/text_component.h>
 #include <hyper/scene/scene.h>
 
 using namespace hyper;
 
 namespace burger_time
 {
-	SceneFactory LoadTestSceneFactory()
+	void LoadTestScene(Scene& scene)
 	{
-		SceneFactory factory;
+		{
+			Actor* pActor = scene.CreateAndAddActor();
+			pActor->AddComponent<SpriteComponent>("assets/sprites/level_01.png");
+			pActor->SetPosition(400, 400);
+		}
 
-		factory.AddActor([](Actor& actor) {
-			actor.AddComponent<SpriteComponent>("assets/sprites/level_01.png");
-			actor.SetPosition(400, 400);
-		});
-
-		factory.AddActor([](Actor& actor) {
-			actor.AddComponent<SpriteComponent>("assets/sprites/player_idle.png");
-			actor.SetPosition(300, 50);
-		});
-
-		return factory;
+		{
+			Actor* pActor = scene.CreateAndAddActor();
+			//pActor->AddComponent<SpriteComponent>("assets/sprites/player_idle.png");
+			auto pTc = pActor->AddComponent<TextComponent>("assets/fonts/joystix_monospace.otf", 36);
+			pTc->SetText("Words on the screen!", { 1, 1, 1 });
+			pActor->SetPosition(100, 50);
+		}
 	}
 }

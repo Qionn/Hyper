@@ -2,8 +2,8 @@
 #include "hyper/core/time.h"
 #include "hyper/event/dispatcher.h"
 #include "hyper/event/window_events.h"
+#include "hyper/scene/scene.h"
 #include "hyper/service/service_hub.h"
-#include "hyper/utils/assert.h"
 #include "hyper/utils/logging.h"
 
 #include <stdexcept>
@@ -19,7 +19,9 @@ namespace hyper
 		{
 			m_pWindow	= std::make_unique<Window>(info.windowWidth, info.windowHeight, info.name);
 			m_pRenderer	= std::make_unique<Renderer>(*m_pWindow);
-			m_pScene	= info.sceneFactory.CreateScene(m_pRenderer->GetContext());
+			m_pScene	= std::make_unique<Scene>(m_pRenderer->GetContext());
+
+			info.loadScene(*m_pScene);
 		}
 		catch (const std::runtime_error& err)
 		{

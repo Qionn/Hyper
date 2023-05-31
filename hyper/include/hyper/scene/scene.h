@@ -19,6 +19,7 @@ namespace hyper
 		void Render() const;
 		
 		Actor* CreateActor();
+		Actor* CreateAndAddActor();
 		void AddActor(Actor* pActor);
 
 		void PurgeActor(const Actor* pActor);

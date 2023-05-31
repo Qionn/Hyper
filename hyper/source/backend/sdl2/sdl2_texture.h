@@ -10,7 +10,7 @@ namespace hyper
 	class SDL2Texture final : public ITexture
 	{
 	public:
-		SDL2Texture(SDL_Renderer* pRenderer, std::string_view filepath);
+		SDL2Texture(SDL_Texture* pTexture);
 
 		int GetWidth() const override;
 		int GetHeight() const override;

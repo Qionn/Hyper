@@ -3,11 +3,11 @@
 
 #include <memory>
 
-#include <hyper/scene/scene_factory.h>
+#include <hyper/fwd.h>
 
 namespace burger_time
 {
-	hyper::SceneFactory LoadTestSceneFactory();
+	void LoadTestScene(hyper::Scene& scene);
 }
 
 #endif // !__BURGER_TIME_TEST_SCENE_H__
