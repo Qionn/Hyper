@@ -1,5 +1,5 @@
 #if defined(HYPER_BACKEND_WIN32)
-#	include "backend/win32/win32_log_service.h"
+#	include "backend/win32/service/win32_log_service.h"
 #endif
 
 namespace hyper

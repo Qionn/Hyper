@@ -25,5 +25,13 @@ namespace burger_time
 			pText->SetText("A recration of Burger Time 1982");
 			pText->SetColor({ 1, 1, 1 });
 		}
+
+		{
+			Actor* pActor = scene.CreateAndAddActor();
+			pActor->SetPosition(400.0f, 150.0f);
+			auto pText = pActor->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 24);
+			pText->SetText("Using the Hyper engine");
+			pText->SetColor({ 1, 1, 1 });
+		}
 	}
 }

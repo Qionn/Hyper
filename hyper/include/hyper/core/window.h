@@ -3,16 +3,13 @@
 
 #include <string_view>
 
-#include "hyper/event/subject.h"
-
 namespace hyper
 {
-	class Window final : public ASubject
+	class Window final
 	{
 	public:
 		Window(uint32_t width, uint32_t height, std::string_view title);
 
-		void Update();
 		void Show();
 		void Hide();
 

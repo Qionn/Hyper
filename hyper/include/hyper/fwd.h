@@ -16,7 +16,6 @@ namespace hyper
 	class WindowCloseEvent;
 
 	class IContext;
-	class IFont;
 	class ITexture;
 
 	class Actor;
@@ -24,6 +23,7 @@ namespace hyper
 	class Scene;
 
 	class SpriteComponent;
+	class TextComponent;
 	class TransformComponent;
 
 	class ILogService;

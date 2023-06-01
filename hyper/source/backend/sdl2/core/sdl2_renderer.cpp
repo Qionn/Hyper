@@ -60,7 +60,7 @@ namespace hyper
 		SDL_RenderPresent(m_pRenderer);
 	}
 
-	hyper::IContext& Renderer::Impl::GetContext() const
+	IContext& Renderer::Impl::GetContext() const
 	{
 		return *m_pContext;
 	}

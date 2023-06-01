@@ -8,7 +8,7 @@
 
 namespace hyper
 {
-	Window::Impl::Impl(uint32_t width, uint32_t height, std::string_view title)
+	Window::Impl::Impl(Window* pWindow, uint32_t width, uint32_t height, std::string_view title)
 	{
 		if (s_InstanceCount++ == 0)
 		{
@@ -29,6 +29,8 @@ namespace hyper
 		{
 			throw std::runtime_error("Failed to create SDL2 window");
 		}
+
+		SDL_SetWindowData(m_pWindow, "hyper_window", pWindow);
 	}
 
 	Window::Impl::~Impl()
@@ -38,28 +40,6 @@ namespace hyper
 		if (--s_InstanceCount == 0)
 		{
 			SDL_QuitSubSystem(SDL_INIT_VIDEO);
-		}
-	}
-
-	void Window::Impl::Update()
-	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_WINDOWEVENT)
-			{
-				switch (event.window.event)
-				{
-					case SDL_WINDOWEVENT_CLOSE:
-					{
-						WindowCloseEvent e;
-						FireEvent(e);
-						break;
-					}
-				}
-			}
-			
-			ImGui_ImplSDL2_ProcessEvent(&event);
 		}
 	}
 
@@ -76,18 +56,5 @@ namespace hyper
 	void* Window::Impl::GetNativeWindow() const
 	{
 		return m_pWindow;
-	}
-
-	void Window::Impl::SetEventCallback(const EventCallback& callback)
-	{
-		m_Callback = callback;
-	}
-
-	void Window::Impl::FireEvent(const AEvent& event) const
-	{
-		if (m_Callback != nullptr)
-		{
-			m_Callback(event);
-		}
 	}
 }

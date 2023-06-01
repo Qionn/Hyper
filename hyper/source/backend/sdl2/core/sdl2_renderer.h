@@ -7,7 +7,7 @@
 
 #include "hyper/core/renderer.h"
 
-#include "sdl2_context.h"
+#include "../graphics/sdl2_context.h"
 
 namespace hyper
 {

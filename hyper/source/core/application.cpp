@@ -2,6 +2,7 @@
 #include "hyper/core/time.h"
 #include "hyper/event/dispatcher.h"
 #include "hyper/event/window_events.h"
+#include "hyper/input/input.h"
 #include "hyper/scene/scene.h"
 #include "hyper/service/service_hub.h"
 #include "hyper/utils/logging.h"
@@ -29,23 +30,25 @@ namespace hyper
 			std::exit(-1);
 		}
 
-		m_pWindow->AddObserver(this);
+		HYPER_INPUT.AddObserver(this);
 	}
 
 	Application::~Application()
 	{
-		m_pWindow->RemoveObserver(this);
+		HYPER_INPUT.RemoveObserver(this);
 	}
 
 	void Application::Start()
 	{
 		m_IsRunning = true;
 
+		Input& input = HYPER_INPUT;
+
 		while (m_IsRunning)
 		{
 			Time::Start();
 
-			m_pWindow->Update();
+			input.Update();
 			m_pScene->Update(Time::DeltaTime());
 
 			m_pRenderer->BeginFrame();
@@ -70,9 +73,13 @@ namespace hyper
 		return dispatcher.IsEventHandled();
 	}
 
-	bool Application::OnWindowCloseEvent(const WindowCloseEvent&)
+	bool Application::OnWindowCloseEvent(const WindowCloseEvent& event)
 	{
-		Stop();
-		return true;
+		if (event.pWindow == m_pWindow.get())
+		{
+			Stop();
+			return true;
+		}
+		return false;
 	}
 }

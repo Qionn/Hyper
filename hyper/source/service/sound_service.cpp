@@ -1,5 +1,5 @@
 #if defined(HYPER_BACKEND_SDL2)
-#	include "backend/sdl2/sdl2_sound_service.h"
+#	include "backend/sdl2/service/sdl2_sound_service.h"
 #endif
 
 #include "hyper/utils/logging.h"

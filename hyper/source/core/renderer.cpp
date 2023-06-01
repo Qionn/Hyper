@@ -1,5 +1,5 @@
 #if defined(HYPER_BACKEND_SDL2)
-#	include "backend/sdl2/sdl2_renderer.h"
+#	include "backend/sdl2/core/sdl2_renderer.h"
 #endif
 
 namespace hyper
