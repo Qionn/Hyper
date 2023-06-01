@@ -12,11 +12,12 @@ namespace hyper
 	class Window::Impl final
 	{
 	public:
-		Impl(Window* pWindow, uint32_t width, uint32_t height, std::string_view title);
+		Impl(uint32_t width, uint32_t height, std::string_view title);
 
 		void Show();
 		void Hide();
 
+		id_t GetId() const;
 		void* GetNativeWindow() const;
 
 		Impl(const Impl&) = delete;
@@ -27,6 +28,7 @@ namespace hyper
 		~Impl();
 
 	private:
+		id_t m_Id;
 		SDL_Window* m_pWindow;
 
 		static inline size_t s_InstanceCount = 0;

@@ -1,18 +1,18 @@
 #ifndef __HYPER_WINDOW_EVENTS_H__
 #define __HYPER_WINDOW_EVENTS_H__
 
+#include "hyper/core/window.h"
 #include "hyper/event/event.h"
-#include "hyper/fwd.h"
 
 namespace hyper
 {
 	class WindowCloseEvent final : public AEvent
 	{
 	public:
-		const Window* pWindow;
+		Window::id_t id;
 
-		WindowCloseEvent(const Window* pWindow)
-			: pWindow{ pWindow } {}
+		WindowCloseEvent(Window::id_t id)
+			: id{ id } {}
 	};
 }
 

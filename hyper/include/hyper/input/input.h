@@ -4,14 +4,12 @@
 #include "hyper/event/subject.h"
 #include "hyper/fwd.h"
 
-#define HYPER_INPUT (::hyper::Input::Get())
-
 namespace hyper
 {
 	class Input final : public ASubject
 	{
 	public:
-		static Input& Get();
+		Input();
 
 		void Update();
 
@@ -25,9 +23,6 @@ namespace hyper
 	private:
 		class Impl;
 		Impl* m_pImpl;
-
-	private:
-		Input();
 	};
 }
 

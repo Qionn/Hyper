@@ -8,6 +8,7 @@
 #include "hyper/core/renderer.h"
 #include "hyper/core/window.h"
 #include "hyper/event/observer.h"
+#include "hyper/input/input.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -42,6 +43,7 @@ namespace hyper
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<Renderer> m_pRenderer;
 		std::unique_ptr<Scene> m_pScene;
+		std::unique_ptr<Input> m_pInput;
 
 		bool m_IsRunning = false;
 		

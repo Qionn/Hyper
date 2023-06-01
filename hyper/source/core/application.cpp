@@ -2,7 +2,6 @@
 #include "hyper/core/time.h"
 #include "hyper/event/dispatcher.h"
 #include "hyper/event/window_events.h"
-#include "hyper/input/input.h"
 #include "hyper/scene/scene.h"
 #include "hyper/service/service_hub.h"
 #include "hyper/utils/logging.h"
@@ -21,6 +20,7 @@ namespace hyper
 			m_pWindow	= std::make_unique<Window>(info.windowWidth, info.windowHeight, info.name);
 			m_pRenderer	= std::make_unique<Renderer>(*m_pWindow);
 			m_pScene	= std::make_unique<Scene>(m_pRenderer->GetContext());
+			m_pInput	= std::make_unique<Input>();
 
 			info.loadScene(*m_pScene);
 		}
@@ -30,25 +30,23 @@ namespace hyper
 			std::exit(-1);
 		}
 
-		HYPER_INPUT.AddObserver(this);
+		m_pInput->AddObserver(this);
 	}
 
 	Application::~Application()
 	{
-		HYPER_INPUT.RemoveObserver(this);
+		m_pInput->RemoveObserver(this);
 	}
 
 	void Application::Start()
 	{
 		m_IsRunning = true;
 
-		Input& input = HYPER_INPUT;
-
 		while (m_IsRunning)
 		{
 			Time::Start();
 
-			input.Update();
+			m_pInput->Update();
 			m_pScene->Update(Time::DeltaTime());
 
 			m_pRenderer->BeginFrame();
@@ -75,7 +73,7 @@ namespace hyper
 
 	bool Application::OnWindowCloseEvent(const WindowCloseEvent& event)
 	{
-		if (event.pWindow == m_pWindow.get())
+		if (event.id == m_pWindow->GetId())
 		{
 			Stop();
 			return true;

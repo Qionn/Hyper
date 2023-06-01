@@ -8,8 +8,10 @@
 
 namespace hyper
 {
-	Window::Impl::Impl(Window* pWindow, uint32_t width, uint32_t height, std::string_view title)
+	Window::Impl::Impl(uint32_t width, uint32_t height, std::string_view title)
 	{
+		m_Id = reinterpret_cast<uintptr_t>(this);
+
 		if (s_InstanceCount++ == 0)
 		{
 			if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
@@ -30,7 +32,7 @@ namespace hyper
 			throw std::runtime_error("Failed to create SDL2 window");
 		}
 
-		SDL_SetWindowData(m_pWindow, "hyper_window", pWindow);
+		SDL_SetWindowData(m_pWindow, "id", reinterpret_cast<void*>(m_Id));
 	}
 
 	Window::Impl::~Impl()
@@ -51,6 +53,11 @@ namespace hyper
 	void Window::Impl::Hide()
 	{
 		SDL_HideWindow(m_pWindow);
+	}
+
+	Window::id_t Window::Impl::GetId() const
+	{
+		return m_Id;
 	}
 
 	void* Window::Impl::GetNativeWindow() const

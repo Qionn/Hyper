@@ -17,12 +17,6 @@ namespace hyper
 		delete m_pImpl;
 	}
 
-	/* static */ Input& Input::Get()
-	{
-		static Input instance;
-		return instance;
-	}
-
 	void Input::Update()
 	{
 		m_pImpl->Update();

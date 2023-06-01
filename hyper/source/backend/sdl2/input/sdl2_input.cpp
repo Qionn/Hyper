@@ -17,13 +17,13 @@ namespace hyper
 				case SDL_WINDOWEVENT:
 				{
 					SDL_Window* pNativeWindow = SDL_GetWindowFromID(event.window.windowID);
-					auto pWindow = static_cast<const Window*>(SDL_GetWindowData(pNativeWindow, "hyper_window"));
+					auto id = reinterpret_cast<size_t>(SDL_GetWindowData(pNativeWindow, "id"));
 
 					switch (event.window.event)
 					{
 						case SDL_WINDOWEVENT_CLOSE:
 						{
-							WindowCloseEvent e(pWindow);
+							WindowCloseEvent e(id);
 							FireEvent(e);
 						}
 					}
