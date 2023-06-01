@@ -14,9 +14,14 @@ namespace hyper
 
 	}
 
-	void TextComponent::SetText(std::string_view text, const glm::vec3& color)
+	void TextComponent::SetText(std::string_view text)
 	{
 		m_Text		= text;
+		m_IsDirty	= true;
+	}
+
+	void TextComponent::SetColor(const glm::vec3& color)
+	{
 		m_Color		= color;
 		m_IsDirty	= true;
 	}
@@ -52,11 +57,14 @@ namespace hyper
 		{
 			glm::vec2 worldPos = GetActor()->GetWorldPosition();
 
+			float width = static_cast<float>(m_pTexture->GetWidth());
+			float height = static_cast<float>(m_pTexture->GetHeight());
+
 			Rectf dstRect = {
-				.x			= worldPos.x,
-				.y			= worldPos.y,
-				.width		= static_cast<float>(m_pTexture->GetWidth()),
-				.height		= static_cast<float>(m_pTexture->GetHeight())
+				.x			= worldPos.x - width * 0.5f,
+				.y			= worldPos.y - height * 0.5f,
+				.width		= width,
+				.height		= height
 			};
 
 			context.DrawTexture(*m_pTexture, dstRect);

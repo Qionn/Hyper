@@ -85,13 +85,13 @@ namespace hyper
 		SDL_Surface* pSurface = TTF_RenderText_Solid(pFont, text.data(), sdlColor);
 		if (pSurface == nullptr)
 		{
-			LogWarn("Missing surface: {}", TTF_GetError());
+			LogTrace("Missing font (surface): {}", TTF_GetError());
 		}
 
 		SDL_Texture* pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pSurface);
 		if (pTexture == nullptr)
 		{
-			LogWarn("Missing texture: {}", SDL_GetError());
+			LogTrace("Missing font (texture): {}", SDL_GetError());
 		}
 
 		SDL_FreeSurface(pSurface);

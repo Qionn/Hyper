@@ -16,7 +16,8 @@ namespace hyper
 	public:
 		TextComponent(Actor* pActor, std::string fontPath, int ptSize);
 
-		void SetText(std::string_view text, const glm::vec3& color);
+		void SetText(std::string_view text);
+		void SetColor(const glm::vec3& color);
 
 		const std::string& GetText() const;
 		const glm::vec3& GetColor() const;

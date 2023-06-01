@@ -1,4 +1,4 @@
-#include "scenes/test_scene.h"
+#include "scenes/main_menu_scene.h"
 
 #include <hyper/core/application.h>
 
@@ -19,7 +19,7 @@ int main()
 		.name			= "Burger Time",
 		.windowWidth	= 800,
 		.windowHeight	= 800,
-		.loadScene		= &LoadTestScene
+		.loadScene		= &LoadMainMenuScene
 	};
 
 	auto pApp = std::make_unique<Application>(appInfo);
