@@ -1,9 +1,9 @@
 #include "hyper/core/application.h"
-#include "hyper/core/time.h"
 #include "hyper/event/dispatcher.h"
 #include "hyper/event/window_events.h"
 #include "hyper/scene/scene.h"
 #include "hyper/service/service_hub.h"
+#include "hyper/utils/clock.h"
 #include "hyper/utils/logging.h"
 
 #include <stdexcept>
@@ -42,18 +42,19 @@ namespace hyper
 	{
 		m_IsRunning = true;
 
+		Clock clock;
+		float deltatime = 0.0f;
+
 		while (m_IsRunning)
 		{
-			Time::Start();
-
 			m_pInput->Update();
-			m_pScene->Update(Time::DeltaTime());
+			m_pScene->Update(deltatime);
 
 			m_pRenderer->BeginFrame();
 			m_pScene->Render();
 			m_pRenderer->EndFrame();
 
-			Time::Stop();
+			deltatime = clock.Tick();
 		}
 	}
 

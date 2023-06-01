@@ -1,4 +1,3 @@
-#include "hyper/core/time.h"
 #include "hyper/scene/scene.h"
 #include "hyper/utils/assert.h"
 
