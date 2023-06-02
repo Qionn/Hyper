@@ -18,15 +18,11 @@ namespace hyper
 		void Update(float dt);
 		void Render() const;
 		
-		Actor* CreateActor();
-		Actor* CreateAndAddActor();
-		void AddActor(Actor* pActor);
+		void AddActor(std::shared_ptr<Actor> pActor);
+		void RemoveActor(Actor* pActor);
+		void RemoveAllActors();
 
-		void PurgeActor(const Actor* pActor);
-		void PurgeAllActors();
-		void DeletePurgedActors();
-
-		void Clear();
+		void EraseRemovedActors();
 
 		IContext& GetContext() const;
 
@@ -40,9 +36,8 @@ namespace hyper
 	private:
 		IContext& m_Context;
 
-		std::vector<Actor*> m_Actors;
-		std::vector<Actor*> m_PurgedActors;
-		std::vector<std::unique_ptr<Actor>> m_ActorPool;
+		std::vector<std::shared_ptr<Actor>> m_Actors;
+		std::vector<Actor*> m_RemovedActors;
 	};
 }
 

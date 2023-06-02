@@ -13,65 +13,50 @@
 
 namespace hyper
 {
-	class Actor final
+	class Actor final : public std::enable_shared_from_this<Actor>
 	{
 	public:
+		explicit Actor(Scene& scene);
+
 		void Update(float dt);
 		void Render(const IContext& context) const;
 
-		// -----===== Scene ======-----
-		Scene* GetScene() const;
-		// -----==================-----
+		template<class T, class ... Args> T* AddComponent(Args&&... args);
+		template<class T> bool RemoveComponent();
+		template<class T> T* GetComponent() const;
 
-		// -----===== Parent =====-----
-		void SetParent(Actor* pParent, bool keepWorldPosition);
-		Actor* GetParent() const;
-
-		void ForEachChild(const std::function<void(Actor&)>& functor);
-		// -----==================-----
-
-		// -----=== Components ===-----
-		template<class T, class ... Args>
-		T* AddComponent(Args&&... args);
-
-		template<class T>
-		bool RemoveComponent();
-
-		template<class T>
-		T* GetComponent() const;
-		// -----==================-----
-
-		// -----=== Transform ===------
 		void SetPosition(float x, float y);
 		void SetPosition(const glm::vec2& position);
 
 		const glm::vec2& GetLocalPosition() const;
 		const glm::vec2& GetWorldPosition() const;
-		// -----==================-----
+
+		void ForEachChild(const std::function<void(Actor&)>& functor) const;
+
+		void SetParent(Actor* pParent, bool keepWorldPosition);
+		bool HasParent() const;
+		Actor* GetParent() const;
+		Scene* GetScene() const;
 
 		Actor(const Actor&)				= delete;
 		Actor(Actor&&)					= delete;
 		Actor& operator=(const Actor&)	= delete;
 		Actor& operator=(Actor&&)		= delete;
 
-		~Actor() = default;
+		~Actor();
 
 	private:
 		Scene* m_pScene;
-
 		Actor* m_pParent = nullptr;
-		std::vector<Actor*> m_Children;
-
+		std::vector<std::shared_ptr<Actor>> m_Children;
 		std::unordered_map<int, std::unique_ptr<AComponent>> m_Components;
 		TransformComponent* m_pTransform;
 
 		friend Scene;
 
 	private:
-		explicit Actor(Scene& scene);
-
-		void AddChild(Actor* pChild);
-		void RemoveChild(const Actor* pChild);
+		void AddChild(std::shared_ptr<Actor> pChild);
+		void RemoveChild(Actor* pChild);
 	};
 }
 

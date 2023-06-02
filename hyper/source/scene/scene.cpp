@@ -13,9 +13,9 @@ namespace hyper
 
 	void Scene::Update(float dt)
 	{
-		DeletePurgedActors();
+		EraseRemovedActors();
 
-		for (Actor* pActor : m_Actors)
+		for (auto& pActor : m_Actors)
 		{
 			pActor->Update(dt);
 		}
@@ -23,77 +23,40 @@ namespace hyper
 
 	void Scene::Render() const
 	{
-		for (const Actor* pActor : m_Actors)
+		for (const auto& pActor : m_Actors)
 		{
 			pActor->Render(m_Context);
 		}
 	}
 
-	Actor* Scene::CreateActor()
-	{
-		auto pActor = new Actor(*this);
-		m_ActorPool.emplace_back(std::unique_ptr<Actor>(pActor));
-		return pActor;
-	}
-
-	Actor* Scene::CreateAndAddActor()
-	{
-		Actor* pActor = CreateActor();
-		AddActor(pActor);
-		return pActor;
-	}
-
-	void Scene::AddActor(Actor* pActor)
+	void Scene::AddActor(std::shared_ptr<Actor> pActor)
 	{
 		HyperAssert(pActor->GetScene() == this, "pActor does not belong to this scene");
-		m_Actors.push_back(pActor);
+		m_Actors.push_back(std::move(pActor));
 	}
 
-	void Scene::PurgeActor(const Actor* pActor)
+	void Scene::RemoveActor(Actor* pActor)
 	{
-		if (auto it = std::ranges::find(m_Actors, pActor); it != m_Actors.end())
+		HyperAssert(pActor->GetScene() == this, "pActor does not belong to this scene");
+		m_RemovedActors.push_back(pActor);
+	}
+
+	void Scene::RemoveAllActors()
+	{
+		for (auto& pActor : m_Actors)
 		{
-			m_PurgedActors.push_back(*it);
+			RemoveActor(pActor.get());
 		}
 	}
 
-	void Scene::PurgeAllActors()
+	void Scene::EraseRemovedActors()
 	{
-		for (Actor* pActor : m_Actors)
+		for (auto& pActor : m_RemovedActors)
 		{
-			PurgeActor(pActor);
-		}
-	}
-
-	void Scene::DeletePurgedActors()
-	{
-		while (!m_PurgedActors.empty())
-		{
-			Actor* pActor = m_PurgedActors.back();
-			m_PurgedActors.pop_back();
-
-			pActor->ForEachChild([](Actor& child) {
-				child.SetParent(nullptr, false);
-			});
-
-			if (auto it = std::ranges::find(m_Actors, pActor); it != m_Actors.end())
-			{
-				m_Actors.erase(it);
-			}
-
 			auto pred = [pActor](const auto& pA) { return pA.get() == pActor; };
-			if (auto it = std::ranges::find_if(m_ActorPool, pred); it != m_ActorPool.end())
-			{
-				m_ActorPool.erase(it);
-			}
+			m_Actors.erase(std::remove_if(m_Actors.begin(), m_Actors.end(), pred), m_Actors.end());
 		}
-	}
-
-	void Scene::Clear()
-	{
-		m_Actors.clear();
-		m_PurgedActors.clear();
-		m_ActorPool.clear();
+		m_RemovedActors.clear();
 	}
 
 	IContext& Scene::GetContext() const
