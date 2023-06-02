@@ -16,14 +16,13 @@ namespace hyper
 	class Application final : public IObserver
 	{
 	public:
-		using LoadSceneFunction = std::function<void(Scene&)>;
+		using LoadSceneFunction = std::function<void(Scene&, Input&)>;
 
 		struct Info final
 		{
 			std::string_view name;
 			uint32_t windowWidth;
 			uint32_t windowHeight;
-			LoadSceneFunction loadScene;
 		};
 
 	public:
@@ -31,6 +30,8 @@ namespace hyper
 
 		void Start();
 		void Stop();
+
+		void LoadScene(const LoadSceneFunction& loadScene);
 
 		Application(const Application&)				= delete;
 		Application(Application&&)					= delete;
@@ -46,6 +47,7 @@ namespace hyper
 		std::unique_ptr<Input> m_pInput;
 
 		bool m_IsRunning = false;
+		bool m_CanStart = true;
 		
 	private:
 		bool OnEvent(const AEvent& event) override;

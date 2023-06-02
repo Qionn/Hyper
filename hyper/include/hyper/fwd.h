@@ -7,7 +7,6 @@ namespace hyper
 
 	class Application;
 	class Renderer;
-	class Time;
 	class Window;
 
 	class Dispatcher;
@@ -18,6 +17,9 @@ namespace hyper
 	class IContext;
 	class ITexture;
 
+	class Input;
+	class Keyboard;
+
 	class Actor;
 	class AComponent;
 	class Scene;
@@ -26,6 +28,8 @@ namespace hyper
 	class TextComponent;
 	class TransformComponent;
 
+	class Clock;
+	class ICommand;
 	class ILogService;
 	class NullLogService;
 	class ConsoleLogService;

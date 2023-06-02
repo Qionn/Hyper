@@ -1,10 +1,8 @@
 #include "sdl2_key.h"
 
-#include <SDL.h>
-
 namespace hyper
 {
-	int KeyToSDL2Key(Key key)
+	SDL_KeyCode KeyToSDL2Key(Key key)
 	{
 		switch (key)
 		{
@@ -107,11 +105,11 @@ namespace hyper
 			case Key::eF22:				return SDLK_F22;
 			case Key::eF23:				return SDLK_F23;
 			case Key::eF24:				return SDLK_F24;
-			default:			return -1;
+			default:					return SDLK_UNKNOWN;
 		}
 	}
 
-	Key SDL2KeyToKey(int key)
+	Key SDL2KeyToKey(SDL_KeyCode key)
 	{
 		switch (key)
 		{

@@ -3,6 +3,13 @@
 
 namespace hyper
 {
+	enum class KeyState
+	{
+		eDown,
+		ePressed,
+		eReleased
+	};
+
 	enum class Key
 	{
 		e0,

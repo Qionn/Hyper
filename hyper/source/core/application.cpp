@@ -4,9 +4,11 @@
 #include "hyper/scene/scene.h"
 #include "hyper/service/service_hub.h"
 #include "hyper/utils/clock.h"
-#include "hyper/utils/logging.h"
+#include "hyper/utils/assert.h"
 
 #include <stdexcept>
+
+#include "hyper/input/keyboard.h"
 
 namespace hyper
 {
@@ -22,45 +24,59 @@ namespace hyper
 			m_pScene	= std::make_unique<Scene>(m_pRenderer->GetContext());
 			m_pInput	= std::make_unique<Input>();
 
-			info.loadScene(*m_pScene);
+			m_pInput->AddObserver(this);
 		}
 		catch (const std::runtime_error& err)
 		{
-			LogError("Application initialization failed: {}", err.what());
-			std::exit(-1);
+			LogError("Resource acquisition failed: {}", err.what());
+			m_CanStart = false;
 		}
-
-		m_pInput->AddObserver(this);
 	}
 
 	Application::~Application()
 	{
-		m_pInput->RemoveObserver(this);
+		if (m_pInput != nullptr)
+		{
+			m_pInput->RemoveObserver(this);
+		}
 	}
 
 	void Application::Start()
 	{
-		m_IsRunning = true;
-
-		Clock clock;
-		float deltatime = 0.0f;
-
-		while (m_IsRunning)
+		if (m_CanStart)
 		{
-			m_pInput->Update();
-			m_pScene->Update(deltatime);
+			m_IsRunning = true;
 
-			m_pRenderer->BeginFrame();
-			m_pScene->Render();
-			m_pRenderer->EndFrame();
+			Clock clock;
+			float deltatime = 0.0f;
 
-			deltatime = clock.Tick();
+			while (m_IsRunning)
+			{
+				m_pInput->Update();
+				m_pScene->Update(deltatime);
+
+				m_pRenderer->BeginFrame();
+				m_pScene->Render();
+				m_pRenderer->EndFrame();
+
+				deltatime = clock.Tick();
+			}
 		}
 	}
 
 	void Application::Stop()
 	{
 		m_IsRunning = false;
+	}
+
+	void Application::LoadScene(const LoadSceneFunction& loadScene)
+	{
+		HyperAssert(loadScene != nullptr, "expected loadScene to be a valid function pointer");
+
+		m_pInput->ClearBindings();
+		m_pScene = std::make_unique<Scene>(m_pRenderer->GetContext());
+
+		loadScene(*m_pScene, *m_pInput);
 	}
 
 	bool Application::OnEvent(const AEvent& event)

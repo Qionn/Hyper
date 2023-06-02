@@ -1,7 +1,11 @@
 #ifndef __HYPER_INPUT_H__
 #define __HYPER_INPUT_H__
 
+#include <memory>
+
 #include "hyper/event/subject.h"
+#include "hyper/input/key.h"
+#include "hyper/utils/command.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -12,6 +16,11 @@ namespace hyper
 		Input();
 
 		void Update();
+
+		void Bind(Key key, KeyState state, std::unique_ptr<ICommand> command);
+		void Unbind(Key key, KeyState state);
+
+		void ClearBindings();
 
 		Input(const Input&)				= delete;
 		Input(Input&&)					= delete;

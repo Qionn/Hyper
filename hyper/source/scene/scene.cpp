@@ -13,12 +13,20 @@ namespace hyper
 
 	void Scene::Update(float dt)
 	{
-		EraseRemovedActors();
-
 		for (auto& pActor : m_Actors)
 		{
-			pActor->Update(dt);
+			if (!pActor->HasParent())
+			{
+				pActor->Update(dt);
+			}
+			else
+			{
+				LogWarn("Removing actor {} from scene root, because it is a child actor", (void*)pActor.get());
+				RemoveActor(pActor.get());
+			}
 		}
+
+		EraseRemovedActors();
 	}
 
 	void Scene::Render() const
