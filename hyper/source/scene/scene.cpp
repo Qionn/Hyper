@@ -13,39 +13,37 @@ namespace hyper
 
 	void Scene::Update(float dt)
 	{
+		EraseRemovedActors();
+
 		for (auto& pActor : m_Actors)
 		{
-			if (!pActor->HasParent())
+			if (pActor->IsEnabled() && !pActor->HasParent())
 			{
 				pActor->Update(dt);
 			}
-			else
-			{
-				LogWarn("Removing actor {} from scene root, because it is a child actor", (void*)pActor.get());
-				RemoveActor(pActor.get());
-			}
 		}
-
-		EraseRemovedActors();
 	}
 
 	void Scene::Render() const
 	{
 		for (const auto& pActor : m_Actors)
 		{
-			pActor->Render(m_Context);
+			if (pActor->IsEnabled() && !pActor->HasParent())
+			{
+				pActor->Render();
+			}
 		}
 	}
 
-	void Scene::AddActor(std::shared_ptr<Actor> pActor)
+	Actor* Scene::CreateActor()
 	{
-		HyperAssert(pActor->GetScene() == this, "pActor does not belong to this scene");
-		m_Actors.push_back(std::move(pActor));
+		m_Actors.push_back(std::make_unique<Actor>(*this));
+		return m_Actors.back().get();
 	}
 
 	void Scene::RemoveActor(Actor* pActor)
 	{
-		HyperAssert(pActor->GetScene() == this, "pActor does not belong to this scene");
+		HyperAssert(&pActor->GetScene() == this, "pActor does not belong to this scene");
 		m_RemovedActors.push_back(pActor);
 	}
 

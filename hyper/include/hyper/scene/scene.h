@@ -2,7 +2,6 @@
 #define __HYPER_SCENE_H__
 
 #include <memory>
-#include <queue>
 #include <vector>
 
 #include "hyper/scene/actor.h"
@@ -18,7 +17,7 @@ namespace hyper
 		void Update(float dt);
 		void Render() const;
 		
-		void AddActor(std::shared_ptr<Actor> pActor);
+		Actor* CreateActor();
 		void RemoveActor(Actor* pActor);
 		void RemoveAllActors();
 
@@ -36,7 +35,7 @@ namespace hyper
 	private:
 		IContext& m_Context;
 
-		std::vector<std::shared_ptr<Actor>> m_Actors;
+		std::vector<std::unique_ptr<Actor>> m_Actors;
 		std::vector<Actor*> m_RemovedActors;
 	};
 }

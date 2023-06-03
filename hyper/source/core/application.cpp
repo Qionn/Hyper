@@ -74,7 +74,7 @@ namespace hyper
 		HyperAssert(loadScene != nullptr, "expected loadScene to be a valid function pointer");
 
 		m_pInput->ClearBindings();
-		m_pScene = std::make_unique<Scene>(m_pRenderer->GetContext());
+		m_pScene->RemoveAllActors();
 
 		loadScene(*m_pScene, *m_pInput);
 	}

@@ -3,8 +3,8 @@
 
 namespace hyper
 {
-	TransformComponent::TransformComponent(Actor* pActor)
-		: AComponent(pActor)
+	TransformComponent::TransformComponent(Actor& actor)
+		: AComponent(actor)
 	{
 
 	}
@@ -44,7 +44,7 @@ namespace hyper
 	{
 		m_IsDirty = true;
 
-		GetActor()->ForEachChild([](Actor& actor) {
+		GetActor().ForEachChild([](Actor& actor) {
 			actor.GetComponent<TransformComponent>()->SetDirty();
 		});
 	}

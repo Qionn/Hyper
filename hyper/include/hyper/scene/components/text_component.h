@@ -14,7 +14,7 @@ namespace hyper
 	class TextComponent final : public AComponent
 	{
 	public:
-		TextComponent(Actor* pActor, std::string fontPath, int ptSize);
+		TextComponent(Actor& actor, std::string fontPath, int ptSize);
 
 		void SetText(std::string_view text);
 		void SetColor(const glm::vec3& color);

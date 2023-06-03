@@ -1,27 +1,26 @@
 #include "hyper/scene/actor.h"
 #include "hyper/scene/component.h"
-#include "hyper/utils/assert.h"
 
 namespace hyper
 {
-	AComponent::AComponent(Actor* pActor)
-		: m_pActor{ pActor }
+	AComponent::AComponent(Actor& actor)
+		: m_Actor{ actor }
 	{
-		HyperAssert(pActor != nullptr, "pActor must point to a valid memory address");
+
 	}
 
-	Actor* AComponent::GetActor() const
+	Actor& AComponent::GetActor() const
 	{
-		return m_pActor;
+		return m_Actor;
 	}
 
 	Actor* AComponent::GetActorParent() const
 	{
-		return m_pActor->GetParent();
+		return m_Actor.GetParent();
 	}
 
-	Scene* AComponent::GetScene() const
+	Scene& AComponent::GetScene() const
 	{
-		return m_pActor->GetScene();
+		return m_Actor.GetScene();
 	}
 }

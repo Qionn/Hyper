@@ -18,7 +18,7 @@ namespace hyper
 			return reinterpret_cast<T*>(it->second.get());
 		}
 
-		T* pComponent = new T(this, std::forward<Args>(args)...);
+		T* pComponent = new T(*this, std::forward<Args>(args)...);
 		m_Components.emplace(id, std::unique_ptr<AComponent>(pComponent));
 
 		return pComponent;

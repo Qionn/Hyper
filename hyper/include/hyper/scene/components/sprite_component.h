@@ -12,7 +12,7 @@ namespace hyper
 	class SpriteComponent final : public AComponent
 	{
 	public:
-		SpriteComponent(Actor* pActor, std::string_view filepath);
+		SpriteComponent(Actor& actor, std::string_view filepath);
 		~SpriteComponent() = default;
 
 		void SetScale(float scale);

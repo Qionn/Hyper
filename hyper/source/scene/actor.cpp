@@ -8,17 +8,20 @@
 namespace hyper
 {
 	Actor::Actor(Scene& scene)
-		: m_pScene{ &scene }
+		: m_Scene{ scene }
+		, m_Context{ scene.GetContext() }
 	{
 		m_pTransform = AddComponent<TransformComponent>();
 	}
 
 	Actor::~Actor()
 	{
-		if (m_pParent != nullptr)
+		for (Actor* pChild : m_Children)
 		{
-			m_pParent->RemoveChild(this);
+			pChild->SetParent(m_pParent, true);
 		}
+
+		SetParent(nullptr, false);
 	}
 
 	void Actor::Update(float dt)
@@ -28,22 +31,22 @@ namespace hyper
 			pComponent->OnUpdate(dt);
 		}
 
-		for (auto& pChild : m_Children)
+		for (Actor* pChild : m_Children)
 		{
 			pChild->Update(dt);
 		}
 	}
 
-	void Actor::Render(const IContext& context) const
+	void Actor::Render() const
 	{
 		for (const auto& [id, pComponent] : m_Components)
 		{
-			pComponent->OnRender(context);
+			pComponent->OnRender(m_Context);
 		}
 
-		for (const auto& pChild : m_Children)
+		for (const Actor* pChild : m_Children)
 		{
-			pChild->Render(context);
+			pChild->Render();
 		}
 	}
 
@@ -67,25 +70,9 @@ namespace hyper
 		return m_pTransform->GetWorldPosition();
 	}
 
-	void Actor::ForEachChild(const std::function<void(Actor&)>& functor) const
-	{
-		std::ranges::for_each(m_Children, [&functor](auto& pChild) {
-			functor(*pChild);
-		});
-	}
-
-	bool Actor::HasParent() const
-	{
-		return m_pParent != nullptr;
-	}
-
 	void Actor::SetParent(Actor* pParent, bool keepWorldPosition)
 	{
-		glm::vec2 oldWorldPosition;
-		if (keepWorldPosition)
-		{
-			oldWorldPosition = GetWorldPosition();
-		}
+		glm::vec2 oldWorldPosition = GetWorldPosition();
 
 		if (m_pParent != nullptr)
 		{
@@ -97,7 +84,7 @@ namespace hyper
 
 		if (m_pParent != nullptr)
 		{
-			m_pParent->AddChild(shared_from_this());
+			m_pParent->AddChild(this);
 		}
 
 		if (keepWorldPosition)
@@ -107,27 +94,45 @@ namespace hyper
 		}
 	}
 
+	void Actor::ForEachChild(const std::function<void(Actor&)>& functor) const
+	{
+		std::ranges::for_each(m_Children, [&functor](auto& pChild) { functor(*pChild); });
+	}
+
+	bool Actor::HasParent() const
+	{
+		return m_pParent != nullptr;
+	}
+
 	Actor* Actor::GetParent() const
 	{
 		return m_pParent;
 	}
 
-	Scene* Actor::GetScene() const
+	Scene& Actor::GetScene() const
 	{
-		return m_pScene;
+		return m_Scene;
 	}
 
-	void Actor::AddChild(std::shared_ptr<Actor> pChild)
+	void Actor::SetEnabled(bool enabled)
 	{
-		HyperAssert(pChild->GetScene() == m_pScene, "pChild doesn't belong in the same scene");
+		m_IsEnabled = enabled;
+	}
+
+	bool Actor::IsEnabled() const
+	{
+		return m_IsEnabled;
+	}
+
+	void Actor::AddChild(Actor* pChild)
+	{
+		HyperAssert(&pChild->GetScene() == &m_Scene, "pChild doesn't belong in the same scene");
 		m_Children.emplace_back(pChild);
 	}
 
 	void Actor::RemoveChild(Actor* pChild)
 	{
-		HyperAssert(pChild->GetScene() == m_pScene, "pChild doesn't belong in the same scene");
-
-		auto pred = [pChild](auto& pC) { return pC.get() == pChild; };
-		m_Children.erase(std::remove_if(m_Children.begin(), m_Children.end(), pred), m_Children.end());
+		HyperAssert(&pChild->GetScene() == &m_Scene, "pChild doesn't belong in the same scene");
+		m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), pChild));
 	}
 }

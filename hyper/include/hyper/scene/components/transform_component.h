@@ -10,7 +10,7 @@ namespace hyper
 	class TransformComponent final : public AComponent
 	{
 	public:
-		TransformComponent(Actor* pActor);
+		TransformComponent(Actor& actor);
 
 		void SetPosition(float x, float y);
 		void SetPosition(const glm::vec2& position);

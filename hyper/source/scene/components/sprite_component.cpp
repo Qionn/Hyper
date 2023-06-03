@@ -5,10 +5,10 @@
 
 namespace hyper
 {
-	SpriteComponent::SpriteComponent(Actor* pActor, std::string_view filepath)
-		: AComponent(pActor)
+	SpriteComponent::SpriteComponent(Actor& actor, std::string_view filepath)
+		: AComponent(actor)
 	{
-		IContext& context = GetScene()->GetContext();
+		IContext& context = GetScene().GetContext();
 
 		m_pTexture			= context.CreateTexture(filepath);
 
@@ -38,7 +38,7 @@ namespace hyper
 		float width = m_ClipRect.width * m_Scale;
 		float height = m_ClipRect.height * m_Scale;
 
-		glm::vec2 worldPos = GetActor()->GetWorldPosition();
+		glm::vec2 worldPos = GetActor().GetWorldPosition();
 
 		Rectf dstRect = {
 			.x			= worldPos.x - (width * 0.5f),

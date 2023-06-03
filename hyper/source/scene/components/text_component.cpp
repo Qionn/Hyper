@@ -5,8 +5,8 @@
 
 namespace hyper
 {
-	TextComponent::TextComponent(Actor* pActor, std::string fontPath, int ptSize)
-		: AComponent(pActor)
+	TextComponent::TextComponent(Actor& actor, std::string fontPath, int ptSize)
+		: AComponent(actor)
 		, m_FontPath{ fontPath }
 		, m_PointSize{ ptSize }
 		, m_Color{ 0.0f }
@@ -45,7 +45,7 @@ namespace hyper
 	{
 		if (m_IsDirty)
 		{
-			IContext& context = GetScene()->GetContext();
+			IContext& context = GetScene().GetContext();
 			m_pTexture = context.CreateTexture(m_FontPath, m_PointSize, m_Text, m_Color);
 			m_IsDirty = false;
 		}
@@ -55,7 +55,7 @@ namespace hyper
 	{
 		if (m_pTexture != nullptr)
 		{
-			glm::vec2 worldPos = GetActor()->GetWorldPosition();
+			glm::vec2 worldPos = GetActor().GetWorldPosition();
 
 			float width = static_cast<float>(m_pTexture->GetWidth());
 			float height = static_cast<float>(m_pTexture->GetHeight());
