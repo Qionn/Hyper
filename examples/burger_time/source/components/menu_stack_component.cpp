@@ -9,7 +9,7 @@ namespace burger_time
 	{
 		Scene& scene = GetScene();
 
-		m_pMainMenuState	= std::make_unique<MainMenuState>(scene);
+		m_pMainMenuState	= std::make_unique<MainMenuState>(scene, this);
 		m_pOptionsMenuState	= std::make_unique<OptionsMenuState>(scene);
 		m_pPlayMenuState	= std::make_unique<PlayMenuState>(scene);
 

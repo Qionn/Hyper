@@ -1,19 +1,22 @@
 #include "constants.h"
 #include "main_menu_state.h"
 
+#include "components/menu_stack_component.h"
+
 #include <hyper/scene/components/text_component.h>
 #include <hyper/scene/scene.h>
 #include <hyper/service/service_hub.h>
-
 
 using namespace hyper;
 
 namespace burger_time
 {
-	MainMenuState::MainMenuState(Scene& scene)
+	MainMenuState::MainMenuState(Scene& scene, MenuStackComponent* pMenuStack)
+		: m_pMenuStack{ pMenuStack }
 	{
 		ISoundService* pSoundService = ServiceHub::SoundService();
-		m_NavigateSoundId = pSoundService->AddSound("assets/audio/menu_navigate_01.wav");
+		m_NavigateSound01Id = pSoundService->AddSound("assets/audio/menu_navigate_01.wav");
+		m_NavigateSound02Id = pSoundService->AddSound("assets/audio/menu_navigate_02.wav");
 
 		m_pRootActor = scene.CreateActor();
 		m_pRootActor->SetEnabled(false);
@@ -39,15 +42,19 @@ namespace burger_time
 		{
 			case Action::eUp:
 			{
-				uint32_t newItem = (m_CurrentItem - 1) % m_Items.size();
-				SelectItem(newItem);
+				NavigateItems(-1);
 				break;
 			}
 
 			case Action::eDown:
 			{
-				uint32_t newItem = (m_CurrentItem + 1) % m_Items.size();
-				SelectItem(newItem);
+				NavigateItems(1);
+				break;
+			}
+
+			case Action::eSelect:
+			{
+				PushItemState();
 				break;
 			}
 		}
@@ -129,14 +136,44 @@ namespace burger_time
 		pItemMarkerTextRight->SetColor({ 1, 1, 1 });
 	}
 
+	void MainMenuState::NavigateItems(int32_t delta)
+	{
+		uint32_t newItem = (m_CurrentItem + delta) % m_Items.size();
+		SelectItem(newItem);
+	}
+
 	void MainMenuState::SelectItem(uint32_t item)
 	{
 		ISoundService* pSoundService = ServiceHub::SoundService();
-		pSoundService->Play(m_NavigateSoundId, 0.5f);
+		pSoundService->Play(m_NavigateSound01Id, 0.5f);
 
 		Actor* pItem = m_Items[item];
 		m_pItemMarkerLeft->SetParent(pItem, false);
 		m_pItemMarkerRight->SetParent(pItem, false);
 		m_CurrentItem = item;
+	}
+
+	void MainMenuState::PushItemState()
+	{
+		IMenuState* pState = nullptr;
+
+		switch (m_CurrentItem)
+		{
+			case 0:
+				pState = m_pMenuStack->GetPlayMenuState();
+				break;
+
+			case 2:
+				pState = m_pMenuStack->GetOptionsMenuState();
+				break;
+
+			default:
+				return;
+		}
+
+		ISoundService* pSoundService = ServiceHub::SoundService();
+		pSoundService->Play(m_NavigateSound02Id, 0.5f);
+
+		m_pMenuStack->PushMenuState(pState);
 	}
 }

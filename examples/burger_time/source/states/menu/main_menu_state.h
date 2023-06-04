@@ -10,10 +10,12 @@
 
 namespace burger_time
 {
+	class MenuStackComponent;
+
 	class MainMenuState final : public IMenuState
 	{
 	public:
-		MainMenuState(hyper::Scene& scene);
+		MainMenuState(hyper::Scene& scene, MenuStackComponent* pMenuStack);
 
 		void OnEnter() override;
 		void OnExit() override;
@@ -34,14 +36,20 @@ namespace burger_time
 		hyper::Actor* m_pItemMarkerLeft;
 		hyper::Actor* m_pItemMarkerRight;
 
-		hyper::SoundId m_NavigateSoundId;
+		MenuStackComponent* m_pMenuStack;
+
+		hyper::SoundId m_NavigateSound01Id;
+		hyper::SoundId m_NavigateSound02Id;
 
 	private:
 		void SetupTitleActors(hyper::Scene& scene);
 		void SetupItemActors(hyper::Scene& scene);
 		void SetupItemMarkers(hyper::Scene& scene);
 
+		void NavigateItems(int32_t delta);
 		void SelectItem(uint32_t item);
+
+		void PushItemState();
 	};
 }
 

@@ -14,5 +14,7 @@ namespace burger_time
 
 		input.Bind(Key::eUp, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eUp));
 		input.Bind(Key::eDown, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eDown));
+		input.Bind(Key::eEnter, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eSelect));
+		input.Bind(Key::eEscape, KeyState::ePressed, std::make_unique<MenuReturnCommand>(pMenuStack));
 	}
 }
