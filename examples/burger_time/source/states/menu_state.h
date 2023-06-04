@@ -6,8 +6,19 @@ namespace burger_time
 	class IMenuState
 	{
 	public:
+		enum class Action
+		{
+			eUp,
+			eDown,
+			eLeft,
+			eRight,
+			eSelect
+		};
+
+	public:
 		virtual void OnEnter() = 0;
 		virtual void OnExit() = 0;
+		virtual void PerformAction(Action action) = 0;
 		virtual ~IMenuState() = default;
 	};
 }

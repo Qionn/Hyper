@@ -8,27 +8,20 @@
 
 namespace burger_time
 {
-	class ChangeMenuCommand final : public hyper::ICommand
+	class MenuActionCommand final : public hyper::ICommand
 	{
 	public:
-		ChangeMenuCommand(MenuStackComponent& menuStack, IMenuState* pState)
-			:m_MenuStack{ menuStack }, m_pState{ pState } {}
+		MenuActionCommand(MenuStackComponent* pMenuStack, IMenuState::Action action)
+			:m_pMenuStack{ pMenuStack }, m_Action{ action } {}
 
 		void Execute() override
 		{
-			if (m_pState != nullptr)
-			{
-				m_MenuStack.PushMenuState(m_pState);
-			}
-			else
-			{
-				m_MenuStack.PopMenuState();
-			}
+			m_pMenuStack->GetCurrentMenuState()->PerformAction(m_Action);
 		}
 
 	private:
-		MenuStackComponent& m_MenuStack;
-		IMenuState* m_pState;
+		MenuStackComponent* m_pMenuStack;
+		IMenuState::Action m_Action;
 	};
 
 	void LoadMainMenuScene(hyper::Scene& scene, hyper::Input& input);

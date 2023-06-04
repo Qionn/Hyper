@@ -16,9 +16,9 @@ namespace hyper
 
 	Actor::~Actor()
 	{
-		for (Actor* pChild : m_Children)
+		while (!m_Children.empty())
 		{
-			pChild->SetParent(m_pParent, true);
+			m_Children.front()->SetParent(m_pParent, false);
 		}
 
 		SetParent(nullptr, false);

@@ -14,6 +14,7 @@ namespace burger_time
 
 		void OnEnter() override;
 		void OnExit() override;
+		void PerformAction(Action action) override;
 
 		OptionsMenuState(const OptionsMenuState&) = delete;
 		OptionsMenuState(OptionsMenuState&&) = delete;

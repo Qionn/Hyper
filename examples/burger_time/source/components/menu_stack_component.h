@@ -20,6 +20,8 @@ namespace burger_time
 		void PushMenuState(IMenuState* pState);
 		void PopMenuState();
 
+		IMenuState* GetCurrentMenuState() const;
+
 		MainMenuState* GetMainMenuState() const;
 		OptionsMenuState* GetOptionsMenuState() const;
 		PlayMenuState* GetPlayMenuState() const;

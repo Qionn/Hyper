@@ -26,6 +26,11 @@ namespace burger_time
 		m_pRootActor->SetEnabled(false);
 	}
 
+	void OptionsMenuState::PerformAction(Action)
+	{
+
+	}
+
 	void OptionsMenuState::SetupTitleActors(Scene& scene)
 	{
 		Actor* pActor1 = scene.CreateActor();

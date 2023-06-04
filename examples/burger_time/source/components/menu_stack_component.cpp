@@ -41,6 +41,11 @@ namespace burger_time
 		}
 	}
 
+	IMenuState* MenuStackComponent::GetCurrentMenuState() const
+	{
+		return m_StateStack.top();
+	}
+
 	MainMenuState* MenuStackComponent::GetMainMenuState() const
 	{
 		return m_pMainMenuState.get();

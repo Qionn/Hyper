@@ -12,17 +12,7 @@ namespace burger_time
 		Actor* pActor = scene.CreateActor();
 		auto pMenuStack = pActor->AddComponent<MenuStackComponent>();
 
-		{
-			auto pCommand = std::make_unique<ChangeMenuCommand>(*pMenuStack, pMenuStack->GetOptionsMenuState());
-			input.Bind(Key::eO, KeyState::ePressed, std::move(pCommand));
-		}
-		{
-			auto pCommand = std::make_unique<ChangeMenuCommand>(*pMenuStack, pMenuStack->GetPlayMenuState());
-			input.Bind(Key::eP, KeyState::ePressed, std::move(pCommand));
-		}
-		{
-			auto pCommand = std::make_unique<ChangeMenuCommand>(*pMenuStack, nullptr);
-			input.Bind(Key::eBackspace, KeyState::ePressed, std::move(pCommand));
-		}
+		input.Bind(Key::eUp, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eUp));
+		input.Bind(Key::eDown, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eDown));
 	}
 }
