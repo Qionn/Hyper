@@ -10,7 +10,7 @@ namespace burger_time
 	void LoadMainMenuScene(Scene& scene, Input& input)
 	{
 		Actor* pActor = scene.CreateActor();
-		auto pMenuStack = pActor->AddComponent<MenuStackComponent>();
+		auto pMenuStack = pActor->AddComponent<MenuFSMComponent>();
 
 		input.Bind(Key::eUp, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eUp));
 		input.Bind(Key::eDown, KeyState::ePressed, std::make_unique<MenuActionCommand>(pMenuStack, IMenuState::Action::eDown));

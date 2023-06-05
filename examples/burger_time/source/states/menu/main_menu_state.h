@@ -1,21 +1,24 @@
 #ifndef __BURGER_TIME_MAIN_MENU_STATE_H__
 #define __BURGER_TIME_MAIN_MENU_STATE_H__
 
+#include <memory>
 #include <vector>
 
-#include <hyper/service/sound_service.h>
 #include <hyper/fwd.h>
 
-#include "states/menu_state.h"
+#include "states/menu/highscores_menu_state.h"
+#include "states/menu/options_menu_state.h"
+#include "states/menu/play_menu_state.h"
+#include "utils/menu_item_list.h"
 
 namespace burger_time
 {
-	class MenuStackComponent;
+	class MenuFSMComponent;
 
 	class MainMenuState final : public IMenuState
 	{
 	public:
-		MainMenuState(hyper::Scene& scene, MenuStackComponent* pMenuStack);
+		MainMenuState(hyper::Scene& scene, MenuFSMComponent* pMenuFSM);
 
 		void OnEnter() override;
 		void OnExit() override;
@@ -31,25 +34,22 @@ namespace burger_time
 	private:
 		hyper::Actor* m_pRootActor;
 
-		uint32_t m_CurrentItem = 0;
-		std::vector<hyper::Actor*> m_Items;
-		hyper::Actor* m_pItemMarkerLeft;
-		hyper::Actor* m_pItemMarkerRight;
+		MenuFSMComponent* m_pMenuFSM;
 
-		MenuStackComponent* m_pMenuStack;
+		std::unique_ptr<HighscoresMenuState> m_pHighscoresState;
+		std::unique_ptr<OptionsMenuState> m_pOptionsState;
+		std::unique_ptr<PlayMenuState> m_pPlayState;
 
-		hyper::SoundId m_NavigateSound01Id;
-		hyper::SoundId m_NavigateSound02Id;
+		std::unique_ptr<MenuItemList> m_pMenuItemList;
 
 	private:
 		void SetupTitleActors(hyper::Scene& scene);
-		void SetupItemActors(hyper::Scene& scene);
-		void SetupItemMarkers(hyper::Scene& scene);
+		void SetupMenuItems(hyper::Scene& scene);
 
-		void NavigateItems(int32_t delta);
-		void SelectItem(uint32_t item);
-
-		void PushItemState();
+		void OnPlaySelect();
+		void OnHighscoresSelect();
+		void OnOptionsSelect();
+		void OnExitSelect();
 	};
 }
 

@@ -4,13 +4,16 @@
 #include <hyper/fwd.h>
 
 #include "states/menu_state.h"
+#include "utils/menu_item_list.h"
 
 namespace burger_time
 {
+	class MenuFSMComponent;
+
 	class PlayMenuState final : public IMenuState
 	{
 	public:
-		PlayMenuState(hyper::Scene& scene);
+		PlayMenuState(hyper::Scene& scene, MenuFSMComponent* pMenuFSM);
 
 		void OnEnter() override;
 		void OnExit() override;
@@ -25,9 +28,16 @@ namespace burger_time
 
 	private:
 		hyper::Actor* m_pRootActor;
+		MenuFSMComponent* m_pMenuFSM;
+		std::unique_ptr<MenuItemList> m_pMenuItemList;
 
 	private:
 		void SetupTitleActors(hyper::Scene& scene);
+		void SetupMenuItems(hyper::Scene& scene);
+
+		void OnSoloSelect();
+		void OnCoopSelect();
+		void OnVersusSelect();
 	};
 }
 

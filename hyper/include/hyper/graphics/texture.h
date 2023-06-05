@@ -11,7 +11,7 @@ namespace hyper
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
 
-		~ITexture() = default;
+		virtual ~ITexture() = default;
 	};
 }
 

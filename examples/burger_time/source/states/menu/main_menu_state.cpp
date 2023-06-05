@@ -1,29 +1,27 @@
 #include "constants.h"
 #include "main_menu_state.h"
 
-#include "components/menu_stack_component.h"
+#include "components/menu_fsm_component.h"
 
 #include <hyper/scene/components/text_component.h>
 #include <hyper/scene/scene.h>
-#include <hyper/service/service_hub.h>
 
 using namespace hyper;
 
 namespace burger_time
 {
-	MainMenuState::MainMenuState(Scene& scene, MenuStackComponent* pMenuStack)
-		: m_pMenuStack{ pMenuStack }
+	MainMenuState::MainMenuState(Scene& scene, MenuFSMComponent* pMenuFSM)
+		: m_pMenuFSM{ pMenuFSM }
 	{
-		ISoundService* pSoundService = ServiceHub::SoundService();
-		m_NavigateSound01Id = pSoundService->AddSound("assets/audio/menu_navigate_01.wav");
-		m_NavigateSound02Id = pSoundService->AddSound("assets/audio/menu_navigate_02.wav");
-
 		m_pRootActor = scene.CreateActor();
 		m_pRootActor->SetEnabled(false);
 
+		m_pHighscoresState	= std::make_unique<HighscoresMenuState>(scene);
+		m_pOptionsState		= std::make_unique<OptionsMenuState>(scene);
+		m_pPlayState		= std::make_unique<PlayMenuState>(scene, pMenuFSM);
+
 		SetupTitleActors(scene);
-		SetupItemActors(scene);
-		SetupItemMarkers(scene);
+		SetupMenuItems(scene);
 	}
 
 	void MainMenuState::OnEnter()
@@ -42,19 +40,19 @@ namespace burger_time
 		{
 			case Action::eUp:
 			{
-				NavigateItems(-1);
+				m_pMenuItemList->MoveCursor(1);
 				break;
 			}
 
 			case Action::eDown:
 			{
-				NavigateItems(1);
+				m_pMenuItemList->MoveCursor(-1);
 				break;
 			}
 
 			case Action::eSelect:
 			{
-				PushItemState();
+				m_pMenuItemList->Select();
 				break;
 			}
 		}
@@ -84,96 +82,36 @@ namespace burger_time
 		pText3->SetColor({ 1, 1, 1 });
 	}
 
-	void MainMenuState::SetupItemActors(hyper::Scene& scene)
+	void MainMenuState::SetupMenuItems(Scene& scene)
 	{
-		Actor* pActor1 = scene.CreateActor();
-		pActor1->SetParent(m_pRootActor, false);
-		pActor1->SetPosition(400.0f, 350.0f);
-		auto pText1 = pActor1->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 36);
-		pText1->SetText("Play");
-		pText1->SetColor({ 1, 1, 1 });
-		m_Items.push_back(pActor1);
+		Actor* pActor = scene.CreateActor();
+		pActor->SetParent(m_pRootActor, false);
+		pActor->SetPosition(400.0f, 350.0f);
 
-		Actor* pActor2 = scene.CreateActor();
-		pActor2->SetParent(pActor1, false);
-		pActor2->SetPosition(0.0f, 80.0f);
-		auto pText2 = pActor2->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 36);
-		pText2->SetText("Highscores");
-		pText2->SetColor({ 1, 1, 1 });
-		m_Items.push_back(pActor2);
-
-		Actor* pActor3 = scene.CreateActor();
-		pActor3->SetParent(pActor2, false);
-		pActor3->SetPosition(0.0f, 80.0f);
-		auto pText3 = pActor3->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 36);
-		pText3->SetText("Options");
-		pText3->SetColor({ 1, 1, 1 });
-		m_Items.push_back(pActor3);
-
-		Actor* pActor4 = scene.CreateActor();
-		pActor4->SetParent(pActor3, false);
-		pActor4->SetPosition(0.0f, 80.0f);
-		auto pText4 = pActor4->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 36);
-		pText4->SetText("Exit");
-		pText4->SetColor({ 1, 1, 1 });
-		m_Items.push_back(pActor4);
+		m_pMenuItemList = std::make_unique<MenuItemList>(pActor, 36, 80.0f);
+		m_pMenuItemList->AddItem("Play", std::bind(&MainMenuState::OnPlaySelect, this));
+		m_pMenuItemList->AddItem("Highscores", std::bind(&MainMenuState::OnHighscoresSelect, this));
+		m_pMenuItemList->AddItem("Options", std::bind(&MainMenuState::OnOptionsSelect, this));
+		m_pMenuItemList->AddItem("Exit", std::bind(&MainMenuState::OnExitSelect, this));
 	}
 
-	void MainMenuState::SetupItemMarkers(hyper::Scene& scene)
+	void MainMenuState::OnPlaySelect()
 	{
-		m_pItemMarkerLeft = scene.CreateActor();
-		m_pItemMarkerLeft->SetParent(m_Items[m_CurrentItem], false);
-		m_pItemMarkerLeft->SetPosition(-200.0f, 0.0f);
-		auto pItemMarkerTextLeft = m_pItemMarkerLeft->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 36);
-		pItemMarkerTextLeft->SetText(">");
-		pItemMarkerTextLeft->SetColor({ 1, 1, 1 });
-
-		m_pItemMarkerRight = scene.CreateActor();
-		m_pItemMarkerRight->SetParent(m_Items[m_CurrentItem], false);
-		m_pItemMarkerRight->SetPosition(200.0f, 0.0f);
-		auto pItemMarkerTextRight = m_pItemMarkerRight->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 36);
-		pItemMarkerTextRight->SetText("<");
-		pItemMarkerTextRight->SetColor({ 1, 1, 1 });
+		m_pMenuFSM->PushMenuState(m_pPlayState.get());
 	}
 
-	void MainMenuState::NavigateItems(int32_t delta)
+	void MainMenuState::OnHighscoresSelect()
 	{
-		uint32_t newItem = (m_CurrentItem + delta) % m_Items.size();
-		SelectItem(newItem);
+		m_pMenuFSM->PushMenuState(m_pHighscoresState.get());
 	}
 
-	void MainMenuState::SelectItem(uint32_t item)
+	void MainMenuState::OnOptionsSelect()
 	{
-		ISoundService* pSoundService = ServiceHub::SoundService();
-		pSoundService->Play(m_NavigateSound01Id, 0.5f);
-
-		Actor* pItem = m_Items[item];
-		m_pItemMarkerLeft->SetParent(pItem, false);
-		m_pItemMarkerRight->SetParent(pItem, false);
-		m_CurrentItem = item;
+		m_pMenuFSM->PushMenuState(m_pOptionsState.get());
 	}
 
-	void MainMenuState::PushItemState()
+	void MainMenuState::OnExitSelect()
 	{
-		IMenuState* pState = nullptr;
 
-		switch (m_CurrentItem)
-		{
-			case 0:
-				pState = m_pMenuStack->GetPlayMenuState();
-				break;
-
-			case 2:
-				pState = m_pMenuStack->GetOptionsMenuState();
-				break;
-
-			default:
-				return;
-		}
-
-		ISoundService* pSoundService = ServiceHub::SoundService();
-		pSoundService->Play(m_NavigateSound02Id, 0.5f);
-
-		m_pMenuStack->PushMenuState(pState);
 	}
 }

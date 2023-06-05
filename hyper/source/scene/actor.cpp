@@ -70,6 +70,13 @@ namespace hyper
 		return m_pTransform->GetWorldPosition();
 	}
 
+	Actor* Actor::CreateChild(bool keepWorldPosition)
+	{
+		Actor* pActor = m_Scene.CreateActor();
+		pActor->SetParent(this, keepWorldPosition);
+		return pActor;
+	}
+
 	void Actor::SetParent(Actor* pParent, bool keepWorldPosition)
 	{
 		glm::vec2 oldWorldPosition = GetWorldPosition();
@@ -107,6 +114,11 @@ namespace hyper
 	Actor* Actor::GetParent() const
 	{
 		return m_pParent;
+	}
+
+	void Actor::Destroy()
+	{
+		m_Scene.RemoveActor(this);
 	}
 
 	Scene& Actor::GetScene() const

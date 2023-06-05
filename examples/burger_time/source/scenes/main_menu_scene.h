@@ -5,46 +5,39 @@
 #include <hyper/utils/command.h>
 #include <hyper/fwd.h>
 
-#include "components/menu_stack_component.h"
+#include "components/menu_fsm_component.h"
 
 namespace burger_time
 {
 	class MenuActionCommand final : public hyper::ICommand
 	{
 	public:
-		MenuActionCommand(MenuStackComponent* pMenuStack, IMenuState::Action action)
-			: m_pMenuStack{ pMenuStack }, m_Action{ action } {}
+		MenuActionCommand(MenuFSMComponent* pMenuFSM, IMenuState::Action action)
+			: m_pMenuFSM{ pMenuFSM }, m_Action{ action } {}
 
 		void Execute() override
 		{
-			m_pMenuStack->GetCurrentMenuState()->PerformAction(m_Action);
+			m_pMenuFSM->GetCurrentMenuState()->PerformAction(m_Action);
 		}
 
 	private:
-		MenuStackComponent* m_pMenuStack;
+		MenuFSMComponent* m_pMenuFSM;
 		IMenuState::Action m_Action;
 	};
 
 	class MenuReturnCommand final : public hyper::ICommand
 	{
 	public:
-		MenuReturnCommand(MenuStackComponent* pMenuStack)
-			: m_pMenuStack{ pMenuStack }
-		{
-			hyper::ISoundService* pSoundService = hyper::ServiceHub::SoundService();
-			m_SoundId = pSoundService->AddSound("assets/audio/menu_navigate_02.wav");
-		}
+		MenuReturnCommand(MenuFSMComponent* pMenuFSM)
+			: m_pMenuFSM{ pMenuFSM } {}
 
 		void Execute() override
 		{
-			hyper::ISoundService* pSoundService = hyper::ServiceHub::SoundService();
-			pSoundService->Play(m_SoundId, 0.5f);
-			m_pMenuStack->PopMenuState();
+			m_pMenuFSM->PopMenuState();
 		}
 
 	private:
-		hyper::SoundId m_SoundId;
-		MenuStackComponent* m_pMenuStack;
+		MenuFSMComponent* m_pMenuFSM;
 	};
 
 	void LoadMainMenuScene(hyper::Scene& scene, hyper::Input& input);
