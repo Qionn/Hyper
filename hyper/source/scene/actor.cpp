@@ -70,10 +70,10 @@ namespace hyper
 		return m_pTransform->GetWorldPosition();
 	}
 
-	Actor* Actor::CreateChild(bool keepWorldPosition)
+	Actor* Actor::CreateChild()
 	{
 		Actor* pActor = m_Scene.CreateActor();
-		pActor->SetParent(this, keepWorldPosition);
+		pActor->SetParent(this, false);
 		return pActor;
 	}
 

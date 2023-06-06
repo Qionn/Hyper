@@ -1,5 +1,5 @@
 #include "constants.h"
-#include "play_menu_state.h"
+#include "level_menu_state.h"
 
 #include "components/menu_fsm_component.h"
 
@@ -10,29 +10,28 @@ using namespace hyper;
 
 namespace burger_time
 {
-	PlayMenuState::PlayMenuState(hyper::Scene& scene, MenuFSMComponent* pMenuFSM)
+	LevelMenuState::LevelMenuState(Scene& scene, MenuFSMComponent* pMenuFSM)
 		: m_pMenuFSM{ pMenuFSM }
 	{
 		m_pRootActor = scene.CreateActor();
 		m_pRootActor->SetEnabled(false);
 
-		m_pLevelState = std::make_unique<LevelMenuState>(scene, pMenuFSM);
-
 		SetupTitleActors();
 		SetupMenuItems();
 	}
 
-	void PlayMenuState::OnEnter()
+	void LevelMenuState::OnEnter()
 	{
+		m_pMenuItemList->SetCursor(0);
 		m_pRootActor->SetEnabled(true);
 	}
 
-	void PlayMenuState::OnExit()
+	void LevelMenuState::OnExit()
 	{
 		m_pRootActor->SetEnabled(false);
 	}
 
-	void PlayMenuState::PerformAction(Action action)
+	void LevelMenuState::PerformAction(Action action)
 	{
 		switch (action)
 		{
@@ -56,44 +55,44 @@ namespace burger_time
 		}
 	}
 
-	void PlayMenuState::SetupTitleActors()
+	void LevelMenuState::SetupTitleActors()
 	{
 		Actor* pActor1 = m_pRootActor->CreateChild();
 		pActor1->SetPosition(400.0f, 80.0f);
 		auto pText1 = pActor1->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 52);
-		pText1->SetText("Play");
+		pText1->SetText("Select Level");
 		pText1->SetColor({ 1, 0, 0 });
 
 		Actor* pActor2 = pActor1->CreateChild();
 		pActor2->SetPosition(0.0f, 40.0f);
 		auto pText2 = pActor2->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 24);
-		pText2->SetText("Choose a gamemode");
+		pText2->SetText("Choose a level to begin");
 		pText2->SetColor({ 1, 1, 1 });
 	}
 
-	void PlayMenuState::SetupMenuItems()
+	void LevelMenuState::SetupMenuItems()
 	{
 		Actor* pActor = m_pRootActor->CreateChild();
 		pActor->SetPosition(400.0f, 350.0f);
 
 		m_pMenuItemList = std::make_unique<MenuItemList>(pActor, 36, 80.0f);
-		m_pMenuItemList->AddItem("Solo", std::bind(&PlayMenuState::OnSoloSelect, this));
-		m_pMenuItemList->AddItem("Co-op", std::bind(&PlayMenuState::OnCoopSelect, this));
-		m_pMenuItemList->AddItem("Versus", std::bind(&PlayMenuState::OnVersusSelect, this));
+		m_pMenuItemList->AddItem("Level 1", std::bind(&LevelMenuState::OnLevel1Select, this));
+		m_pMenuItemList->AddItem("Level 2", std::bind(&LevelMenuState::OnLevel2Select, this));
+		m_pMenuItemList->AddItem("Level 3", std::bind(&LevelMenuState::OnLevel3Select, this));
 	}
 
-	void PlayMenuState::OnSoloSelect()
+	void LevelMenuState::OnLevel1Select()
 	{
-		m_pMenuFSM->PushMenuState(m_pLevelState.get());
+
 	}
 
-	void PlayMenuState::OnCoopSelect()
+	void LevelMenuState::OnLevel2Select()
 	{
-		m_pMenuFSM->PushMenuState(m_pLevelState.get());
+
 	}
 
-	void PlayMenuState::OnVersusSelect()
+	void LevelMenuState::OnLevel3Select()
 	{
-		m_pMenuFSM->PushMenuState(m_pLevelState.get());
+
 	}
 }

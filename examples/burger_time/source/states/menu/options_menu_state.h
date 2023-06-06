@@ -27,7 +27,7 @@ namespace burger_time
 		hyper::Actor* m_pRootActor;
 
 	private:
-		void SetupTitleActors(hyper::Scene& scene);
+		void SetupTitleActors();
 	};
 }
 

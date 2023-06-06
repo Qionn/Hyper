@@ -1,6 +1,7 @@
 #ifndef __BURGER_TIME_HIGHSCORES_MENU_STATE_H__
 #define __BURGER_TIME_HIGHSCORES_MENU_STATE_H__
 
+#include <array>
 #include <vector>
 #include <string>
 
@@ -38,9 +39,10 @@ namespace burger_time
 		hyper::Actor* m_pPlayers;
 
 	private:
-		void SetupTitleActors(hyper::Scene& scene);
+		void SetupTitleActors();
+		void SetupHighScoreActors();
 
-		void ParseHighScores();
+		static std::array<Player, 5> GetTopPlayers();
 	};
 }
 

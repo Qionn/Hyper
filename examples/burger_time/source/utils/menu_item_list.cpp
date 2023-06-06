@@ -2,7 +2,7 @@
 #include "menu_item_list.h"
 
 #include <hyper/scene/components/text_component.h>
-#include <hyper/scene/scene.h>
+#include <hyper/scene/actor.h>
 #include <hyper/service/service_hub.h>
 
 #include <algorithm>
@@ -22,20 +22,29 @@ namespace burger_time
 		SetupItemMarker();
 	}
 
+	void MenuItemList::SetCursor(size_t item)
+	{
+		item = std::min(item, m_Items.size() - 1);
+		if (item != m_CurrentItem)
+		{
+			m_CurrentItem = item;
+			m_pItemMarker->SetParent(m_Items[m_CurrentItem].pActor, false);
+		}
+	}
+
 	void MenuItemList::MoveCursor(int32_t delta)
 	{
 		if (!m_Items.empty())
 		{
-			auto maxItem = static_cast<int>(m_Items.size() - 1);
-			int nextItem = std::clamp(m_CurrentItem - delta, 0, maxItem);
+			auto currentItem = static_cast<int32_t>(m_CurrentItem);
+			auto maxItem = static_cast<int32_t>(m_Items.size() - 1);
+			int32_t nextItem = std::clamp(currentItem - delta, 0, maxItem);
 
 			if (m_CurrentItem != nextItem)
 			{
 				ISoundService* pSoundService = ServiceHub::SoundService();
 				pSoundService->Play(m_SoundId, 0.5f);
-
-				m_CurrentItem = nextItem;
-				m_pItemMarker->SetParent(m_Items[m_CurrentItem].pActor, false);
+				SetCursor(nextItem);
 			}
 		}
 	}
@@ -54,16 +63,13 @@ namespace burger_time
 
 	void MenuItemList::AddItem(std::string_view label, std::function<void()> onSelect)
 	{
-		Scene& scene = m_pRootActor->GetScene();
-
-		Actor* pActor = scene.CreateActor();
+		Actor* pActor = m_pRootActor->CreateChild();
 		auto pText = pActor->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_PointSize);
 		pText->SetText(label);
 		pText->SetColor({ 1, 1, 1 });
 
 		if (m_Items.empty())
 		{
-			pActor->SetParent(m_pRootActor, false);
 			m_pItemMarker->SetEnabled(true);
 			m_pItemMarker->SetParent(pActor, false);
 		}
@@ -78,20 +84,16 @@ namespace burger_time
 
 	void MenuItemList::SetupItemMarker()
 	{
-		Scene& scene = m_pRootActor->GetScene();
-
-		m_pItemMarker = scene.CreateActor();
+		m_pItemMarker = m_pRootActor->CreateChild();
 		m_pItemMarker->SetEnabled(false);
 
-		Actor* pActor1 = scene.CreateActor();
-		pActor1->SetParent(m_pItemMarker, false);
+		Actor* pActor1 = m_pItemMarker->CreateChild();
 		pActor1->SetPosition(-200.0f, 0.0f);
 		auto pText1 = pActor1->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_PointSize);
 		pText1->SetText(">");
 		pText1->SetColor({ 1, 1, 1 });
 
-		Actor* pActor2 = scene.CreateActor();
-		pActor2->SetParent(m_pItemMarker, false);
+		Actor* pActor2 = m_pItemMarker->CreateChild();
 		pActor2->SetPosition(200.0f, 0.0f);
 		auto pText2 = pActor2->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_PointSize);
 		pText2->SetText("<");

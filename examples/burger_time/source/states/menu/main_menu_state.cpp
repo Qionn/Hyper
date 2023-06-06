@@ -20,8 +20,8 @@ namespace burger_time
 		m_pOptionsState		= std::make_unique<OptionsMenuState>(scene);
 		m_pPlayState		= std::make_unique<PlayMenuState>(scene, pMenuFSM);
 
-		SetupTitleActors(scene);
-		SetupMenuItems(scene);
+		SetupTitleActors();
+		SetupMenuItems();
 	}
 
 	void MainMenuState::OnEnter()
@@ -58,34 +58,30 @@ namespace burger_time
 		}
 	}
 
-	void MainMenuState::SetupTitleActors(Scene& scene)
+	void MainMenuState::SetupTitleActors()
 	{
-		Actor* pActor1 = scene.CreateActor();
-		pActor1->SetParent(m_pRootActor, false);
+		Actor* pActor1 = m_pRootActor->CreateChild();
 		pActor1->SetPosition(400.0f, 80.0f);
 		auto pText1 = pActor1->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 52);
 		pText1->SetText("Burger Time");
 		pText1->SetColor({ 1, 0, 0 });
 
-		Actor* pActor2 = scene.CreateActor();
-		pActor2->SetParent(pActor1, false);
+		Actor* pActor2 = pActor1->CreateChild();
 		pActor2->SetPosition(0.0f, 40.0f);
 		auto pText2 = pActor2->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 24);
 		pText2->SetText("A recration of Burger Time 1982");
 		pText2->SetColor({ 1, 1, 1 });
 
-		Actor* pActor3 = scene.CreateActor();
-		pActor3->SetParent(pActor2, false);
+		Actor* pActor3 = pActor2->CreateChild();
 		pActor3->SetPosition(0.0f, 30.0f);
 		auto pText3 = pActor3->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, 24);
 		pText3->SetText("Using the Hyper engine");
 		pText3->SetColor({ 1, 1, 1 });
 	}
 
-	void MainMenuState::SetupMenuItems(Scene& scene)
+	void MainMenuState::SetupMenuItems()
 	{
-		Actor* pActor = scene.CreateActor();
-		pActor->SetParent(m_pRootActor, false);
+		Actor* pActor = m_pRootActor->CreateChild();
 		pActor->SetPosition(400.0f, 350.0f);
 
 		m_pMenuItemList = std::make_unique<MenuItemList>(pActor, 36, 80.0f);

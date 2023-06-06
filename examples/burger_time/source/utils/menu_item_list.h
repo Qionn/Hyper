@@ -17,6 +17,7 @@ namespace burger_time
 	public:
 		MenuItemList(hyper::Actor* pRootActor, int ptSize, float spacing);
 
+		void SetCursor(size_t item);
 		void MoveCursor(int32_t delta);
 		void Select() const;
 
@@ -42,7 +43,7 @@ namespace burger_time
 
 		hyper::Actor* m_pRootActor;
 
-		int32_t m_CurrentItem = 0;
+		size_t m_CurrentItem = 0;
 		std::vector<Item> m_Items;
 		hyper::Actor* m_pItemMarker;
 

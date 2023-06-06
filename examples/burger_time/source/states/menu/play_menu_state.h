@@ -1,9 +1,11 @@
 #ifndef __BURGER_TIME_PLAY_MENU_STATE_H__
 #define __BURGER_TIME_PLAY_MENU_STATE_H__
 
+#include <memory>
+
 #include <hyper/fwd.h>
 
-#include "states/menu_state.h"
+#include "states/menu/level_menu_state.h"
 #include "utils/menu_item_list.h"
 
 namespace burger_time
@@ -28,12 +30,15 @@ namespace burger_time
 
 	private:
 		hyper::Actor* m_pRootActor;
+
 		MenuFSMComponent* m_pMenuFSM;
+		std::unique_ptr<LevelMenuState> m_pLevelState;
+
 		std::unique_ptr<MenuItemList> m_pMenuItemList;
 
 	private:
-		void SetupTitleActors(hyper::Scene& scene);
-		void SetupMenuItems(hyper::Scene& scene);
+		void SetupTitleActors();
+		void SetupMenuItems();
 
 		void OnSoloSelect();
 		void OnCoopSelect();

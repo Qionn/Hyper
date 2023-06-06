@@ -43,8 +43,8 @@ namespace burger_time
 		std::unique_ptr<MenuItemList> m_pMenuItemList;
 
 	private:
-		void SetupTitleActors(hyper::Scene& scene);
-		void SetupMenuItems(hyper::Scene& scene);
+		void SetupTitleActors();
+		void SetupMenuItems();
 
 		void OnPlaySelect();
 		void OnHighscoresSelect();

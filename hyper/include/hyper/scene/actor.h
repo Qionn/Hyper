@@ -26,7 +26,7 @@ namespace hyper
 		const glm::vec2& GetLocalPosition() const;
 		const glm::vec2& GetWorldPosition() const;
 
-		Actor* CreateChild(bool keepWorldPosition);
+		Actor* CreateChild();
 		void SetParent(Actor* pParent, bool keepWorldPosition);
 		void ForEachChild(const std::function<void(Actor&)>& functor) const;
 		bool HasParent() const;
