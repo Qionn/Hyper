@@ -33,7 +33,10 @@ namespace hyper
 
 		for (Actor* pChild : m_Children)
 		{
-			pChild->Update(dt);
+			if (pChild->IsEnabled())
+			{
+				pChild->Update(dt);
+			}
 		}
 	}
 
@@ -46,7 +49,10 @@ namespace hyper
 
 		for (const Actor* pChild : m_Children)
 		{
-			pChild->Render();
+			if (pChild->IsEnabled())
+			{
+				pChild->Render();
+			}
 		}
 	}
 

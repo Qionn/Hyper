@@ -35,6 +35,21 @@ namespace hyper
 		}
 	}
 
+	void Scene::Start()
+	{
+		m_IsRunning = true;
+	}
+
+	void Scene::Stop()
+	{
+		m_IsRunning = false;
+	}
+
+	bool Scene::IsRunning() const
+	{
+		return m_IsRunning;
+	}
+
 	Actor* Scene::CreateActor()
 	{
 		m_Actors.push_back(std::make_unique<Actor>(*this));

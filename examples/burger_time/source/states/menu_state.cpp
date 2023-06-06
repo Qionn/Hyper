@@ -1,5 +1,7 @@
 #include "constants.h"
-#include "menu_item_list.h"
+#include "menu_state.h"
+
+#include "components/menu_fsm_component.h"
 
 #include <hyper/scene/components/text_component.h>
 #include <hyper/scene/actor.h>
@@ -11,34 +13,43 @@ using namespace hyper;
 
 namespace burger_time
 {
-	MenuItemList::MenuItemList(Actor* pRootActor, int ptSize, float spacing)
-		: m_PointSize{ ptSize }
+	AMenuState::AMenuState(MenuFSMComponent* pMenuFSM, int fontSize, float spacing)
+		: m_pMenuFSM{ pMenuFSM }
+		, m_FontSize{ fontSize }
 		, m_Spacing{ spacing }
-		, m_pRootActor{ pRootActor }
 	{
 		ISoundService* pSoundService = ServiceHub::SoundService();
 		m_SoundId = pSoundService->AddSound("assets/audio/menu_navigate_01.wav");
 
+		m_pRootActor = m_pMenuFSM->GetActor().CreateChild();
+		m_pRootActor->SetEnabled(false);
+
 		SetupItemMarker();
 	}
 
-	void MenuItemList::SetCursor(size_t item)
+	void AMenuState::OnEnter()
 	{
-		item = std::min(item, m_Items.size() - 1);
-		if (item != m_CurrentItem)
-		{
-			m_CurrentItem = item;
-			m_pItemMarker->SetParent(m_Items[m_CurrentItem].pActor, false);
-		}
+		m_pRootActor->SetEnabled(true);
 	}
 
-	void MenuItemList::MoveCursor(int32_t delta)
+	void AMenuState::OnExit()
+	{
+		m_pRootActor->SetEnabled(false);
+	}
+
+	void AMenuState::SetCursor(size_t index)
+	{
+		m_CurrentItem = std::min(index, m_Items.size() - 1);
+		m_pItemMarker->SetParent(m_Items[m_CurrentItem].pActor, false);
+	}
+
+	void AMenuState::MoveCursor(int32_t delta)
 	{
 		if (!m_Items.empty())
 		{
-			auto currentItem = static_cast<int32_t>(m_CurrentItem);
-			auto maxItem = static_cast<int32_t>(m_Items.size() - 1);
-			int32_t nextItem = std::clamp(currentItem - delta, 0, maxItem);
+			auto currentItem	= static_cast<int32_t>(m_CurrentItem);
+			auto maxItem		= static_cast<int32_t>(m_Items.size() - 1);
+			uint32_t nextItem	= std::clamp(currentItem - delta, 0, maxItem);
 
 			if (m_CurrentItem != nextItem)
 			{
@@ -49,7 +60,7 @@ namespace burger_time
 		}
 	}
 
-	void MenuItemList::Select() const
+	void AMenuState::Select() const
 	{
 		if (!m_Items.empty())
 		{
@@ -61,10 +72,15 @@ namespace burger_time
 		}
 	}
 
-	void MenuItemList::AddItem(std::string_view label, std::function<void()> onSelect)
+	MenuFSMComponent* AMenuState::GetMenuFSM() const
+	{
+		return m_pMenuFSM;
+	}
+
+	void AMenuState::AddItem(std::string_view label, std::function<void()> onSelect)
 	{
 		Actor* pActor = m_pRootActor->CreateChild();
-		auto pText = pActor->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_PointSize);
+		auto pText = pActor->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_FontSize);
 		pText->SetText(label);
 		pText->SetColor({ 1, 1, 1 });
 
@@ -79,23 +95,23 @@ namespace burger_time
 			pActor->SetPosition(0.0f, m_Spacing);
 		}
 
-		m_Items.emplace_back(pActor, std::move(onSelect));
+		m_Items.push_back(Item{ pActor, std::move(onSelect) });
 	}
 
-	void MenuItemList::SetupItemMarker()
+	void AMenuState::SetupItemMarker()
 	{
 		m_pItemMarker = m_pRootActor->CreateChild();
 		m_pItemMarker->SetEnabled(false);
 
 		Actor* pActor1 = m_pItemMarker->CreateChild();
 		pActor1->SetPosition(-200.0f, 0.0f);
-		auto pText1 = pActor1->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_PointSize);
+		auto pText1 = pActor1->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_FontSize);
 		pText1->SetText(">");
 		pText1->SetColor({ 1, 1, 1 });
 
 		Actor* pActor2 = m_pItemMarker->CreateChild();
 		pActor2->SetPosition(200.0f, 0.0f);
-		auto pText2 = pActor2->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_PointSize);
+		auto pText2 = pActor2->AddComponent<TextComponent>(BURGER_TIME_FONT_PATH, m_FontSize);
 		pText2->SetText("<");
 		pText2->SetColor({ 1, 1, 1 });
 	}

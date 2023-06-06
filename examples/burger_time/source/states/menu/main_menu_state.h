@@ -2,53 +2,26 @@
 #define __BURGER_TIME_MAIN_MENU_STATE_H__
 
 #include <memory>
-#include <vector>
 
-#include <hyper/fwd.h>
-
-#include "states/menu/highscores_menu_state.h"
-#include "states/menu/options_menu_state.h"
-#include "states/menu/play_menu_state.h"
-#include "utils/menu_item_list.h"
+#include "states/menu/level_menu_state.h"
 
 namespace burger_time
 {
 	class MenuFSMComponent;
 
-	class MainMenuState final : public IMenuState
+	class MainMenuState final : public AMenuState
 	{
 	public:
-		MainMenuState(hyper::Scene& scene, MenuFSMComponent* pMenuFSM);
-
-		void OnEnter() override;
-		void OnExit() override;
-		void PerformAction(Action action) override;
-
-		MainMenuState(const MainMenuState&)				= delete;
-		MainMenuState(MainMenuState&&)					= delete;
-		MainMenuState& operator=(const MainMenuState&)	= delete;
-		MainMenuState& operator=(MainMenuState&&)		= delete;
-
+		MainMenuState(MenuFSMComponent* pMenuFSM);
 		~MainMenuState() = default;
 
 	private:
-		hyper::Actor* m_pRootActor;
-
-		MenuFSMComponent* m_pMenuFSM;
-
-		std::unique_ptr<HighscoresMenuState> m_pHighscoresState;
-		std::unique_ptr<OptionsMenuState> m_pOptionsState;
-		std::unique_ptr<PlayMenuState> m_pPlayState;
-
-		std::unique_ptr<MenuItemList> m_pMenuItemList;
+		std::unique_ptr<LevelMenuState> m_pLevelState;
 
 	private:
-		void SetupTitleActors();
-		void SetupMenuItems();
-
-		void OnPlaySelect();
-		void OnHighscoresSelect();
-		void OnOptionsSelect();
+		void OnSoloSelect();
+		void OnCoopSelect();
+		void OnVersusSelect();
 		void OnExitSelect();
 	};
 }

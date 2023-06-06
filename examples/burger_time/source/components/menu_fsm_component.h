@@ -16,15 +16,15 @@ namespace burger_time
 	public:
 		MenuFSMComponent(hyper::Actor& actor);
 
-		void PushMenuState(IMenuState* pState);
+		void PushMenuState(AMenuState* pState);
 		void PopMenuState();
 
-		IMenuState* GetCurrentMenuState() const;
+		AMenuState* GetCurrentMenuState() const;
 
 		~MenuFSMComponent() = default;
 
 	private:
-		std::stack<IMenuState*> m_Stack;
+		std::stack<AMenuState*> m_Stack;
 		std::unique_ptr<MainMenuState> m_pDefaultState;
 
 		hyper::SoundId m_SoundId;

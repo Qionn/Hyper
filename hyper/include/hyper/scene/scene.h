@@ -16,6 +16,10 @@ namespace hyper
 
 		void Update(float dt);
 		void Render() const;
+
+		void Start();
+		void Stop();
+		bool IsRunning() const;
 		
 		Actor* CreateActor();
 		void RemoveActor(Actor* pActor);
@@ -33,6 +37,7 @@ namespace hyper
 		~Scene() = default;
 
 	private:
+		bool m_IsRunning = true;
 		IContext& m_Context;
 
 		std::vector<std::unique_ptr<Actor>> m_Actors;

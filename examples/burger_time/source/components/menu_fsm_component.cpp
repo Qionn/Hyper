@@ -12,15 +12,13 @@ namespace burger_time
 		ISoundService* pSoundService = ServiceHub::SoundService();
 		m_SoundId = pSoundService->AddSound("assets/audio/menu_navigate_02.wav");
 
-		Scene& scene = GetScene();
-
-		m_pDefaultState = std::make_unique<MainMenuState>(scene, this);
+		m_pDefaultState = std::make_unique<MainMenuState>(this);
 		
 		m_Stack.push(m_pDefaultState.get());
 		m_Stack.top()->OnEnter();
 	}
 
-	void MenuFSMComponent::PushMenuState(IMenuState* pState)
+	void MenuFSMComponent::PushMenuState(AMenuState* pState)
 	{
 		ISoundService* pSoundService = ServiceHub::SoundService();
 		pSoundService->Play(m_SoundId, 0.5f);
@@ -47,7 +45,7 @@ namespace burger_time
 		}
 	}
 
-	IMenuState* MenuFSMComponent::GetCurrentMenuState() const
+	AMenuState* MenuFSMComponent::GetCurrentMenuState() const
 	{
 		return m_Stack.top();
 	}

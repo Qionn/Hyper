@@ -45,12 +45,12 @@ namespace hyper
 	{
 		if (m_CanStart)
 		{
-			m_IsRunning = true;
+			m_pScene->Start();
 
 			Clock clock;
 			float deltatime = 0.0f;
 
-			while (m_IsRunning)
+			while (m_pScene->IsRunning())
 			{
 				m_pInput->Update();
 				m_pScene->Update(deltatime);
@@ -66,7 +66,7 @@ namespace hyper
 
 	void Application::Stop()
 	{
-		m_IsRunning = false;
+		m_pScene->Stop();
 	}
 
 	void Application::LoadScene(const LoadSceneFunction& loadScene)

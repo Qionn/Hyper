@@ -46,7 +46,6 @@ namespace hyper
 		std::unique_ptr<Scene> m_pScene;
 		std::unique_ptr<Input> m_pInput;
 
-		bool m_IsRunning = false;
 		bool m_CanStart = true;
 		
 	private:
