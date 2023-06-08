@@ -12,11 +12,11 @@ namespace burger_time
 	class PauseMenuState final : public AMenuState
 	{
 	public:
-		PauseMenuState(MenuFSMComponent* pMenuFSM);
+		PauseMenuState(MenuFSMComponent* pMenuFSM, hyper::Input& input);
 		~PauseMenuState() = default;
 
 	private:
-		void OnResumeSelect();
+		void OnResumeSelect(hyper::Input& input);
 		void OnMuteSelect();
 		void OnSkipLevelSelect();
 		void OnExitSelect();

@@ -4,6 +4,7 @@
 #include "components/menu_fsm_component.h"
 #include "scenes/main_menu_scene.h"
 
+#include <hyper/input/input.h>
 #include <hyper/scene/components/rect_component.h>
 #include <hyper/scene/components/text_component.h>
 #include <hyper/scene/scene.h>
@@ -12,20 +13,21 @@ using namespace hyper;
 
 namespace burger_time
 {
-	PauseMenuState::PauseMenuState(MenuFSMComponent* pMenuFSM)
+	PauseMenuState::PauseMenuState(MenuFSMComponent* pMenuFSM, hyper::Input& input)
 		: AMenuState(pMenuFSM, 36, 50)
 	{
 		SetupBackground();
 
-		AddItem("Resume", std::bind(&PauseMenuState::OnResumeSelect, this));
+		AddItem("Resume", std::bind(&PauseMenuState::OnResumeSelect, this, std::ref(input)));
 		AddItem("Mute", std::bind(&PauseMenuState::OnMuteSelect, this));
 		AddItem("Skip Level", std::bind(&PauseMenuState::OnSkipLevelSelect, this));
 		AddItem("Exit", std::bind(&PauseMenuState::OnExitSelect, this));
 	}
 
-	void PauseMenuState::OnResumeSelect()
+	void PauseMenuState::OnResumeSelect(hyper::Input& input)
 	{
-
+		GetMenuFSM()->PopMenuState();
+		input.Poplayer();
 	}
 
 	void PauseMenuState::OnMuteSelect()
@@ -53,11 +55,11 @@ namespace burger_time
 		// White border
 		Actor* pActor2 = pActor1->CreateChild();
 		pActor2->SetPosition(0.0f, 25.0f);
-		pActor2->AddComponent<RectComponent>(510.0f, 360.0f, glm::vec4(1, 1, 1, 1));
+		pActor2->AddComponent<RectComponent>(510.0f, 335.0f, glm::vec4(1, 1, 1, 1));
 
 		// Black card
 		Actor* pActor3 = pActor2->CreateChild();
-		pActor3->AddComponent<RectComponent>(500.0f, 350.0f, glm::vec4(0, 0, 0, 1));
+		pActor3->AddComponent<RectComponent>(500.0f, 325.0f, glm::vec4(0, 0, 0, 1));
 
 		// Title
 		Actor* pActor4 = pActor1->CreateChild();

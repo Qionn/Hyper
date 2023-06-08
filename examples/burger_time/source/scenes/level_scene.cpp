@@ -18,8 +18,8 @@ namespace burger_time
 
 		Actor* pMenuFSMActor = scene.CreateActor();
 		pMenuFSMActor->SetPosition(400.0f, 375.0f);
-		auto pMenuStack = pMenuFSMActor->AddComponent<MenuFSMComponent>(1);
+		auto pMenuStack = pMenuFSMActor->AddComponent<MenuFSMComponent>(0);
 
-		input.Bind(Key::eEscape, KeyState::ePressed, std::make_unique<PauseCommand>(pMenuStack));
+		input.Bind(Key::eEscape, KeyState::ePressed, std::make_unique<PauseCommand>(pMenuStack, input));
 	}
 }

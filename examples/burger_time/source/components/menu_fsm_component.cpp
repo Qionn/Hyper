@@ -28,7 +28,11 @@ namespace burger_time
 		{
 			m_Stack.top()->OnExit();
 			m_Stack.pop();
-			m_Stack.top()->OnEnter();
+
+			if (!m_Stack.empty())
+			{
+				m_Stack.top()->OnEnter();
+			}
 		}
 	}
 

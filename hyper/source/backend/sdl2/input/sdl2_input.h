@@ -42,6 +42,7 @@ namespace hyper
 		std::unique_ptr<Keyboard> m_pKeyboard;
 		std::stack<CommandLayer*> m_LayerStack;
 		std::unique_ptr<CommandLayer> m_pDefaultLayer;
+		std::unique_ptr<CommandLayer> m_pDefaultLayerBuffer;
 		EventCallback m_Callback;
 
 	private:

@@ -17,6 +17,11 @@ namespace hyper
 
 	void Input::Impl::Update()
 	{
+		if (m_pDefaultLayerBuffer != nullptr)
+		{
+			m_pDefaultLayerBuffer.reset();
+		}
+
 		HandleEvents();
 
 		CommandLayer* layer = m_LayerStack.top();
@@ -58,7 +63,8 @@ namespace hyper
 			m_LayerStack.pop();
 		}
 
-		m_pDefaultLayer->UnbindAll();
+		m_pDefaultLayerBuffer = std::move(m_pDefaultLayer);
+		m_pDefaultLayer = std::make_unique<CommandLayer>();
 		PushLayer(m_pDefaultLayer.get());
 	}
 
