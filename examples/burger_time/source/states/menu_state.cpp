@@ -5,7 +5,6 @@
 
 #include <hyper/scene/components/text_component.h>
 #include <hyper/scene/actor.h>
-#include <hyper/service/service_hub.h>
 
 #include <algorithm>
 
@@ -18,9 +17,6 @@ namespace burger_time
 		, m_FontSize{ fontSize }
 		, m_Spacing{ spacing }
 	{
-		ISoundService* pSoundService = ServiceHub::SoundService();
-		m_SoundId = pSoundService->AddSound("assets/audio/menu_navigate_01.wav");
-
 		m_pRootActor = m_pMenuFSM->GetActor().CreateChild();
 		m_pRootActor->SetEnabled(false);
 
@@ -53,8 +49,6 @@ namespace burger_time
 
 			if (m_CurrentItem != nextItem)
 			{
-				ISoundService* pSoundService = ServiceHub::SoundService();
-				pSoundService->Play(m_SoundId, 0.5f);
 				SetCursor(nextItem);
 			}
 		}
@@ -70,6 +64,11 @@ namespace burger_time
 				item.onSelect();
 			}
 		}
+	}
+
+	Actor* AMenuState::GetRootActor() const
+	{
+		return m_pRootActor;
 	}
 
 	MenuFSMComponent* AMenuState::GetMenuFSM() const

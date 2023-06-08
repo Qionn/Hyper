@@ -17,6 +17,16 @@ namespace hyper
 		delete m_pImpl;
 	}
 
+	void Input::PushLayer(CommandLayer* pLayer)
+	{
+		m_pImpl->PushLayer(pLayer);
+	}
+
+	void Input::Poplayer()
+	{
+		m_pImpl->Poplayer();
+	}
+
 	void Input::Update()
 	{
 		m_pImpl->Update();
@@ -32,8 +42,13 @@ namespace hyper
 		m_pImpl->Unbind(key, state);
 	}
 
-	void Input::ClearBindings()
+	void Input::UnbindAll()
 	{
-		m_pImpl->ClearBindings();
+		m_pImpl->UnbindAll();
+	}
+
+	void Input::Reset()
+	{
+		m_pImpl->Reset();
 	}
 }

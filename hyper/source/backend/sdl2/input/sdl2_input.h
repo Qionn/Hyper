@@ -2,7 +2,8 @@
 #define __HYPER_SDL2_INPUT_H__
 
 #include <functional>
-#include <map>
+#include <memory>
+#include <stack>
 
 #include "hyper/input/input.h"
 #include "hyper/input/keyboard.h"
@@ -19,10 +20,14 @@ namespace hyper
 
 		void Update();
 
+		void PushLayer(CommandLayer* pLayer);
+		void Poplayer();
+
 		void Bind(Key key, KeyState state, std::unique_ptr<ICommand> command);
 		void Unbind(Key key, KeyState state);
+		void UnbindAll();
 
-		void ClearBindings();
+		void Reset();
 
 		void SetEventCallback(const EventCallback& callback);
 
@@ -35,12 +40,12 @@ namespace hyper
 
 	private:
 		std::unique_ptr<Keyboard> m_pKeyboard;
-		std::map<std::pair<Key, KeyState>, std::unique_ptr<ICommand>> m_KeyboardCommands;
+		std::stack<CommandLayer*> m_LayerStack;
+		std::unique_ptr<CommandLayer> m_pDefaultLayer;
 		EventCallback m_Callback;
 
 	private:
 		void HandleEvents();
-		void HandleKeyboardCommands();
 		void FireEvent(const AEvent& event) const;
 	};
 }

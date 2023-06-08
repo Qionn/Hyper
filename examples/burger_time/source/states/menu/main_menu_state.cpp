@@ -38,6 +38,6 @@ namespace burger_time
 	void MainMenuState::OnExitSelect()
 	{
 		Scene& scene = GetMenuFSM()->GetScene();
-		scene.Stop();
+		scene.RequestStop();
 	}
 }

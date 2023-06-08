@@ -1,0 +1,4 @@
+# file format:
+#   b:{PATH} - backgound image
+
+b:assets/sprites/level_01.png

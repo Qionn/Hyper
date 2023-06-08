@@ -4,23 +4,23 @@
 #include <memory>
 #include <vector>
 
+#include "hyper/event/subject.h"
 #include "hyper/scene/actor.h"
 #include "hyper/fwd.h"
 
 namespace hyper
 {
-	class Scene final
+	class Scene final : public ASubject
 	{
 	public:
 		explicit Scene(IContext& context);
 
 		void Update(float dt);
 		void Render() const;
-
-		void Start();
-		void Stop();
-		bool IsRunning() const;
 		
+		void RequestStop();
+		void RequestLoad(std::function<void(Scene&, Input&)> loadScene);
+
 		Actor* CreateActor();
 		void RemoveActor(Actor* pActor);
 		void RemoveAllActors();
@@ -29,15 +29,9 @@ namespace hyper
 
 		IContext& GetContext() const;
 
-		Scene(const Scene&)				= delete;
-		Scene(Scene&&)					= delete;
-		Scene& operator=(const Scene&)	= delete;
-		Scene& operator=(Scene&&)		= delete;
-
 		~Scene() = default;
 
 	private:
-		bool m_IsRunning = true;
 		IContext& m_Context;
 
 		std::vector<std::unique_ptr<Actor>> m_Actors;

@@ -13,6 +13,11 @@ namespace hyper
 		void AddObserver(IObserver* observer);
 		void RemoveObserver(IObserver* observer);
 
+		ASubject(const ASubject&)				= delete;
+		ASubject(ASubject&&)					= delete;
+		ASubject& operator=(const ASubject&)	= delete;
+		ASubject& operator=(ASubject&&)			= delete;
+
 		virtual ~ASubject() = default;
 
 	protected:

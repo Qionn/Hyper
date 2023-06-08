@@ -3,6 +3,7 @@
 
 #include "commands/menu_command.h"
 #include "components/menu_fsm_component.h"
+#include "states/menu/main_menu_state.h"
 
 #include <hyper/input/input.h>
 #include <hyper/scene/components/sprite_component.h>
@@ -29,9 +30,12 @@ namespace burger_time
 		pText3->SetText("Data East©");
 		pText3->SetColor({ 1, 1, 1 });
 
-		Actor* pMenuActor = scene.CreateActor();
-		pMenuActor->SetPosition(400.0f, 400.0f);
-		auto pMenuStack = pMenuActor->AddComponent<MenuFSMComponent>();
+		Actor* pMenuFSMActor = scene.CreateActor();
+		pMenuFSMActor->SetPosition(400.0f, 400.0f);
+		auto pMenuStack = pMenuFSMActor->AddComponent<MenuFSMComponent>(1);
+
+		auto pDefaultState = pMenuStack->CreateState<MainMenuState>();
+		pMenuStack->PushMenuState(pDefaultState);
 
 		input.Bind(Key::eUp, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorUp));
 		input.Bind(Key::eDown, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorDown));

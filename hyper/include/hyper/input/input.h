@@ -4,8 +4,7 @@
 #include <memory>
 
 #include "hyper/event/subject.h"
-#include "hyper/input/key.h"
-#include "hyper/utils/command.h"
+#include "hyper/input/command_layer.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -17,10 +16,14 @@ namespace hyper
 
 		void Update();
 
+		void PushLayer(CommandLayer* pLayer);
+		void Poplayer();
+
 		void Bind(Key key, KeyState state, std::unique_ptr<ICommand> command);
 		void Unbind(Key key, KeyState state);
+		void UnbindAll();
 
-		void ClearBindings();
+		void Reset();
 
 		Input(const Input&)				= delete;
 		Input(Input&&)					= delete;

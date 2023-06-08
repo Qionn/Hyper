@@ -11,6 +11,7 @@ namespace hyper
 	public:
 		Window::id_t id;
 
+	public:
 		WindowCloseEvent(Window::id_t id)
 			: id{ id } {}
 	};

@@ -13,6 +13,8 @@ namespace hyper
 	class AEvent;
 	class IObserver;
 	class WindowCloseEvent;
+	class SceneStopRequestEvent;
+	class SceneLoadRequestEvent;
 
 	class IContext;
 	class ITexture;

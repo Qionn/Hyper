@@ -2,6 +2,7 @@
 #define __BURGER_TIME_LEVEL_MENU_STATE_H__
 
 #include <memory>
+#include <string_view>
 
 #include "states/menu_state.h"
 
@@ -21,6 +22,8 @@ namespace burger_time
 		void OnLevel1Select();
 		void OnLevel2Select();
 		void OnLevel3Select();
+
+		void LoadLevel(std::string_view mapFile);
 	};
 }
 

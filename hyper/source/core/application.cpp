@@ -1,6 +1,7 @@
 #include "hyper/core/application.h"
 #include "hyper/event/dispatcher.h"
 #include "hyper/event/window_events.h"
+#include "hyper/event/scene_events.h"
 #include "hyper/scene/scene.h"
 #include "hyper/service/service_hub.h"
 #include "hyper/utils/clock.h"
@@ -24,6 +25,7 @@ namespace hyper
 			m_pScene	= std::make_unique<Scene>(m_pRenderer->GetContext());
 			m_pInput	= std::make_unique<Input>();
 
+			m_pScene->AddObserver(this);
 			m_pInput->AddObserver(this);
 		}
 		catch (const std::runtime_error& err)
@@ -33,24 +35,16 @@ namespace hyper
 		}
 	}
 
-	Application::~Application()
-	{
-		if (m_pInput != nullptr)
-		{
-			m_pInput->RemoveObserver(this);
-		}
-	}
-
 	void Application::Start()
 	{
 		if (m_CanStart)
 		{
-			m_pScene->Start();
+			m_IsRunning = true;
 
 			Clock clock;
 			float deltatime = 0.0f;
 
-			while (m_pScene->IsRunning())
+			while (m_IsRunning)
 			{
 				m_pInput->Update();
 				m_pScene->Update(deltatime);
@@ -66,14 +60,14 @@ namespace hyper
 
 	void Application::Stop()
 	{
-		m_pScene->Stop();
+		m_IsRunning = false;
 	}
 
-	void Application::LoadScene(const LoadSceneFunction& loadScene)
+	void Application::LoadScene(const std::function<void(Scene&, Input&)>& loadScene)
 	{
 		HyperAssert(loadScene != nullptr, "expected loadScene to be a valid function pointer");
 
-		m_pInput->ClearBindings();
+		m_pInput->Reset();
 		m_pScene->RemoveAllActors();
 
 		loadScene(*m_pScene, *m_pInput);
@@ -84,6 +78,8 @@ namespace hyper
 		Dispatcher dispatcher(event);
 
 		dispatcher.Dispatch(&Application::OnWindowCloseEvent, this);
+		dispatcher.Dispatch(&Application::OnSceneStopRequestEvent, this);
+		dispatcher.Dispatch(&Application::OnSceneLoadRequestEvent, this);
 
 		return dispatcher.IsEventHandled();
 	}
@@ -93,6 +89,26 @@ namespace hyper
 		if (event.id == m_pWindow->GetId())
 		{
 			Stop();
+			return true;
+		}
+		return false;
+	}
+
+	bool Application::OnSceneStopRequestEvent(const SceneStopRequestEvent& event)
+	{
+		if (&event.scene == m_pScene.get())
+		{
+			Stop();
+			return true;
+		}
+		return false;
+	}
+
+	bool Application::OnSceneLoadRequestEvent(const SceneLoadRequestEvent& event)
+	{
+		if (&event.scene == m_pScene.get())
+		{
+			LoadScene(event.loadScene);
 			return true;
 		}
 		return false;

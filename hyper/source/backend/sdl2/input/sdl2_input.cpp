@@ -9,35 +9,57 @@ namespace hyper
 {
 	Input::Impl::Impl()
 	{
-		m_pKeyboard = std::make_unique<Keyboard>();
+		m_pKeyboard		= std::make_unique<Keyboard>();
+		m_pDefaultLayer	= std::make_unique<CommandLayer>();
+
+		PushLayer(m_pDefaultLayer.get());
 	}
 
 	void Input::Impl::Update()
 	{
 		HandleEvents();
-		HandleKeyboardCommands();
+
+		CommandLayer* layer = m_LayerStack.top();
+		layer->Update(m_pKeyboard.get());
+	}
+
+	void Input::Impl::PushLayer(CommandLayer* pLayer)
+	{
+		m_LayerStack.push(pLayer);
+	}
+
+	void Input::Impl::Poplayer()
+	{
+		if (m_LayerStack.size() > 1)
+		{
+			m_LayerStack.pop();
+		}
 	}
 
 	void Input::Impl::Bind(Key key, KeyState state, std::unique_ptr<ICommand> command)
 	{
-		std::pair<Key, KeyState> keyStatePair(key, state);
-		m_KeyboardCommands[keyStatePair] = std::move(command);
+		m_LayerStack.top()->Bind(key, state, std::move(command));
 	}
 
 	void Input::Impl::Unbind(Key key, KeyState state)
 	{
-		std::pair<Key, KeyState> keyStatePair(key, state);
-
-		auto it = m_KeyboardCommands.find(keyStatePair);
-		if (it != m_KeyboardCommands.end())
-		{
-			m_KeyboardCommands.erase(it);
-		}
+		m_LayerStack.top()->Unbind(key, state);
 	}
 
-	void Input::Impl::ClearBindings()
+	void Input::Impl::UnbindAll()
 	{
-		m_KeyboardCommands.clear();
+		m_LayerStack.top()->UnbindAll();
+	}
+
+	void Input::Impl::Reset()
+	{
+		while (!m_LayerStack.empty())
+		{
+			m_LayerStack.pop();
+		}
+
+		m_pDefaultLayer->UnbindAll();
+		PushLayer(m_pDefaultLayer.get());
 	}
 
 	void Input::Impl::SetEventCallback(const EventCallback& callback)
@@ -66,40 +88,6 @@ namespace hyper
 						}
 					}
 				}
-			}
-		}
-	}
-
-	void Input::Impl::HandleKeyboardCommands()
-	{
-		m_pKeyboard->Update();
-
-		for (auto& [id, pCommand] : m_KeyboardCommands)
-		{
-			auto [key, state] = id;
-
-			switch (state)
-			{
-				case KeyState::eDown:
-					if (m_pKeyboard->IsDown(key))
-					{
-						pCommand->Execute();
-					}
-					break;
-
-				case KeyState::ePressed:
-					if (m_pKeyboard->IsPressed(key))
-					{
-						pCommand->Execute();
-					}
-					break;
-
-				case KeyState::eReleased:
-					if (m_pKeyboard->IsReleased(key))
-					{
-						pCommand->Execute();
-					}
-					break;
 			}
 		}
 	}

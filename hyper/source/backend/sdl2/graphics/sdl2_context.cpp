@@ -56,6 +56,30 @@ namespace hyper
 		SDL_RenderCopyF(m_pRenderer, sdl2Texture.GetSDLTexture(), &sdlSrcRect, &sdlDstRect);
 	}
 
+	void SDL2Context::DrawRect(const Rectf& rect, const glm::vec4& color) const
+	{
+		SDL_FRect sdlRect = {
+			.x = rect.x,
+			.y = rect.y,
+			.w = rect.width,
+			.h = rect.height
+		};
+
+		SDL_Color sdlColor = {
+			static_cast<Uint8>(std::clamp(color.r * 255, 0.0f, 255.0f)),
+			static_cast<Uint8>(std::clamp(color.g * 255, 0.0f, 255.0f)),
+			static_cast<Uint8>(std::clamp(color.b * 255, 0.0f, 255.0f)),
+			static_cast<Uint8>(std::clamp(color.a * 255, 0.0f, 255.0f))
+		};
+
+		SDL_Color prevColor{};
+
+		SDL_GetRenderDrawColor(m_pRenderer, &prevColor.r, &prevColor.g, &prevColor.b, &prevColor.a);
+		SDL_SetRenderDrawColor(m_pRenderer, sdlColor.r, sdlColor.g, sdlColor.b, sdlColor.a);
+		SDL_RenderFillRectF(m_pRenderer, &sdlRect);
+		SDL_SetRenderDrawColor(m_pRenderer, prevColor.r, prevColor.g, prevColor.b, prevColor.a);
+	}
+
 	std::unique_ptr<ITexture> SDL2Context::CreateTexture(std::string_view filepath)
 	{
 		SDL_Texture* pTexture = IMG_LoadTexture(m_pRenderer, filepath.data());

@@ -7,7 +7,6 @@
 
 #include <glm/vec2.hpp>
 
-#include <hyper/service/sound_service.h>
 #include <hyper/fwd.h>
 
 namespace burger_time
@@ -26,6 +25,7 @@ namespace burger_time
 		void MoveCursor(int32_t delta);
 		void Select() const;
 
+		hyper::Actor* GetRootActor() const;
 		MenuFSMComponent* GetMenuFSM() const;
 
 		AMenuState(const AMenuState&)				= delete;
@@ -52,7 +52,6 @@ namespace burger_time
 		size_t m_CurrentItem = 0;
 		std::vector<Item> m_Items;
 		hyper::Actor* m_pItemMarker;
-		hyper::SoundId m_SoundId;
 
 		int m_FontSize;
 		float m_Spacing;

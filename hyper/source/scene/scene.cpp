@@ -1,3 +1,4 @@
+#include "hyper/event/scene_events.h"
 #include "hyper/scene/scene.h"
 #include "hyper/utils/assert.h"
 
@@ -35,19 +36,16 @@ namespace hyper
 		}
 	}
 
-	void Scene::Start()
+	void Scene::RequestStop()
 	{
-		m_IsRunning = true;
+		SceneStopRequestEvent e(*this);
+		NotifyObservers(e);
 	}
 
-	void Scene::Stop()
+	void Scene::RequestLoad(std::function<void(Scene&, Input&)> loadScene)
 	{
-		m_IsRunning = false;
-	}
-
-	bool Scene::IsRunning() const
-	{
-		return m_IsRunning;
+		SceneLoadRequestEvent e(*this, std::move(loadScene));
+		NotifyObservers(e);
 	}
 
 	Actor* Scene::CreateActor()

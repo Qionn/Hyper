@@ -1,6 +1,7 @@
 #ifndef __BURGER_TIME_MENU_COMMAND_H__
 #define __BURGER_TIME_MENU_COMMAND_H__
 
+#include <hyper/service/sound_service.h>
 #include <hyper/utils/command.h>
 
 #include "components/menu_fsm_component.h"
@@ -25,6 +26,9 @@ namespace burger_time
 	private:
 		MenuFSMComponent* m_pMenuFSM;
 		Action m_Action;
+
+		hyper::SoundId m_CursorSoundId;
+		hyper::SoundId m_SelectSoundId;
 	};
 }
 

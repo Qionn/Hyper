@@ -9,6 +9,7 @@
 #include "hyper/core/window.h"
 #include "hyper/event/observer.h"
 #include "hyper/input/input.h"
+#include "hyper/scene/scene.h"
 #include "hyper/fwd.h"
 
 namespace hyper
@@ -16,8 +17,6 @@ namespace hyper
 	class Application final : public IObserver
 	{
 	public:
-		using LoadSceneFunction = std::function<void(Scene&, Input&)>;
-
 		struct Info final
 		{
 			std::string_view name;
@@ -31,14 +30,14 @@ namespace hyper
 		void Start();
 		void Stop();
 
-		void LoadScene(const LoadSceneFunction& loadScene);
+		void LoadScene(const std::function<void(Scene&, Input&)>& loadScene);
 
 		Application(const Application&)				= delete;
 		Application(Application&&)					= delete;
 		Application& operator=(const Application&)	= delete;
 		Application& operator=(Application&&)		= delete;
 
-		~Application();
+		~Application() = default;
 
 	private:
 		std::unique_ptr<Window> m_pWindow;
@@ -46,11 +45,14 @@ namespace hyper
 		std::unique_ptr<Scene> m_pScene;
 		std::unique_ptr<Input> m_pInput;
 
+		bool m_IsRunning = false;
 		bool m_CanStart = true;
 		
 	private:
 		bool OnEvent(const AEvent& event) override;
 		bool OnWindowCloseEvent(const WindowCloseEvent& event);
+		bool OnSceneStopRequestEvent(const SceneStopRequestEvent& event);
+		bool OnSceneLoadRequestEvent(const SceneLoadRequestEvent& event);
 	};
 }
 

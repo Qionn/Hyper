@@ -1,6 +1,7 @@
 #ifndef __HYPER_SPRITE_H__
 #define __HYPER_SPRITE_H__
 
+#include <memory>
 #include <string_view>
 
 #include "hyper/graphics/texture.h"

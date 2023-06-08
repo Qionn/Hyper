@@ -15,6 +15,8 @@ namespace hyper
 		void DrawTexture(const ITexture& texture, const Rectf& dstRect) const override;
 		void DrawTexture(const ITexture& texture, const Recti& srcRect, const Rectf& dstRect) const override;
 
+		void DrawRect(const Rectf& rect, const glm::vec4& color) const override;
+
 		std::unique_ptr<ITexture> CreateTexture(std::string_view filepath) override;
 		std::unique_ptr<ITexture> CreateTexture(std::string_view fontFilepath, int ptSize, std::string_view text, const glm::vec3& color) override;
 

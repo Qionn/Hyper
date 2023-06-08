@@ -21,6 +21,8 @@ namespace hyper
 			throw std::runtime_error("Failed to create SDL2 renderer");
 		}
 
+		SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
+
 		m_pContext = std::make_unique<SDL2Context>(m_pRenderer);
 
 		IMGUI_CHECKVERSION();
