@@ -9,9 +9,24 @@ namespace burger_time
 	class MapParser final
 	{
 	public:
+		struct Platform final
+		{
+			float minX, maxX;
+			float height;
+		};
+
+		struct Ladder final
+		{
+			float bottom, top;
+			float posX;
+		};
+
+	public:
 		explicit MapParser(std::string_view mapFile);
 
-		const std::vector<std::string>& GetBackgrounds() const;
+		const std::string& GetBackground() const;
+		const std::vector<Platform>& GetPlatforms() const;
+		const std::vector<Ladder>& GetLadders() const;
 
 		MapParser(const MapParser&)				= default;
 		MapParser(MapParser&&)					= default;
@@ -21,11 +36,15 @@ namespace burger_time
 		~MapParser() = default;
 
 	private:
-		std::vector<std::string> m_Backgrounds;
+		std::string m_Background;
+		std::vector<Platform> m_Platforms;
+		std::vector<Ladder> m_Ladders;
 
 	private:
-		void ParseLine(std::string_view line);
-		void ParseBackground(std::string_view line);
+		void ParseLine(const std::string& line);
+		void ParseBackground(const std::string& line);
+		void ParsePlatform(const std::string& line);
+		void ParseLadder(const std::string& line);
 	};
 }
 

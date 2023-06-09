@@ -28,6 +28,16 @@ namespace hyper
 		m_ClipRect = rect;
 	}
 
+	float SpriteComponent::GetWidth() const
+	{
+		return static_cast<float>(m_pTexture->GetWidth());
+	}
+
+	float SpriteComponent::GetHeight() const
+	{
+		return static_cast<float>(m_pTexture->GetHeight());
+	}
+
 	void SpriteComponent::OnUpdate(float)
 	{
 

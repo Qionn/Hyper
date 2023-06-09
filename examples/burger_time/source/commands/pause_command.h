@@ -20,7 +20,7 @@ namespace burger_time
 	private:
 		MenuFSMComponent* m_pMenuFSM;
 		PauseMenuState* m_pState;
-		std::unique_ptr<hyper::CommandLayer> m_pCommandLayer;
+		hyper::CommandLayer m_CommandLayer;
 		hyper::Input& m_Input;
 	};
 }

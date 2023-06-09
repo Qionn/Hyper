@@ -17,7 +17,7 @@ namespace hyper
 		void Update();
 
 		void PushLayer(CommandLayer* pLayer);
-		void Poplayer();
+		void PopLayer();
 
 		void Bind(Key key, KeyState state, std::unique_ptr<ICommand> command);
 		void Unbind(Key key, KeyState state);

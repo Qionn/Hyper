@@ -22,7 +22,7 @@ namespace hyper
 		m_pImpl->PushLayer(pLayer);
 	}
 
-	void Input::Poplayer()
+	void Input::PopLayer()
 	{
 		m_pImpl->Poplayer();
 	}

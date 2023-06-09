@@ -67,6 +67,23 @@ namespace hyper
 		m_Conditional.notify_one();
 	}
 
+	void DefaultSoundService::Impl::Mute()
+	{
+		m_IsMuted = true;
+		Mix_MasterVolume(0);
+	}
+
+	void DefaultSoundService::Impl::Unmute()
+	{
+		m_IsMuted = false;
+		Mix_MasterVolume(MIX_MAX_VOLUME);
+	}
+
+	bool DefaultSoundService::Impl::IsMuted()
+	{
+		return m_IsMuted;
+	}
+
 	void DefaultSoundService::Impl::ThreadFunction()
 	{
 		while (true)

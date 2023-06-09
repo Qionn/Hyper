@@ -25,4 +25,19 @@ namespace hyper
 	{
 		m_pImpl->Play(id, volume);
 	}
+
+	void DefaultSoundService::Mute()
+	{
+		m_pImpl->Mute();
+	}
+
+	void DefaultSoundService::Unmute()
+	{
+		m_pImpl->Unmute();
+	}
+
+	bool DefaultSoundService::IsMuted()
+	{
+		return m_pImpl->IsMuted();
+	}
 }

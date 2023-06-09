@@ -8,31 +8,41 @@
 #include <hyper/scene/components/rect_component.h>
 #include <hyper/scene/components/text_component.h>
 #include <hyper/scene/scene.h>
+#include <hyper/service/service_hub.h>
 
 using namespace hyper;
 
 namespace burger_time
 {
 	PauseMenuState::PauseMenuState(MenuFSMComponent* pMenuFSM, hyper::Input& input)
-		: AMenuState(pMenuFSM, 36, 50)
+		: AMenuState(pMenuFSM, 32, 50)
 	{
 		SetupBackground();
 
 		AddItem("Resume", std::bind(&PauseMenuState::OnResumeSelect, this, std::ref(input)));
-		AddItem("Mute", std::bind(&PauseMenuState::OnMuteSelect, this));
+		AddItem("Toggle Mute", std::bind(&PauseMenuState::OnMuteSelect, this));
 		AddItem("Skip Level", std::bind(&PauseMenuState::OnSkipLevelSelect, this));
-		AddItem("Exit", std::bind(&PauseMenuState::OnExitSelect, this));
+		AddItem("Menu", std::bind(&PauseMenuState::OnMenuSelect, this));
 	}
 
 	void PauseMenuState::OnResumeSelect(hyper::Input& input)
 	{
 		GetMenuFSM()->PopMenuState();
-		input.Poplayer();
+		input.PopLayer();
 	}
 
 	void PauseMenuState::OnMuteSelect()
 	{
+		ISoundService* pSound = ServiceHub::SoundService();
 
+		if (pSound->IsMuted())
+		{
+			pSound->Unmute();
+		}
+		else
+		{
+			pSound->Mute();
+		}
 	}
 
 	void PauseMenuState::OnSkipLevelSelect()
@@ -40,7 +50,7 @@ namespace burger_time
 
 	}
 
-	void PauseMenuState::OnExitSelect()
+	void PauseMenuState::OnMenuSelect()
 	{
 		Scene& scene = GetMenuFSM()->GetScene();
 		scene.RequestLoad(&LoadMainMenuScene);

@@ -19,7 +19,7 @@ namespace burger_time
 		void OnResumeSelect(hyper::Input& input);
 		void OnMuteSelect();
 		void OnSkipLevelSelect();
-		void OnExitSelect();
+		void OnMenuSelect();
 
 		void SetupBackground();
 	};

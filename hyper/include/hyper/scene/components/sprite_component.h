@@ -19,6 +19,9 @@ namespace hyper
 		void SetScale(float scale);
 		void SetClipRect(const Recti& rect);
 
+		float GetWidth() const;
+		float GetHeight() const;
+
 	private:
 		float m_Scale = 1.0f;
 		Recti m_ClipRect;

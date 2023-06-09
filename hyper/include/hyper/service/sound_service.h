@@ -15,6 +15,9 @@ namespace hyper
 	public:
 		virtual SoundId AddSound(std::string_view filepath) = 0;
 		virtual void Play(SoundId id, float volume) const = 0;
+		virtual void Mute() = 0;
+		virtual void Unmute() = 0;
+		virtual bool IsMuted() = 0;
 		virtual ~ISoundService() = default;
 	};
 
@@ -23,6 +26,9 @@ namespace hyper
 	public:
 		SoundId AddSound(std::string_view) override { return 0; }
 		void Play(SoundId, float) const override {}
+		void Mute() override {};
+		void Unmute() override {};
+		bool IsMuted() override { return false; };
 	};
 
 	class DefaultSoundService final : public ISoundService
@@ -32,6 +38,9 @@ namespace hyper
 
 		SoundId AddSound(std::string_view filepath) override;
 		void Play(SoundId id, float volume) const override;
+		void Mute() override;
+		void Unmute() override;
+		bool IsMuted() override;
 
 		DefaultSoundService(const DefaultSoundService&)				= delete;
 		DefaultSoundService(DefaultSoundService&&)					= delete;

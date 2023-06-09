@@ -21,6 +21,9 @@ namespace hyper
 
 		SoundId AddSound(std::string_view filepath);
 		void Play(SoundId id, float volume);
+		void Mute();
+		void Unmute();
+		bool IsMuted();
 
 		Impl(const Impl&)				= delete;
 		Impl(Impl&&)					= delete;
@@ -45,6 +48,8 @@ namespace hyper
 		std::mutex m_Mutex;
 		std::condition_variable m_Conditional;
 		std::atomic_bool m_JoinThread = false;
+
+		bool m_IsMuted = false;
 
 		static inline size_t s_InstanceCount = 0;
 
