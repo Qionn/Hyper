@@ -6,6 +6,8 @@
 #include <hyper/scene/components/sprite_component.h>
 #include <hyper/scene/scene.h>
 
+#include <glm/glm.hpp>
+
 using namespace hyper;
 
 namespace burger_time
@@ -18,6 +20,7 @@ namespace burger_time
 		CreatePlatforms(parser);
 		CreateLadders(parser);
 		CreateIngredients(parser);
+		CreateCatchers(parser);
 	}
 
 	const std::vector<MapComponent::Platform>& MapComponent::GetPlatforms() const
@@ -28,6 +31,11 @@ namespace burger_time
 	const std::vector<MapComponent::Ladder>& MapComponent::GetLadders() const
 	{
 		return m_Ladders;
+	}
+
+	const std::vector<MapComponent::Catcher>& MapComponent::GetCatchers() const
+	{
+		return m_Catchers;
 	}
 
 	const MapComponent::Platform* MapComponent::GetNearestPlatform(const glm::vec2& pos, float range) const
@@ -68,6 +76,26 @@ namespace burger_time
 		}
 
 		return pLadder;
+	}
+
+	const MapComponent::Catcher* MapComponent::GetNearestCatcher(const glm::vec2& pos, float range) const
+	{
+		const Catcher* pCatcher = nullptr;
+		float distance = FLT_MAX;
+
+		for (const auto& catcher : m_Catchers)
+		{
+			glm::vec2 point(catcher.posX, catcher.posY);
+			float dist = glm::distance(point, pos);
+
+			if (dist < distance && dist <= range)
+			{
+				pCatcher = &catcher;
+				distance = dist;
+			}
+		}
+
+		return pCatcher;
 	}
 
 	void MapComponent::CreateBackgrounds(const MapParser& parser)
@@ -122,6 +150,18 @@ namespace burger_time
 			pActor->SetPosition(pos);
 			pActor->AddComponent<ColliderComponent>(93.0f, 21.0f);
 			pActor->AddComponent<IngredientComponent>(type, this);
+		}
+	}
+
+	void MapComponent::CreateCatchers(const MapParser& parser)
+	{
+		for (const auto& cat : parser.GetCatchers())
+		{
+			Catcher catcher;
+			catcher.posX = m_TopLeft.x + cat.posX;
+			catcher.posY = m_TopLeft.y + cat.posY;
+
+			m_Catchers.push_back(catcher);
 		}
 	}
 

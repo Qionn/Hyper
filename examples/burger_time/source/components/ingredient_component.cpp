@@ -42,11 +42,23 @@ namespace burger_time
 
 			for (Actor* pSlice : m_Slices)
 			{
-				pSlice->Translate(0.0f, -5.0f);
+				glm::vec2 pos = pSlice->GetLocalPosition();
+				pos.y = 0.0f;
+				pSlice->SetPosition(pos);
 			}
 
 			GetActor().Translate(0.0f, 5.0f);
 		}
+	}
+
+	bool IngredientComponent::IsOnPlatform() const
+	{
+		return m_pPlatform != nullptr;
+	}
+
+	bool IngredientComponent::IsInCatcher() const
+	{
+		return m_IsInCatcher;
 	}
 
 	void IngredientComponent::SpawnSlices()
@@ -94,6 +106,18 @@ namespace burger_time
 		actor.SetPosition(pos);
 	}
 
+	void IngredientComponent::ClampPositionToCatcher(const Catcher& catcher)
+	{
+		Actor& actor = GetActor();
+
+		glm::vec2 pos = actor.GetWorldPosition();
+
+		pos.x = catcher.posX;
+		pos.y = catcher.posY - 15.0f;
+
+		actor.SetPosition(pos);
+	}
+
 	std::string_view IngredientComponent::GetSpritePath() const
 	{
 		switch (m_Type)
@@ -112,9 +136,10 @@ namespace burger_time
 
 	void IngredientComponent::OnUpdate(float dt)
 	{
-		if (m_pPlatform == nullptr)
+		if (m_pPlatform == nullptr && !m_IsInCatcher)
 		{
 			Actor& actor = GetActor();
+
 			actor.Translate(0.0f, m_Speed * dt);
 
 			m_pPlatform = m_pMap->GetNearestPlatform(actor.GetWorldPosition(), 3.0f);
@@ -122,13 +147,20 @@ namespace burger_time
 			{
 				ClampPositionToPlatform(*m_pPlatform);
 			}
+
+			const Catcher* pCatcher = m_pMap->GetNearestCatcher(actor.GetWorldPosition(), 3.0f);
+			if (pCatcher != nullptr)
+			{
+				m_IsInCatcher = true;
+				ClampPositionToCatcher(*pCatcher);
+			}
 		}
 	}
 
 	void IngredientComponent::OnRender(const IContext&) const
 	{
 
-	}
+	} 
 
 	bool IngredientComponent::OnEvent(const AEvent& event)
 	{
@@ -175,6 +207,14 @@ namespace burger_time
 			auto pIngredient = pOther->GetComponent<IngredientComponent>();
 			if (pIngredient != nullptr && pIngredient != this)
 			{
+				if (pIngredient->IsInCatcher() && !m_IsInCatcher)
+				{
+					glm::vec2 pos = pOther->GetWorldPosition();
+					pos.y -= 25.0f;
+					pOwner->SetPosition(pos);
+					m_IsInCatcher = true;
+				}
+
 				pIngredient->Drop();
 			}
 		}

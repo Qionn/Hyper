@@ -26,20 +26,26 @@ namespace burger_time
 	{
 	public:
 		using Platform = MapComponent::Platform;
+		using Catcher = MapComponent::Catcher;
 
 	public:
 		IngredientComponent(hyper::Actor& actor, IngredientType type, MapComponent* pMap);
 
 		void Drop();
 
+		bool IsOnPlatform() const;
+		bool IsInCatcher() const;
+
 		~IngredientComponent();
 
 	private:
 		const MapComponent* m_pMap;
 		const Platform* m_pPlatform = nullptr;
+
 		IngredientType m_Type;
 
 		const float m_Speed = 100.0f;
+		bool m_IsInCatcher = false;
 
 		std::array<hyper::Actor*, 4> m_Slices;
 		std::array<bool, 4> m_SliceFlags;
@@ -47,6 +53,7 @@ namespace burger_time
 	private:
 		void SpawnSlices();
 		void ClampPositionToPlatform(const Platform& platform);
+		void ClampPositionToCatcher(const Catcher& catcher);
 
 		std::string_view GetSpritePath() const;
 
