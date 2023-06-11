@@ -32,6 +32,8 @@ namespace hyper
 
 		void LoadScene(const std::function<void(Scene&, Input&)>& loadScene);
 
+		Input& GetInput() const;
+
 		Application(const Application&)				= delete;
 		Application(Application&&)					= delete;
 		Application& operator=(const Application&)	= delete;

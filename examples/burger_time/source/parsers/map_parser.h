@@ -21,12 +21,25 @@ namespace burger_time
 			float posX;
 		};
 
+		struct Ingredient final
+		{
+			float posX, posY;
+			int type;
+		};
+
+		struct Catcher final
+		{
+			float posX, posY;
+		};
+
 	public:
 		explicit MapParser(std::string_view mapFile);
 
 		const std::string& GetBackground() const;
 		const std::vector<Platform>& GetPlatforms() const;
 		const std::vector<Ladder>& GetLadders() const;
+		const std::vector<Ingredient>& GetIngredients() const;
+		const std::vector<Catcher>& GetCatchers() const;
 
 		MapParser(const MapParser&)				= default;
 		MapParser(MapParser&&)					= default;
@@ -39,12 +52,16 @@ namespace burger_time
 		std::string m_Background;
 		std::vector<Platform> m_Platforms;
 		std::vector<Ladder> m_Ladders;
+		std::vector<Ingredient> m_Ingredients;
+		std::vector<Catcher> m_Catchers;
 
 	private:
 		void ParseLine(const std::string& line);
 		void ParseBackground(const std::string& line);
 		void ParsePlatform(const std::string& line);
 		void ParseLadder(const std::string& line);
+		void ParseIngredient(const std::string& line);
+		void ParseCatcher(const std::string& line);
 	};
 }
 

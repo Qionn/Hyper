@@ -25,6 +25,18 @@ namespace burger_time
 		AddItem("Menu", std::bind(&PauseMenuState::OnMenuSelect, this));
 	}
 
+	void PauseMenuState::OnEnter()
+	{
+		AMenuState::OnEnter();
+		GetMenuFSM()->GetScene().SetTimeScale(0.0f);
+	}
+
+	void PauseMenuState::OnExit()
+	{
+		AMenuState::OnExit();
+		GetMenuFSM()->GetScene().SetTimeScale(1.0f);
+	}
+
 	void PauseMenuState::OnResumeSelect(hyper::Input& input)
 	{
 		GetMenuFSM()->PopMenuState();

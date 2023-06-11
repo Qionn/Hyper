@@ -25,6 +25,8 @@ namespace hyper
 
 		void Reset();
 
+		Keyboard& GetKeyboard() const;
+
 		Input(const Input&)				= delete;
 		Input(Input&&)					= delete;
 		Input& operator=(const Input&)	= delete;

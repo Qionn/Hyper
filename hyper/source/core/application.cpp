@@ -69,8 +69,14 @@ namespace hyper
 
 		m_pInput->Reset();
 		m_pScene->RemoveAllActors();
+		m_pScene->SetTimeScale(1.0f);
 
 		loadScene(*m_pScene, *m_pInput);
+	}
+
+	Input& Application::GetInput() const
+	{
+		return *m_pInput;
 	}
 
 	bool Application::OnEvent(const AEvent& event)

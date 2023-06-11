@@ -17,13 +17,13 @@
 #		endif
 #	endif
 
-#define HyperAssert(cond, msg)														\
-	while (!(cond)) {																\
-		constexpr std::string_view file = __FILE__;									\
-		constexpr size_t lastSlash = file.find_last_of("/\\");						\
-		constexpr std::string_view fileName = file.substr(lastSlash + 1);			\
-		LogError("Assertion failed: \"{}\" ({}:{})", msg, fileName, __LINE__);		\
-		HyperDebugBreak();															\
+#define HyperAssert(cond, msg)																\
+	while (!(cond)) {																		\
+		constexpr std::string_view file = __FILE__;											\
+		constexpr size_t lastSlash = file.find_last_of("/\\");								\
+		constexpr std::string_view fileName = file.substr(lastSlash + 1);					\
+		hyper::LogError("Assertion failed: \"{}\" ({}:{})", msg, fileName, __LINE__);		\
+		HyperDebugBreak();																	\
 	}
 #else
 #	define HyperAssert(cond, msg)

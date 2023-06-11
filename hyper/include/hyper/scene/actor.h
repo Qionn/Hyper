@@ -21,6 +21,9 @@ namespace hyper
 		void Update(float dt);
 		void Render() const;
 
+		void Translate(float x, float y);
+		void Translate(const glm::vec2& translation);
+
 		void SetPosition(float x, float y);
 		void SetPosition(const glm::vec2& position);
 		const glm::vec2& GetLocalPosition() const;

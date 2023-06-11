@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "hyper/event/subject.h"
+#include "hyper/physics/physics_world.h"
 #include "hyper/scene/actor.h"
 #include "hyper/fwd.h"
 
@@ -27,15 +28,22 @@ namespace hyper
 
 		void EraseRemovedActors();
 
+		void SetTimeScale(float scale);
+		float GetTimeScale() const;
+
 		IContext& GetContext() const;
+		PhysicsWorld& GetPhysicsWorld() const;
 
 		~Scene() = default;
 
 	private:
 		IContext& m_Context;
+		std::unique_ptr<PhysicsWorld> m_pPhysicsWorld;
 
 		std::vector<std::unique_ptr<Actor>> m_Actors;
 		std::vector<Actor*> m_RemovedActors;
+
+		float m_TimeScale = 1.0f;
 	};
 }
 

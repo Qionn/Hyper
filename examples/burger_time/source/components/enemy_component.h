@@ -7,23 +7,36 @@
 
 namespace burger_time
 {
-	class AIComponent final : public hyper::AComponent
+	class EnemyComponent final : public hyper::AComponent
 	{
 	public:
-		AIComponent(hyper::Actor& actor, hyper::Actor* pTargetActor);
+		enum class Type
+		{
+			eHotdog,
+			ePicke,
+			eEgg
+		};
+
+	public:
+		EnemyComponent(hyper::Actor& actor, Type type);
 
 		void SetTargetActor(hyper::Actor* pActor);
 		hyper::Actor* GetTargetActor() const;
 
-		~AIComponent() = default;
+		std::string_view GetSpritePath() const;
+
+		~EnemyComponent() = default;
 
 	private:
-		hyper::Actor* m_pTargetActor;
+		hyper::Actor* m_pTargetActor = nullptr;
 		CharacterComponent* m_pCharacter;
+		Type m_Type;
 
 	private:
 		void OnUpdate(float dt) override;
 		void OnRender(const hyper::IContext& context) const override;
+
+		void UpdateAIBrain();
 	};
 }
 

@@ -29,6 +29,8 @@ namespace hyper
 
 		void Reset();
 
+		Keyboard& GetKeyboard() const;
+
 		void SetEventCallback(const EventCallback& callback);
 
 		Impl(const Impl&)				= delete;

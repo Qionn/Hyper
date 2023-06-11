@@ -19,6 +19,7 @@ namespace burger_time
 	public:
 		using Platform = MapParser::Platform;
 		using Ladder = MapParser::Ladder;
+		using Ingredient = MapParser::Ingredient;
 
 	public:
 		MapComponent(hyper::Actor& actor, std::string_view mapFile);
@@ -26,17 +27,21 @@ namespace burger_time
 		const std::vector<Platform>& GetPlatforms() const;
 		const std::vector<Ladder>& GetLadders() const;
 
+		const Platform* GetNearestPlatform(const glm::vec2& pos, float range) const;
+		const Ladder* GetNearestLadder(const glm::vec2& pos, float range) const;
+
 		~MapComponent() = default;
 
 	private:
 		glm::vec2 m_TopLeft;
 		std::vector<Platform> m_Platforms;
-		std::vector<Ladder> m_Ladder;
+		std::vector<Ladder> m_Ladders;
 
 	private:
 		void CreateBackgrounds(const MapParser& parser);
 		void CreatePlatforms(const MapParser& parser);
 		void CreateLadders(const MapParser& parser);
+		void CreateIngredients(const MapParser& parser);
 
 		void OnUpdate(float dt) override;
 		void OnRender(const hyper::IContext& context) const override;

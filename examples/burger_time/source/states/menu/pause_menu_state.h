@@ -15,6 +15,9 @@ namespace burger_time
 		PauseMenuState(MenuFSMComponent* pMenuFSM, hyper::Input& input);
 		~PauseMenuState() = default;
 
+		void OnEnter() override;
+		void OnExit() override;
+
 	private:
 		void OnResumeSelect(hyper::Input& input);
 		void OnMuteSelect();

@@ -1,5 +1,6 @@
-#include "constants.h"
 #include "main_menu_scene.h"
+#include "constants.h"
+#include "options.h"
 
 #include "commands/menu_command.h"
 #include "components/menu_fsm_component.h"
@@ -37,9 +38,9 @@ namespace burger_time
 		auto pDefaultState = pMenuStack->CreateState<MainMenuState>();
 		pMenuStack->PushMenuState(pDefaultState);
 
-		input.Bind(Key::eUp, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorUp));
-		input.Bind(Key::eDown, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorDown));
-		input.Bind(Key::eEnter, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eSelect));
-		input.Bind(Key::eEscape, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eReturn));
+		input.Bind(Options::keys.menuUp, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorUp));
+		input.Bind(Options::keys.menuDown, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorDown));
+		input.Bind(Options::keys.menuSelect, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eSelect));
+		input.Bind(Options::keys.menuReturn, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eReturn));
 	}
 }

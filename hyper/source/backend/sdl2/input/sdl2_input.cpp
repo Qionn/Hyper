@@ -68,6 +68,11 @@ namespace hyper
 		PushLayer(m_pDefaultLayer.get());
 	}
 
+	Keyboard& Input::Impl::GetKeyboard() const
+	{
+		return *m_pKeyboard;
+	}
+
 	void Input::Impl::SetEventCallback(const EventCallback& callback)
 	{
 		m_Callback = callback;

@@ -5,6 +5,7 @@
 #include "scenes/level_scene.h"
 
 #include <hyper/scene/scene.h>
+#include <hyper/utils/assert.h>
 
 using namespace hyper;
 
@@ -16,6 +17,11 @@ namespace burger_time
 		AddItem("Level 1", std::bind(&LevelMenuState::OnLevel1Select, this));
 		AddItem("Level 2", std::bind(&LevelMenuState::OnLevel2Select, this));
 		AddItem("Level 3", std::bind(&LevelMenuState::OnLevel3Select, this));
+	}
+
+	void LevelMenuState::SetGamemode(IGamemode* pGamemode)
+	{
+		m_pGamemode = pGamemode;
 	}
 
 	void LevelMenuState::OnEnter()
@@ -41,8 +47,10 @@ namespace burger_time
 
 	void LevelMenuState::LoadLevel(std::string_view mapFile)
 	{
+		HyperAssert(m_pGamemode != nullptr, "No gamemode is set");
+
 		using namespace std::placeholders;
 		Scene& scene = GetMenuFSM()->GetScene();
-		scene.RequestLoad(std::bind(&LoadLevelScene, _1, _2, mapFile));
+		scene.RequestLoad(std::bind(&LoadLevelScene, _1, _2, mapFile, m_pGamemode));
 	}
 }

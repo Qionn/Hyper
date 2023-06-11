@@ -2,6 +2,16 @@
 #   b:{PATH} - backgound image
 #   p:{X_MIN},{X_MAX},{HEIGHT} - Platform
 #   l:{BOTTOM},{TOP},{X_POS} - ladder
+#   i:{TYPE},{X_POS},{Y_POS} - ingredient
+#   c:{X_POS},{Y_POS} - ingredient catcher
+
+# ingredient types
+#   0 - bun top
+#   1 - bun bottom
+#   2 - cheese
+#   3 - patty
+#   4 - tomato
+#   5 - letuce
 
 b:assets/sprites/level_01.png
 
@@ -29,3 +39,12 @@ l:471,39,456
 l:471,231,528
 l:231,39,601
 l:471,327,601
+
+# ingredients
+i:1,96,471
+i:3,96,375
+i:5,96,231
+i:0,96,135
+
+# ingredient catchers
+c:96,597

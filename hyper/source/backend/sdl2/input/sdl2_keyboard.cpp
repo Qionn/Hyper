@@ -45,6 +45,22 @@ namespace hyper
 		return CheckKeyState(key, m_Released);
 	}
 
+	bool Keyboard::Impl::IsAzerty() const
+	{
+		bool a = SDL_GetScancodeFromKey(SDLK_a) == SDL_SCANCODE_Q;
+		bool z = SDL_GetScancodeFromKey(SDLK_z) == SDL_SCANCODE_W;
+
+		return a && z;
+	}
+
+	bool Keyboard::Impl::IsQwerty() const
+	{
+		bool q = SDL_GetScancodeFromKey(SDLK_q) == SDL_SCANCODE_Q;
+		bool w = SDL_GetScancodeFromKey(SDLK_w) == SDL_SCANCODE_W;
+
+		return q && w;
+	}
+
 	/* static */ bool Keyboard::Impl::CheckKeyState(Key key, ConstKeyArray keyArray)
 	{
 		SDL_KeyCode keyCode = KeyToSDL2Key(key);

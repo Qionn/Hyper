@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "gamemodes/solo_gamemode.h"
 #include "states/menu/level_menu_state.h"
 
 namespace burger_time
@@ -17,6 +18,8 @@ namespace burger_time
 
 	private:
 		std::unique_ptr<LevelMenuState> m_pLevelState;
+
+		SoloGamemode m_SoloGamemode;
 
 	private:
 		void OnSoloSelect();

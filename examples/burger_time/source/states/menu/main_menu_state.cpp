@@ -22,6 +22,7 @@ namespace burger_time
 
 	void MainMenuState::OnSoloSelect()
 	{
+		m_pLevelState->SetGamemode(&m_SoloGamemode);
 		GetMenuFSM()->PushMenuState(m_pLevelState.get());
 	}
 

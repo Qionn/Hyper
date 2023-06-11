@@ -56,6 +56,21 @@ namespace hyper
 		}
 	}
 
+	void Actor::Translate(float x, float y)
+	{
+		glm::vec2 pos = m_pTransform->GetLocalPosition();
+		pos.x += x;
+		pos.y += y;
+		m_pTransform->SetPosition(pos);
+	}
+
+	void Actor::Translate(const glm::vec2& translation)
+	{
+		glm::vec2 pos = m_pTransform->GetLocalPosition();
+		pos += translation;
+		m_pTransform->SetPosition(pos);
+	}
+
 	void Actor::SetPosition(float x, float y)
 	{
 		m_pTransform->SetPosition(x, y);

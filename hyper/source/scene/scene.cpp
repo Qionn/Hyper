@@ -9,7 +9,7 @@ namespace hyper
 	Scene::Scene(IContext& context)
 		: m_Context{ context }
 	{
-
+		m_pPhysicsWorld = std::make_unique<PhysicsWorld>();
 	}
 
 	void Scene::Update(float dt)
@@ -20,9 +20,11 @@ namespace hyper
 		{
 			if (pActor->IsEnabled() && !pActor->HasParent())
 			{
-				pActor->Update(dt);
+				pActor->Update(dt * m_TimeScale);
 			}
 		}
+
+		m_pPhysicsWorld->Update();
 	}
 
 	void Scene::Render() const
@@ -78,8 +80,23 @@ namespace hyper
 		m_RemovedActors.clear();
 	}
 
+	void Scene::SetTimeScale(float scale)
+	{
+		m_TimeScale = scale;
+	}
+
+	float Scene::GetTimeScale() const
+	{
+		return m_TimeScale;
+	}
+
 	IContext& Scene::GetContext() const
 	{
 		return m_Context;
+	}
+
+	PhysicsWorld& Scene::GetPhysicsWorld() const
+	{
+		return *m_pPhysicsWorld;
 	}
 }

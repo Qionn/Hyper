@@ -11,18 +11,13 @@ using namespace hyper;
 namespace burger_time
 {
 
-	CharacterComponent::CharacterComponent(Actor& actor, const MapComponent* pMap, float speed)
+	CharacterComponent::CharacterComponent(Actor& actor, const MapComponent* pMap, float speed, float height)
 		: AComponent(actor)
 		, m_pMap{ pMap }
 		, m_Speed{ speed }
+		, m_Height{ height }
 	{
-		auto pSprite = GetActor().GetComponent<SpriteComponent>();
-		if (pSprite != nullptr)
-		{
-			m_Height = pSprite->GetHeight();
-		}
-
-		m_pPlatform = GetNearestPlatform(FLT_MAX);
+		m_pPlatform = m_pMap->GetNearestPlatform(GetFeetPosition(), FLT_MAX);
 		HyperAssert(m_pPlatform != nullptr, "No near platform was found");
 		ClampPositionToPlatform(*m_pPlatform);
 	}
@@ -39,7 +34,7 @@ namespace burger_time
 
 			if (direction.y != 0)
 			{
-				m_pLadder = GetNearestLadder(10.0f);
+				m_pLadder = m_pMap->GetNearestLadder(GetFeetPosition(), 10.0f);
 				if (m_pLadder != nullptr)
 				{
 					m_pPlatform = nullptr;
@@ -57,7 +52,7 @@ namespace burger_time
 
 			if (direction.x != 0)
 			{
-				m_pPlatform = GetNearestPlatform(10.0f);
+				m_pPlatform = m_pMap->GetNearestPlatform(GetFeetPosition(), 10.0);
 				if (m_pPlatform != nullptr)
 				{
 					m_pLadder = nullptr;
@@ -76,48 +71,9 @@ namespace burger_time
 		return m_pLadder != nullptr;
 	}
 
-	const CharacterComponent::Platform* CharacterComponent::GetNearestPlatform(float range) const
+	glm::vec2 CharacterComponent::GetFeetPosition() const
 	{
-		glm::vec2 pos = GetActor().GetWorldPosition() + glm::vec2(0, m_Height * 0.5f);
-
-		const Platform* pPlatform = nullptr;
-		float distance = FLT_MAX;
-
-		for (const auto& platform : m_pMap->GetPlatforms())
-		{
-			float dist = platform.height - pos.y;
-
-			if (platform.minX <= pos.x && platform.maxX >= pos.x &&
-				dist >= 0 && dist < distance && dist <= range)
-			{
-				pPlatform = &platform;
-				distance = dist;
-			}
-		}
-
-		return pPlatform;
-	}
-
-	const CharacterComponent::Ladder* CharacterComponent::GetNearestLadder(float range) const
-	{
-		glm::vec2 pos = GetActor().GetWorldPosition() + glm::vec2(0, m_Height * 0.5f);
-
-		const Ladder* pLadder = nullptr;
-		float distance = FLT_MAX;
-
-		for (const auto& ladder : m_pMap->GetLadders())
-		{
-			float dist = std::abs(ladder.posX - pos.x);
-
-			if (ladder.top <= pos.y && ladder.bottom >= pos.y &&
-				dist >= 0 && dist < distance && dist <= range)
-			{
-				pLadder = &ladder;
-				distance = dist;
-			}
-		}
-
-		return pLadder;
+		return GetActor().GetWorldPosition() + glm::vec2(0.0f, m_Height * 0.5f);
 	}
 
 	void CharacterComponent::ClampPositionToPlatform(const Platform& platform)

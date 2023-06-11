@@ -1,4 +1,5 @@
 #include "scenes/main_menu_scene.h"
+#include "options.h"
 
 #include <hyper/core/application.h>
 
@@ -22,6 +23,9 @@ int main()
 	};
 
 	auto pApp = std::make_unique<Application>(appInfo);
+
+	burger_time::SetupOptions(pApp->GetInput());
+
 	pApp->LoadScene(&LoadMainMenuScene);
 	pApp->Start();
 }

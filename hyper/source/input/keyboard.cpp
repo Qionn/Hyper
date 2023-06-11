@@ -33,4 +33,14 @@ namespace hyper
 	{
 		return m_pImpl->IsReleased(key);
 	}
+
+	bool Keyboard::IsAzerty() const
+	{
+		return m_pImpl->IsAzerty();
+	}
+
+	bool Keyboard::IsQwerty() const
+	{
+		return m_pImpl->IsQwerty();
+	}
 }

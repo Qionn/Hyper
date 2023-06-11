@@ -51,4 +51,9 @@ namespace hyper
 	{
 		m_pImpl->Reset();
 	}
+
+	Keyboard& Input::GetKeyboard() const
+	{
+		return m_pImpl->GetKeyboard();
+	}
 }

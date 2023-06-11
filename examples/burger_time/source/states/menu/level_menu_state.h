@@ -4,6 +4,7 @@
 #include <memory>
 #include <string_view>
 
+#include "gamemodes/gamemode.h"
 #include "states/menu_state.h"
 
 namespace burger_time
@@ -16,7 +17,12 @@ namespace burger_time
 		LevelMenuState(MenuFSMComponent* pMenuFSM);
 		~LevelMenuState() = default;
 
+		void SetGamemode(IGamemode* pGamemode);
+
 		void OnEnter() override;
+
+	private:
+		IGamemode* m_pGamemode = nullptr;
 
 	private:
 		void OnLevel1Select();

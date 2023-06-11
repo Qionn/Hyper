@@ -1,4 +1,4 @@
-#include "ai_component.h"
+#include "enemy_component.h"
 
 #include <hyper/scene/actor.h>
 #include <hyper/utils/assert.h>
@@ -10,25 +10,39 @@ using namespace hyper;
 namespace burger_time
 {
 
-	AIComponent::AIComponent(Actor& actor, Actor* pTargetActor)
+	EnemyComponent::EnemyComponent(Actor& actor, Type type)
 		: AComponent(actor)
-		, m_pTargetActor{ pTargetActor }
+		, m_Type{ type }
 	{
 		m_pCharacter = GetActor().GetComponent<CharacterComponent>();
-		HyperAssert(m_pCharacter != nullptr, "The AIComponent requires a CharacterComponent to function propperly");
 	}
 
-	void AIComponent::SetTargetActor(Actor* pActor)
+	void EnemyComponent::SetTargetActor(Actor* pActor)
 	{
 		m_pTargetActor = pActor;
 	}
 
-	Actor* AIComponent::GetTargetActor() const
+	Actor* EnemyComponent::GetTargetActor() const
 	{
 		return m_pTargetActor;
 	}
 
-	void AIComponent::OnUpdate(float)
+	void EnemyComponent::OnUpdate(float)
+	{
+		if (m_pCharacter == nullptr)
+		{
+			m_pCharacter = GetActor().GetComponent<CharacterComponent>();
+		}
+
+		UpdateAIBrain();
+	}
+
+	void EnemyComponent::OnRender(const IContext&) const
+	{
+
+	}
+
+	void EnemyComponent::UpdateAIBrain()
 	{
 		if (m_pCharacter != nullptr && m_pTargetActor != nullptr)
 		{
@@ -66,8 +80,16 @@ namespace burger_time
 		}
 	}
 
-	void AIComponent::OnRender(const IContext&) const
+	std::string_view EnemyComponent::GetSpritePath() const
 	{
+		switch (m_Type)
+		{
+			case Type::eHotdog: return "assets/sprites/hotdog_test.png";
+			case Type::ePicke: return "assets/sprites/pickle_test.png";
+			case Type::eEgg: return "assets/sprites/egg_test.png";
+		}
 
+		HyperAssert(false, "Unknown enemy type");
+		return nullptr;
 	}
 }

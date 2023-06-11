@@ -13,9 +13,11 @@ namespace hyper
 	class SpriteComponent final : public AComponent
 	{
 	public:
+		SpriteComponent(Actor& actor);
 		SpriteComponent(Actor& actor, std::string_view filepath);
 		~SpriteComponent() = default;
 
+		void SetTexture(std::string_view filepath);
 		void SetScale(float scale);
 		void SetClipRect(const Recti& rect);
 

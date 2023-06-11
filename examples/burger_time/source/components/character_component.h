@@ -14,12 +14,14 @@ namespace burger_time
 		using Ladder = MapComponent::Ladder;
 
 	public:
-		CharacterComponent(hyper::Actor& actor, const MapComponent* pMap, float speed);
+		CharacterComponent(hyper::Actor& actor, const MapComponent* pMap, float speed, float height);
 
 		void Move(const glm::vec2& direction);
 
 		bool IsOnPlatform() const;
 		bool IsOnLadder() const;
+
+		glm::vec2 GetFeetPosition() const;
 
 		~CharacterComponent() = default;
 
@@ -33,9 +35,6 @@ namespace burger_time
 		float m_Deltatime = 0.0f;
 
 	private:
-		const Platform* GetNearestPlatform(float range) const;
-		const Ladder* GetNearestLadder(float range) const;
-
 		void ClampPositionToPlatform(const Platform& platform);
 		void ClampPositionToLadder(const Ladder& ladder);
 

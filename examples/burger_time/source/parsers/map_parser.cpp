@@ -22,6 +22,10 @@ namespace burger_time
 		{
 			ParseLine(line);
 		}
+
+	#ifdef _DEBUG
+		LogDebug("Parsing map '{}'", mapFile);
+	#endif
 	}
 
 	const std::string& MapParser::GetBackground() const
@@ -39,6 +43,16 @@ namespace burger_time
 		return m_Ladders;
 	}
 
+	const std::vector<MapParser::Ingredient>& MapParser::GetIngredients() const
+	{
+		return m_Ingredients;
+	}
+
+	const std::vector<MapParser::Catcher>& MapParser::GetCatchers() const
+	{
+		return m_Catchers;
+	}
+
 	void MapParser::ParseLine(const std::string& line)
 	{
 		switch (line[0])
@@ -53,6 +67,14 @@ namespace burger_time
 
 			case 'l':
 				ParseLadder(line.substr(2));
+				break;
+
+			case 'i':
+				ParseIngredient(line.substr(2));
+				break;
+
+			case 'c':
+				ParseCatcher(line.substr(2));
 				break;
 		}
 	}
@@ -90,5 +112,31 @@ namespace burger_time
 		ladder.posX = std::stof(line.substr(idx2 + 1));
 
 		m_Ladders.push_back(ladder);
+	}
+
+	void MapParser::ParseIngredient(const std::string& line)
+	{
+		Ingredient ingredient;
+
+		size_t idx1 = line.find_first_of(',');
+		ingredient.type = std::stoi(line.substr(0, idx1));
+
+		size_t idx2 = line.find_first_of(',', idx1 + 1);
+		ingredient.posX = std::stof(line.substr(idx1 + 1, idx2 - idx1));
+
+		ingredient.posY = std::stof(line.substr(idx2 + 1));
+
+		m_Ingredients.push_back(ingredient);
+	}
+
+	void MapParser::ParseCatcher(const std::string& line)
+	{
+		Catcher catcher;
+
+		size_t idx1 = line.find_first_of(',');
+		catcher.posX = std::stof(line.substr(0, idx1));
+		catcher.posY = std::stof(line.substr(idx1 + 1));
+
+		m_Catchers.push_back(catcher);
 	}
 }

@@ -22,15 +22,19 @@ namespace hyper
 	class Input;
 	class Keyboard;
 
+	class PhysicsWorld;
+
 	class Actor;
 	class AComponent;
 	class Scene;
 
+	class AnimationComponent;
+	class ColliderComponent;
+	class RectComponent;
 	class SpriteComponent;
 	class TextComponent;
 	class TransformComponent;
 
-	class Clock;
 	class ICommand;
 	class ILogService;
 	class NullLogService;
@@ -39,6 +43,8 @@ namespace hyper
 	class ISoundService;
 	class NullSoundService;
 	class DefaultSoundService;
+
+	class Clock;
 }
 
 #endif // !__HYPER_FWD_H__

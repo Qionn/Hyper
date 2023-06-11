@@ -18,6 +18,9 @@ namespace hyper
 		bool IsPressed(Key key) const;
 		bool IsReleased(Key key) const;
 
+		bool IsAzerty() const;
+		bool IsQwerty() const;
+
 		Impl(const Impl&)				= delete;
 		Impl(Impl&&)					= delete;
 		Impl& operator=(const Impl&)	= delete;

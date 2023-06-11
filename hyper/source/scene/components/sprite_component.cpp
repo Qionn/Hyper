@@ -5,17 +5,29 @@
 
 namespace hyper
 {
+	SpriteComponent::SpriteComponent(Actor& actor)
+		: AComponent(actor)
+		, m_ClipRect{ 0, 0, 0, 0 }
+	{
+
+	}
+
 	SpriteComponent::SpriteComponent(Actor& actor, std::string_view filepath)
 		: AComponent(actor)
 	{
+		SetTexture(filepath);
+	}
+
+	void SpriteComponent::SetTexture(std::string_view filepath)
+	{
 		IContext& context = GetScene().GetContext();
 
-		m_pTexture			= context.CreateTexture(filepath);
+		m_pTexture = context.CreateTexture(filepath);
 
-		m_ClipRect.x		= 0;
-		m_ClipRect.y		= 0;
-		m_ClipRect.width	= m_pTexture->GetWidth();
-		m_ClipRect.height	= m_pTexture->GetHeight();
+		m_ClipRect.x = 0;
+		m_ClipRect.y = 0;
+		m_ClipRect.width = m_pTexture->GetWidth();
+		m_ClipRect.height = m_pTexture->GetHeight();
 	}
 
 	void SpriteComponent::SetScale(float scale)
@@ -30,12 +42,12 @@ namespace hyper
 
 	float SpriteComponent::GetWidth() const
 	{
-		return static_cast<float>(m_pTexture->GetWidth());
+		return static_cast<float>(m_ClipRect.width);
 	}
 
 	float SpriteComponent::GetHeight() const
 	{
-		return static_cast<float>(m_pTexture->GetHeight());
+		return static_cast<float>(m_ClipRect.height);
 	}
 
 	void SpriteComponent::OnUpdate(float)
