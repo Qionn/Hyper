@@ -1,6 +1,7 @@
 #include "solo_gamemode.h"
 #include "options.h"
 
+#include "commands/move_command.h"
 #include "components/enemy_component.h"
 #include "components/character_component.h"
 #include "components/ingredient_component.h"
@@ -19,22 +20,6 @@ using namespace hyper;
 
 namespace burger_time
 {
-	class MoveCommand final : public hyper::ICommand
-	{
-	public:
-		MoveCommand(CharacterComponent* pCharachter, const glm::vec2& direction)
-			: m_pCharacter{ pCharachter }, m_Direction{ direction } {}
-
-		void Execute() override
-		{
-			m_pCharacter->Move(m_Direction);
-		}
-
-	private:
-		CharacterComponent* m_pCharacter;
-		glm::vec2 m_Direction;
-	};
-
 	void SoloGamemode::Setup(hyper::Scene& scene, Input& input, const MapComponent* pMap)
 	{
 		SpawnPlayer(scene, input, pMap);
@@ -74,7 +59,7 @@ namespace burger_time
 		{
 			Actor* pActor = scene.CreateActor();
 			pActor->SetPosition(GetRandomPosition(pMap));
-			auto pEnemy = pActor->AddComponent<EnemyComponent>(enemy);
+			auto pEnemy = pActor->AddComponent<EnemyComponent>(enemy, true);
 			pActor->AddComponent<SpriteComponent>(pEnemy->GetSpritePath());
 			pActor->AddComponent<CharacterComponent>(pMap, 35.0f, 48.0f);
 			pActor->AddComponent<ColliderComponent>(20.0f, 30.0f);

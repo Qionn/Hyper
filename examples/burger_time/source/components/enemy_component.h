@@ -18,7 +18,7 @@ namespace burger_time
 		};
 
 	public:
-		EnemyComponent(hyper::Actor& actor, Type type);
+		EnemyComponent(hyper::Actor& actor, Type type, bool enableAI);
 
 		void SetTargetActor(hyper::Actor* pActor);
 		hyper::Actor* GetTargetActor() const;
@@ -31,6 +31,7 @@ namespace burger_time
 		hyper::Actor* m_pTargetActor = nullptr;
 		CharacterComponent* m_pCharacter;
 		Type m_Type;
+		bool m_HasAI;
 
 	private:
 		void OnUpdate(float dt) override;

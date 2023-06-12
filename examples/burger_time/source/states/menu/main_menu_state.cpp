@@ -28,11 +28,13 @@ namespace burger_time
 
 	void MainMenuState::OnCoopSelect()
 	{
+		m_pLevelState->SetGamemode(&m_CoopGamemode);
 		GetMenuFSM()->PushMenuState(m_pLevelState.get());
 	}
 
 	void MainMenuState::OnVersusSelect()
 	{
+		m_pLevelState->SetGamemode(&m_VersusGamemode);
 		GetMenuFSM()->PushMenuState(m_pLevelState.get());
 	}
 

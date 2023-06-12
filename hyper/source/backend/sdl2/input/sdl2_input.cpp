@@ -32,7 +32,7 @@ namespace hyper
 		CommandLayer* layer = m_LayerStack.top();
 		layer->Update(m_pKeyboard.get());
 
-		for (int i = 0; i < m_Gamepads.size(); ++i)
+		for (int i = 0; i < static_cast<int>(m_Gamepads.size()); ++i)
 		{
 			layer->Update(m_Gamepads[i].get(), i);
 		}
@@ -136,7 +136,7 @@ namespace hyper
 
 	Gamepad* Input::Impl::GetGamepad(int index) const
 	{
-		if (index < m_Gamepads.size())
+		if (index < static_cast<int>(m_Gamepads.size()))
 		{
 			return m_Gamepads[index].get();
 		}

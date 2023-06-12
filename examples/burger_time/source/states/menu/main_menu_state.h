@@ -4,6 +4,8 @@
 #include <memory>
 
 #include "gamemodes/solo_gamemode.h"
+#include "gamemodes/coop_gamemode.h"
+#include "gamemodes/versus_gamemode.h"
 #include "states/menu/level_menu_state.h"
 
 namespace burger_time
@@ -18,6 +20,8 @@ namespace burger_time
 		std::unique_ptr<LevelMenuState> m_pLevelState;
 
 		SoloGamemode m_SoloGamemode;
+		CoopGamemode m_CoopGamemode;
+		VersusGamemode m_VersusGamemode;
 
 	private:
 		void OnSoloSelect();

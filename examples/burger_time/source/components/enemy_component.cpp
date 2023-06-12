@@ -10,9 +10,10 @@ using namespace hyper;
 namespace burger_time
 {
 
-	EnemyComponent::EnemyComponent(Actor& actor, Type type)
+	EnemyComponent::EnemyComponent(Actor& actor, Type type, bool enableAI)
 		: AComponent(actor)
 		, m_Type{ type }
+		, m_HasAI{ enableAI }
 	{
 		m_pCharacter = GetActor().GetComponent<CharacterComponent>();
 	}
@@ -29,12 +30,15 @@ namespace burger_time
 
 	void EnemyComponent::OnUpdate(float)
 	{
-		if (m_pCharacter == nullptr)
+		if (m_HasAI)
 		{
-			m_pCharacter = GetActor().GetComponent<CharacterComponent>();
-		}
+			if (m_pCharacter == nullptr)
+			{
+				m_pCharacter = GetActor().GetComponent<CharacterComponent>();
+			}
 
-		UpdateAIBrain();
+			UpdateAIBrain();
+		}
 	}
 
 	void EnemyComponent::OnRender(const IContext&) const
