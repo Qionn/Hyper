@@ -42,5 +42,10 @@ namespace burger_time
 		input.Bind(Options::keys.menuDown, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorDown));
 		input.Bind(Options::keys.menuSelect, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eSelect));
 		input.Bind(Options::keys.menuReturn, KeyState::ePressed, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eReturn));
+
+		input.Bind(Options::buttons.menuUp, ButtonState::ePressed, 0, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorUp));
+		input.Bind(Options::buttons.menuDown, ButtonState::ePressed, 0, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eCursorDown));
+		input.Bind(Options::buttons.menuSelect, ButtonState::ePressed, 0, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eSelect));
+		input.Bind(Options::buttons.menuReturn, ButtonState::ePressed, 0, std::make_unique<MenuCommand>(pMenuStack, MenuCommand::Action::eReturn));
 	}
 }

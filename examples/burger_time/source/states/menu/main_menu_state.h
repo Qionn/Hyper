@@ -8,8 +8,6 @@
 
 namespace burger_time
 {
-	class MenuFSMComponent;
-
 	class MainMenuState final : public AMenuState
 	{
 	public:

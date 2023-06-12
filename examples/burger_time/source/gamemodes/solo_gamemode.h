@@ -24,6 +24,7 @@ namespace burger_time
 	private:
 		void SpawnPlayer(hyper::Scene& scene, hyper::Input& input, const MapComponent* pMap);
 		void SpawnEnemies(hyper::Scene& scene, const MapComponent* pMap);
+		void CreateHUD(hyper::Scene& scene, const MapComponent* pMap);
 
 		static glm::vec2 GetRandomPosition(const MapComponent* pMap);
 

@@ -4,12 +4,13 @@
 
 namespace hyper
 {
-	ColliderComponent::ColliderComponent(Actor& actor, float width, float height)
+	ColliderComponent::ColliderComponent(Actor& actor, float width, float height, float yOffset)
 		: AComponent(actor)
 		, m_Width{ width }
 		, m_Height{ height }
 		, m_HalfWidth{ width * 0.5f }
 		, m_HalfHeight{ height * 0.5f }
+		, m_OffsetY{ yOffset }
 	{
 		GetScene().GetPhysicsWorld().AddCollider(this);
 	}
@@ -32,10 +33,10 @@ namespace hyper
 		// https://stackoverflow.com/a/306379
 
 		const glm::vec2& posA = GetActor().GetWorldPosition();
-		Rectf a{ posA.x - m_HalfWidth, posA.y - m_HalfHeight, m_Width, m_Height };
+		Rectf a{ posA.x - m_HalfWidth, posA.y - m_HalfHeight - m_OffsetY, m_Width, m_Height };
 
 		const glm::vec2& posB = other.GetActor().GetWorldPosition();
-		Rectf b{ posB.x - other.m_HalfWidth, posB.y - other.m_HalfHeight, other.m_Width, other.m_Height };
+		Rectf b{ posB.x - other.m_HalfWidth, posB.y - other.m_HalfHeight - other.m_OffsetY, other.m_Width, other.m_Height };
 
 		bool overlapX = (ValueInRange(a.x, b.x, b.x + b.width) ||
 						 ValueInRange(b.x, a.x, a.x + a.width));

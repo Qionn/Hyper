@@ -24,7 +24,13 @@ namespace hyper
 			}
 		}
 
-		m_pPhysicsWorld->Update();
+		m_Lag += dt;
+
+		while (m_Lag >= m_PhysicsTime)
+		{
+			m_pPhysicsWorld->Update();
+			m_Lag -= m_PhysicsTime;
+		}
 	}
 
 	void Scene::Render() const
@@ -68,6 +74,8 @@ namespace hyper
 		{
 			RemoveActor(pActor.get());
 		}
+
+		m_pPhysicsWorld->RemoveAllColliders();
 	}
 
 	void Scene::EraseRemovedActors()

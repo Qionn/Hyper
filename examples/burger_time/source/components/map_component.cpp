@@ -38,6 +38,11 @@ namespace burger_time
 		return m_Catchers;
 	}
 
+	const std::vector<hyper::Actor*>& MapComponent::GetIngredients() const
+	{
+		return m_Ingredients;
+	}
+
 	const MapComponent::Platform* MapComponent::GetNearestPlatform(const glm::vec2& pos, float range) const
 	{
 		const Platform* pPlatform = nullptr;
@@ -150,6 +155,8 @@ namespace burger_time
 			pActor->SetPosition(pos);
 			pActor->AddComponent<ColliderComponent>(93.0f, 21.0f);
 			pActor->AddComponent<IngredientComponent>(type, this);
+
+			m_Ingredients.push_back(pActor);
 		}
 	}
 

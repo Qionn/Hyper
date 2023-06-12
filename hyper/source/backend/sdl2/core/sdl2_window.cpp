@@ -14,10 +14,12 @@ namespace hyper
 
 		if (s_InstanceCount++ == 0)
 		{
-			if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
+			if (SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 			{
 				throw std::runtime_error("Failed to initialize SDL2 video subsystem");
 			}
+
+			SDL_JoystickEventState(SDL_ENABLE);
 		}
 
 		m_pWindow = SDL_CreateWindow(title.data(),

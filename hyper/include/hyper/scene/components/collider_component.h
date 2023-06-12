@@ -10,7 +10,7 @@ namespace hyper
 	class ColliderComponent final : public AComponent
 	{
 	public:
-		ColliderComponent(Actor& actor, float width, float height);
+		ColliderComponent(Actor& actor, float width, float height, float yOffset = 0.0f);
 
 		void SetSize(float width, float height);
 		bool IsOverlapping(const ColliderComponent& other) const;
@@ -20,6 +20,7 @@ namespace hyper
 	private:
 		float m_Width, m_Height;
 		float m_HalfWidth, m_HalfHeight;
+		float m_OffsetY;
 
 	private:
 		void OnUpdate(float dt) override;

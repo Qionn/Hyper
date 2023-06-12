@@ -20,12 +20,18 @@ namespace hyper
 		void PopLayer();
 
 		void Bind(Key key, KeyState state, std::unique_ptr<ICommand> command);
-		void Unbind(Key key, KeyState state);
-		void UnbindAll();
+		void Bind(Button button, ButtonState state, int gamepad, std::unique_ptr<ICommand> command);
 
+		void Unbind(Key key, KeyState state);
+		void Unbind(Button button, ButtonState state, int gamepad);
+
+		void UnbindAll();
 		void Reset();
 
+		int GetGamepadCount() const;
+
 		Keyboard& GetKeyboard() const;
+		Gamepad* GetGamepad(int index) const;
 
 		Input(const Input&)				= delete;
 		Input(Input&&)					= delete;

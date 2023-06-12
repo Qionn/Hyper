@@ -44,6 +44,8 @@ namespace hyper
 		std::vector<Actor*> m_RemovedActors;
 
 		float m_TimeScale = 1.0f;
+		float m_Lag = 0.0f;
+		const float m_PhysicsTime = 1 / 10.0f;
 	};
 }
 

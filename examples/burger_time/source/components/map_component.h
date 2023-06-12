@@ -28,6 +28,7 @@ namespace burger_time
 		const std::vector<Platform>& GetPlatforms() const;
 		const std::vector<Ladder>& GetLadders() const;
 		const std::vector<Catcher>& GetCatchers() const;
+		const std::vector<hyper::Actor*>& GetIngredients() const;
 
 		const Platform* GetNearestPlatform(const glm::vec2& pos, float range) const;
 		const Ladder* GetNearestLadder(const glm::vec2& pos, float range) const;
@@ -40,6 +41,7 @@ namespace burger_time
 		std::vector<Platform> m_Platforms;
 		std::vector<Ladder> m_Ladders;
 		std::vector<Catcher> m_Catchers;
+		std::vector<hyper::Actor*> m_Ingredients;
 
 	private:
 		void CreateBackgrounds(const MapParser& parser);

@@ -8,6 +8,8 @@ namespace hyper
 {
 	void PhysicsWorld::Update()
 	{
+		EraseRemovedColliders();
+
 		for (Collider* pColA : m_Colliders)
 		{
 			for (Collider* pColB : m_Colliders)
@@ -27,7 +29,25 @@ namespace hyper
 
 	void PhysicsWorld::RemoveCollider(Collider* pCollider)
 	{
-		m_Colliders.erase(pCollider);
+		m_RemovedColliders.push_back(pCollider);
+	}
+
+	void PhysicsWorld::RemoveAllColliders()
+	{
+		for (Collider* pCollider : m_Colliders)
+		{
+			RemoveCollider(pCollider);
+		}
+		m_OverlappingColliders.clear();
+	}
+
+	void PhysicsWorld::EraseRemovedColliders()
+	{
+		for (Collider* pCollider : m_RemovedColliders)
+		{
+			m_Colliders.erase(pCollider);
+		}
+		m_RemovedColliders.clear();
 	}
 
 	void PhysicsWorld::CheckOverlap(Collider* pA, Collider* pB)

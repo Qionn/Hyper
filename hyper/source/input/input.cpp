@@ -37,9 +37,19 @@ namespace hyper
 		m_pImpl->Bind(key, state, std::move(command));
 	}
 
+	void Input::Bind(Button button, ButtonState state, int gamepad, std::unique_ptr<ICommand> command)
+	{
+		m_pImpl->Bind(button, state, gamepad, std::move(command));
+	}
+
 	void Input::Unbind(Key key, KeyState state)
 	{
 		m_pImpl->Unbind(key, state);
+	}
+
+	void Input::Unbind(Button button, ButtonState state, int gamepad)
+	{
+		m_pImpl->Unbind(button, state, gamepad);
 	}
 
 	void Input::UnbindAll()
@@ -52,8 +62,18 @@ namespace hyper
 		m_pImpl->Reset();
 	}
 
+	int Input::GetGamepadCount() const
+	{
+		return m_pImpl->GetGamepadCount();
+	}
+
 	Keyboard& Input::GetKeyboard() const
 	{
 		return m_pImpl->GetKeyboard();
+	}
+
+	Gamepad* Input::GetGamepad(int index) const
+	{
+		return m_pImpl->GetGamepad(index);
 	}
 }

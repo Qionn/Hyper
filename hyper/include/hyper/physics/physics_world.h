@@ -21,6 +21,9 @@ namespace hyper
 
 		void AddCollider(Collider* pCollider);
 		void RemoveCollider(Collider* pCollider);
+		void RemoveAllColliders();
+
+		void EraseRemovedColliders();
 
 		PhysicsWorld(const PhysicsWorld&)				= delete;
 		PhysicsWorld(PhysicsWorld&&)					= delete;
@@ -31,6 +34,7 @@ namespace hyper
 
 	private:
 		std::unordered_set<Collider*> m_Colliders;
+		std::vector<Collider*> m_RemovedColliders;
 		std::vector<std::pair<Collider*, Collider*>> m_OverlappingColliders;
 
 	private:

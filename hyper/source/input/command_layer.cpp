@@ -1,4 +1,5 @@
 #include "hyper/input/command_layer.h"
+#include "hyper/input/gamepad.h"
 #include "hyper/input/keyboard.h"
 
 #include <algorithm>
@@ -44,6 +45,49 @@ namespace hyper
 		}
 	}
 
+	void CommandLayer::Update(Gamepad* pGamepad, int index)
+	{
+		for (const auto& buttonStatePair : m_ButtonsToUnbind)
+		{
+			m_GamepadCommands.erase(buttonStatePair);
+		}
+
+		pGamepad->Update();
+
+		for (auto& [id, pCommand] : m_GamepadCommands)
+		{
+			auto [gamepadIndex, statePair] = id;
+			if (gamepadIndex == index)
+			{
+				auto [button, state] = statePair;
+
+				switch (state)
+				{
+					case ButtonState::eDown:
+						if (pGamepad->IsDown(button))
+						{
+							pCommand->Execute();
+						}
+						break;
+
+					case ButtonState::ePressed:
+						if (pGamepad->IsPressed(button))
+						{
+							pCommand->Execute();
+						}
+						break;
+
+					case ButtonState::eReleased:
+						if (pGamepad->IsReleased(button))
+						{
+							pCommand->Execute();
+						}
+						break;
+				}
+			}
+		}
+	}
+
 	void CommandLayer::Bind(Key key, KeyState state, std::unique_ptr<ICommand> command)
 	{
 		std::pair<Key, KeyState> keyStatePair(key, state);
@@ -56,9 +100,26 @@ namespace hyper
 		m_KeyboardCommands[keyStatePair] = std::move(command);
 	}
 
+	void CommandLayer::Bind(Button button, ButtonState state, int gamepad, std::unique_ptr<ICommand> command)
+	{
+		std::pair<int, std::pair<Button, ButtonState>> buttonStatePair(gamepad, { button, state });
+
+		if (auto it = std::remove(m_ButtonsToUnbind.begin(), m_ButtonsToUnbind.end(), buttonStatePair); it != m_ButtonsToUnbind.end())
+		{
+			m_ButtonsToUnbind.erase(it, m_ButtonsToUnbind.end());
+		}
+
+		m_GamepadCommands[buttonStatePair] = std::move(command);
+	}
+
 	void CommandLayer::Unbind(Key key, KeyState state)
 	{
 		m_KeysToUnbind.push_back({ key, state });
+	}
+
+	void CommandLayer::Unbind(Button button, ButtonState state, int gamepad)
+	{
+		m_ButtonsToUnbind.push_back({ gamepad, { button, state } });
 	}
 
 	void CommandLayer::UnbindAll()
@@ -66,6 +127,11 @@ namespace hyper
 		for (const auto& [id, pCommand] : m_KeyboardCommands)
 		{
 			m_KeysToUnbind.push_back(id);
+		}
+
+		for (const auto& [id, pCommand] : m_GamepadCommands)
+		{
+			m_ButtonsToUnbind.push_back(id);
 		}
 	}
 }

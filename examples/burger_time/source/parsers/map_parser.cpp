@@ -68,7 +68,7 @@ namespace burger_time
 			case 'l':
 				ParseLadder(line.substr(2));
 				break;
-
+				
 			case 'i':
 				ParseIngredient(line.substr(2));
 				break;

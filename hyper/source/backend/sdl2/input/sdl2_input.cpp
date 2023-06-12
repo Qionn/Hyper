@@ -12,6 +12,11 @@ namespace hyper
 		m_pKeyboard		= std::make_unique<Keyboard>();
 		m_pDefaultLayer	= std::make_unique<CommandLayer>();
 
+		for (int i = 0; i < SDL_NumJoysticks(); ++i)
+		{
+			m_Gamepads.push_back(std::make_unique<Gamepad>(i));
+		}
+
 		PushLayer(m_pDefaultLayer.get());
 	}
 
@@ -26,6 +31,11 @@ namespace hyper
 
 		CommandLayer* layer = m_LayerStack.top();
 		layer->Update(m_pKeyboard.get());
+
+		for (int i = 0; i < m_Gamepads.size(); ++i)
+		{
+			layer->Update(m_Gamepads[i].get(), i);
+		}
 	}
 
 	void Input::Impl::PushLayer(CommandLayer* pLayer)
@@ -46,9 +56,19 @@ namespace hyper
 		m_LayerStack.top()->Bind(key, state, std::move(command));
 	}
 
+	void Input::Impl::Bind(Button button, ButtonState state, int gamepad, std::unique_ptr<ICommand> command)
+	{
+		m_LayerStack.top()->Bind(button, state, gamepad, std::move(command));
+	}
+
 	void Input::Impl::Unbind(Key key, KeyState state)
 	{
 		m_LayerStack.top()->Unbind(key, state);
+	}
+
+	void Input::Impl::Unbind(Button button, ButtonState state, int gamepad)
+	{
+		m_LayerStack.top()->Unbind(button, state, gamepad);
 	}
 
 	void Input::Impl::UnbindAll()
@@ -107,5 +127,19 @@ namespace hyper
 	{
 		HyperAssert(m_Callback != nullptr, "Expected a valid callback");
 		m_Callback(event);
+	}
+
+	int Input::Impl::GetGamepadCount() const
+	{
+		return static_cast<int>(m_Gamepads.size());
+	}
+
+	Gamepad* Input::Impl::GetGamepad(int index) const
+	{
+		if (index < m_Gamepads.size())
+		{
+			return m_Gamepads[index].get();
+		}
+		return nullptr;
 	}
 }

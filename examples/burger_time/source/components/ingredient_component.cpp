@@ -1,6 +1,7 @@
 #include "ingredient_component.h"
 
 #include "components/player_component.h"
+#include "events/scene_events.h"
 
 #include <hyper/event/dispatcher.h>
 #include <hyper/scene/components/collider_component.h>
@@ -48,6 +49,9 @@ namespace burger_time
 			}
 
 			GetActor().Translate(0.0f, 5.0f);
+
+			IngredientDropEvent e(this);
+			NotifyObservers(e);
 		}
 	}
 
@@ -179,12 +183,15 @@ namespace burger_time
 			Actor* pSlice = m_Slices[i];
 			Actor* pOther = nullptr;
 
-			if (event.IsInvolved(pSlice, pOther) && !m_SliceFlags[i])
+			if (event.IsInvolved(pSlice, pOther) && !m_IsInCatcher && !m_SliceFlags[i])
 			{
 				if (auto pPlayer = pOther->GetComponent<PlayerComponent>(); pPlayer != nullptr)
 				{
 					pSlice->Translate(0.0f, 5.0f);
 					m_SliceFlags[i] = true;
+
+					IngredientSliceEvent e(this);
+					NotifyObservers(e);
 				}
 			}
 		}
@@ -213,6 +220,12 @@ namespace burger_time
 					pos.y -= 25.0f;
 					pOwner->SetPosition(pos);
 					m_IsInCatcher = true;
+
+					if (m_Type == IngredientType::eBunTop)
+					{
+						BurgerCompleteEvent e;
+						NotifyObservers(e);
+					}
 				}
 
 				pIngredient->Drop();

@@ -4,8 +4,10 @@
 #include <array>
 
 #include <hyper/event/physics_events.h>
+#include <hyper/event/subject.h>
 #include <hyper/event/observer.h>
-#include <hyper/scene/component.h>
+#include <hyper/scene/scene.h>
+#include <hyper/service/service_hub.h>
 #include <hyper/fwd.h>
 
 #include "components/map_component.h"
@@ -22,7 +24,7 @@ namespace burger_time
 		eLetuce
 	};
 
-	class IngredientComponent final : public hyper::AComponent, public hyper::IObserver
+	class IngredientComponent final : public hyper::AComponent, public hyper::ASubject, public hyper::IObserver
 	{
 	public:
 		using Platform = MapComponent::Platform;
@@ -49,6 +51,8 @@ namespace burger_time
 
 		std::array<hyper::Actor*, 4> m_Slices;
 		std::array<bool, 4> m_SliceFlags;
+
+		hyper::SoundId m_WalkSoundId;
 
 	private:
 		void SpawnSlices();

@@ -36,5 +36,15 @@ namespace burger_time
 			Options::keys.characterLeft		= Key::eA;
 			Options::keys.characterRight	= Key::eD;
 		}
+
+		Options::buttons.menuUp				= Button::eDpadUp;
+		Options::buttons.menuDown			= Button::eDpadDown;
+		Options::buttons.menuSelect			= Button::eA;
+		Options::buttons.menuReturn			= Button::eB;
+		Options::buttons.pause				= Button::eStart;
+		Options::buttons.characterUp		= Button::eDpadUp;
+		Options::buttons.characterDown		= Button::eDpadDown;
+		Options::buttons.characterLeft		= Button::eDpadLeft;
+		Options::buttons.characterRight		= Button::eDpadRight;
 	}
 }

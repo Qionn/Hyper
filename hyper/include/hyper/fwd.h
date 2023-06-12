@@ -21,6 +21,7 @@ namespace hyper
 
 	class Input;
 	class Keyboard;
+	class Gamepad;
 
 	class PhysicsWorld;
 

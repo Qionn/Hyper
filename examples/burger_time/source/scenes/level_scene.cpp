@@ -24,6 +24,7 @@ namespace burger_time
 		pMenuFSMActor->SetPosition(400.0f, 375.0f);
 		auto pMenuStack = pMenuFSMActor->AddComponent<MenuFSMComponent>(0);
 
-		input.Bind(Key::eEscape, KeyState::ePressed, std::make_unique<PauseCommand>(pMenuStack, input));
+		input.Bind(Options::keys.pause, KeyState::ePressed, std::make_unique<PauseCommand>(pMenuStack, input));
+		input.Bind(Options::buttons.pause, ButtonState::ePressed, 0, std::make_unique<PauseCommand>(pMenuStack, input));
 	}
 }
